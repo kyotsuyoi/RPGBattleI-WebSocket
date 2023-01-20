@@ -14,8 +14,20 @@ class Hud {
         if(id == 'player'){
             this.position.x = 0 + 2
             this.position.y = 800 - this.height - 2
-            this.face = createImage('src/image/knight_female_face.png')
             this.sprite_spell = createImage('src/image/hud_spell.png')
+
+            switch (char_gender){
+                case 'male':
+                    this.face = createImage('src/image/knight_male_face.png')
+                break
+
+                case 'female':
+                    this.face = createImage('src/image/knight_female_face.png')
+                break
+
+                default:
+                    this.face = undefined
+            }            
         }
         
         this.sprite = createImage('src/image/hud_large.png')

@@ -280,12 +280,12 @@ class Damage{
     }
 
     debug(){        
-        if(this.owner_id == 'Kyo'){
-            context.fillStyle = '#ff000055'
-        }else{
-            context.fillStyle = 'green'
-        }
-        context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // if(this.owner_id == 'Kyo'){
+        //     context.fillStyle = '#ff000055'
+        // }else{
+        //     context.fillStyle = 'green'
+        // }
+        // context.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
 
@@ -796,7 +796,6 @@ function sendDamage(id, result, knockback_side, knockback_val, stamina_result){
     }
 
     conn.send(JSON.stringify(json_obj))
-    console.log('send dmg type:action_damage '+ ' from:'+player.id+' to:'+id)
-    
+    //console.log('send dmg type:action_damage '+ ' from:'+player.id+' to:'+id)    
 }
 

@@ -43,10 +43,10 @@ class Player{
 
         this.attributes = {
             power : 12,
-            agility : 999,
-            dexterity : 999,
+            agility : 10,
+            dexterity : 12,
             vitality : 11,
-            inteligence : 20
+            inteligence : 17
         }
         
         this.attributes_values = {
@@ -78,11 +78,16 @@ class Player{
 
         this.currentShieldSprite = this.sprites.shield.sprite
         this.currentShieldCropWidth = 45
+
+        this.message = {
+            message : '',
+            time : 0
+        }
     }
 
     draw(){ 
         
-        this.debug()
+        //this.debug()
 
         //draw shield first (up only)
         if(this.state.side == 'up' && this.state.defending){
@@ -107,12 +112,10 @@ class Player{
             )
         }        
 
-        this.center_x = (this.position.x + this.width/2) - (this.sprites.character.width/2)
-        this.center_y = (this.position.y + this.height - this.sprites.character.height)
+        this.center_x = (this.position.x + this.width/2)// - (this.sprites.character.width/2)
+        this.center_y = (this.position.y + this.height)// - (this.sprites.character.height)
         
-        context.font = "10px Arial Black"
-        context.fillStyle = 'black'
-        context.fillText(this.user_name, this.center_x, this.position.y -15) 
+        this.drawPlayerName()
 
         //draw character
         context.drawImage(          
@@ -121,8 +124,8 @@ class Player{
             this.currentCropHeight, //corte no eixo y
             this.sprites.character.cropWidth, //largura do corte
             this.sprites.character.cropHeight, //altura do corte
-            this.center_x, 
-            this.center_y,
+            this.center_x - (this.sprites.character.width/2), 
+            this.center_y - (this.sprites.character.height),
             this.sprites.character.width,
             this.sprites.character.height
         )
@@ -167,11 +170,13 @@ class Player{
         } 
 
         this.drawBars()
+
+        this.drawPlayerMessage()
     }
 
     drawBars(){
         var bar_width = 40
-        var bar_center_x = this.center_x -4
+        var bar_center_x = this.center_x - bar_width/2
 
         //HP bar
         if(this.attributes_values.hp < this.attributes_values.max_hp){
@@ -209,6 +214,61 @@ class Player{
                 context.fillStyle = 'yellow'
             }       
             context.fillRect(bar_center_x, this.position.y + this.height+8, bar_value, 3)
+        }
+    }
+
+    drawPlayerName(){
+        var center_name = (this.user_name.length*6) / 2
+
+        context.font = "10px Arial Black"
+        context.fillStyle = 'black'
+        context.fillText(this.user_name, this.center_x - center_name -1, (this.position.y + this.height) - (this.sprites.character.height)- 5-1) 
+
+        context.font = "10px Arial Black"
+        context.fillStyle = 'black'
+        context.fillText(this.user_name, this.center_x - center_name +1, (this.position.y + this.height) - (this.sprites.character.height)- 5+1) 
+
+        context.font = "10px Arial Black"
+        context.fillStyle = 'black'
+        context.fillText(this.user_name, this.center_x - center_name -1, (this.position.y + this.height) - (this.sprites.character.height)- 5+1) 
+
+        context.font = "10px Arial Black"
+        context.fillStyle = 'black'
+        context.fillText(this.user_name, this.center_x - center_name +1, (this.position.y + this.height) - (this.sprites.character.height)- 5-1) 
+        
+        context.font = "10px Arial Black"
+        context.fillStyle = '#'+this.color
+        context.fillText(this.user_name, this.center_x - center_name, (this.position.y + this.height) - (this.sprites.character.height)- 5) 
+
+    }
+
+    drawPlayerMessage(){
+        if(this.message.message != '' && this.message.time > 0){
+            //Baloon
+            
+            var center_name = (this.message.message.length*7) / 2
+
+            context.font = "12px Arial Black"
+            context.fillStyle = 'black'
+            context.fillText(this.message.message, this.center_x - center_name, (this.position.y + this.height) - (this.sprites.character.height)- 30) 
+
+            context.font = "12px Arial Black"
+            context.fillStyle = 'black'
+            context.fillText(this.message.message, this.center_x - center_name+2, (this.position.y + this.height) - (this.sprites.character.height)- 30+2) 
+
+            context.font = "12px Arial Black"
+            context.fillStyle = 'black'
+            context.fillText(this.message.message, this.center_x - center_name, (this.position.y + this.height) - (this.sprites.character.height)- 30+2) 
+
+            context.font = "12px Arial Black"
+            context.fillStyle = 'black'
+            context.fillText(this.message.message, this.center_x - center_name+2, (this.position.y + this.height) - (this.sprites.character.height)- 30) 
+
+            context.font = "12px Arial Black"
+            context.fillStyle = '#'+this.color
+            context.fillText(this.message.message, this.center_x - center_name+1, (this.position.y + this.height) - (this.sprites.character.height)- 30+1) 
+
+            this.message.time--
         }
     }
 
@@ -383,7 +443,6 @@ class Player{
         this.attributes_values.attack_speed = attack_speed_value(this.attributes.agility) + this.attributes_values.attack_speed
         this.attributes_values.hp_recovery = hp_recovery(this.attributes.vitality)   
         this.attributes_values.sp_recovery = sp_recovery(this.attributes.inteligence, this.attributes.dexterity) 
-
     }
 
     setGender(){
@@ -395,9 +454,8 @@ class Player{
                 this.sprites = {
                     character : {
                         sprite : createImage('src/image/knight_male.png'),
-                        cropWidth : 0,
                         width : 32,
-                        height : 50,
+                        height : 48,
                         cropWidth : 32,
                         cropHeight : 45
                     },
@@ -416,7 +474,6 @@ class Player{
                 this.sprites = {
                     character : {
                         sprite : createImage('src/image/knight_female.png'),
-                        cropWidth : 0,
                         width : 32,
                         height : 43,
                         cropWidth : 32,
@@ -436,7 +493,7 @@ class Player{
     }
 
     debug(){
-        //area
+        //player area
         context.fillStyle = '#ff000088'
         context.fillRect(this.position.x, this.position.y, this.width, this.height)  
 
@@ -482,5 +539,14 @@ class Player{
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
         context.fillText('atk_cdown: ' + this.cooldown.attackCooldown, center_x +2, this.position.y + 52 +24+12+6)
+    }
+
+    setMessage(text){        
+        this.message.message = text   
+        var time_length = text.length 
+        if (time_length < 5){
+            time_length = 5
+        }
+        this.message.time = 20 * time_length
     }
 }

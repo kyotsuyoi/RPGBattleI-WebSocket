@@ -37,10 +37,11 @@ var weapons = new Array()
 var damages = new Array()
 var displays = new Array()
 
-const hud = new Hud({id : 'player'})
+var hud
 
 function start() {  
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animate)
+    hud = new Hud({id : 'player'})
 }
 
 function animate(timestamp){

@@ -1,0 +1,24 @@
+Para executar servidor WebSocket localmente é necessário servidor PHP instalado.
+Para executar servidor PHP no terminal (maquina local):
+    php -S localhost:8000 
+Para executar servidor PHP no terminal (rede local):
+    php -S (IP da maquina):8000
+    Ex.: php -S 10.0.0.103:8000
+Para executar servidor WebSocket no terminal:
+    ...\RPGBattleI-WebSocket\WebSocketServer> php Server.php
+
+Correções:
+    -Defesa não desabilita quando stamina acaba (animação somente)
+    -Segunda conexão pega posição errada do personagem que já está conectado
+
+Melhorias:
+    -Velocidade de movimento do ataque deve ser somada a velocidade do personagem (andando e correndo)
+    -Respawn após morrer
+    -Sons e musica de fundo
+    -Obstaculos (objetos e paredes)
+    -Coletáveis
+    -Sistema de upgrade de atributos
+    -Sistema de upgrade de habilidades
+    -Chat deve mostrar mensagens com balão de fala em cima do personagem
+    -Escolher aparencia do personagem
+    -Opção de escolher classe do personagem

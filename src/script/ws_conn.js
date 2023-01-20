@@ -30,14 +30,16 @@ input.addEventListener('keypress', e =>{
 button_send.addEventListener("click", send_message)
 
 function send_message() {
-    const value = input.value
-    if (value === ''){
+    const text = input.value
+    if (text === ''){
         return
     }
-    output.append('Eu (' + player_id + '): ' + value, document.createElement('br'))
+    output.append('Eu (' + player_id + '): ' + text, document.createElement('br'))
     //let json = JSON.parse('{ "type":"chat" , "text":"' + value + '" }')
-    conn.send('{ "type":"chat" , "text":"' + value + '" }')
+    conn.send('{ "type":"chat" , "text":"' + text + '" }')
     input.value = ''
+
+    player.setMessage(text)
 }
 
 button_user_name.addEventListener("click", send_user_name)
@@ -57,8 +59,8 @@ function send_user_name() {
 }
 
 function setConnection(user_name){
-    // conn = new WebSocket('ws://10.0.0.103:8085')
-    conn = new WebSocket('ws://192.168.1.100:8085')
+    conn = new WebSocket('ws://localhost:8085')
+    //conn = new WebSocket('ws://10.0.0.103:8085')
     conn.addEventListener('message', message => {
         const data = JSON.parse(message.data)
 
@@ -66,6 +68,8 @@ function setConnection(user_name){
 
         if(data.type === 'chat'){
             output.append(data.user_name +' (' + data.id + '): ' + data.text, document.createElement('br'))
+            var p = players.find(element => element.id == data.id)
+            p.setMessage(data.text)
         }
     
         if(data.type === 'action'){
