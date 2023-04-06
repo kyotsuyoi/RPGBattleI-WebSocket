@@ -1,11 +1,13 @@
 Para executar servidor WebSocket localmente é necessário servidor PHP instalado.
 Para executar servidor PHP no terminal (maquina local):
     php -S localhost:8000 
-Para executar servidor PHP no terminal (rede local):
+Para executar servidor PHP no terminal, navegue até o diretorio do projeto, local do arquivo index (rede local):
     php -S (IP da maquina):8000
-    Ex.: php -S 10.0.0.103:8000
-Para executar servidor WebSocket no terminal:
-    ...\RPGBattleI-WebSocket\WebSocketServer> php Server.php
+    Ex.: (caminho)\RPGBattleI-WebSocket\WebSocketServer>php -S 10.0.0.103:8000
+    Com isso é possível executar o servidor WebSocket e também acessar o arquivo index direto pelo IP.
+    A maquina que está rodadndo o PHP se torna servidor Web e pode ser acessada por outras maquinas na rede.
+Para executar servidor WebSocket no terminal (em outro terminal):
+    (caminho)\RPGBattleI-WebSocket\WebSocketServer> php Server.php
 
 Correções:
     -Defesa não desabilita quando stamina acaba (animação somente)

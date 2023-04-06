@@ -59,8 +59,8 @@ function send_user_name() {
 }
 
 function setConnection(user_name){
-    conn = new WebSocket('ws://localhost:8085')
-    //conn = new WebSocket('ws://10.0.0.103:8085')
+    //conn = new WebSocket('wss://websocket-test-rpg-game.glitch.me/')
+    conn = new WebSocket('ws://10.0.0.103:8085')
     conn.addEventListener('message', message => {
         const data = JSON.parse(message.data)
 
