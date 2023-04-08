@@ -116,12 +116,7 @@ function keyCodeDown(keyCode){
                 }        
                 conn.send(JSON.stringify(json_obj)) 
 
-                gamepads[0].vibrationActuator.playEffect("dual-rumble", {
-                    startDelay: 0,
-                    duration: 100,
-                    weakMagnitude: 1.0,
-                    strongMagnitude: 1.0,
-                })
+                setRumble('attack')
             }
         break
         
@@ -300,13 +295,9 @@ function buttonPressed(b) {
 }
 
 function padLoop() {
+    if (!connectedGamepad()) return
     var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [])
-    if (!gamepads) {
-        return
-    }
-
     var gp = gamepads[0]
-    if(gp==null)return
 
     //console.log(gp) 
     
@@ -414,4 +405,42 @@ function padLoop() {
     } else if (buttonPressed(gp.buttons[11])) {
         //console.log('b11')
     }  
+
+    return false
+}
+
+function connectedGamepad(){
+    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [])
+    if (!gamepads) return false
+
+    if(gamepads[0]==null) return false
+    if(!gamepads[0].connected) return false
+    return true
+}
+
+function setRumble(type){
+
+    if (!connectedGamepad()) return
+
+    switch (type){
+        case 'attack':
+            gamepads[0].vibrationActuator.playEffect("dual-rumble", {
+                startDelay: 0,
+                duration: 100,
+                weakMagnitude: 1.0,
+                strongMagnitude: 1.0,
+            })
+        break
+
+        case 'running':
+            gamepads[0].vibrationActuator.playEffect("dual-rumble", {
+                startDelay: 0,
+                duration: 10,
+                weakMagnitude: 0.01,
+                strongMagnitude: 0.01,
+            })
+        break
+    }
+
+    
 }

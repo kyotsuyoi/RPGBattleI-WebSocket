@@ -306,12 +306,7 @@ class Player{
 
         if(this.state.running){
             this.cooldown.staminaCooldown = 20
-            gamepads[0].vibrationActuator.playEffect("dual-rumble", {
-                startDelay: 0,
-                duration: 10,
-                weakMagnitude: 0.01,
-                strongMagnitude: 0.01,
-            })
+            setRumble('running')
             this.attributes_values.stamina = 100
         }
         this.updateCooldowns()

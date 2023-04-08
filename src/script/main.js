@@ -54,8 +54,9 @@ function animate(timestamp){
     background.width = 800
     background.height = 800
 
-    padLoop()
-    keypadLoop()
+    if(!padLoop()){
+        keypadLoop()
+    }
 
     var layer = new Array() 
     player.update()
