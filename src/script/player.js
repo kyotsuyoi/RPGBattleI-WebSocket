@@ -63,7 +63,7 @@ class Player{
             flee : 0,
             
             speed : 3,
-            attack_speed : -12,  
+            attack_speed : 0,//-12,  
             hp_recovery : 0,    
             sp_recovery : 0   
         }
@@ -85,11 +85,12 @@ class Player{
         }
 
         this.framespeed 
+        this.is_debug = false
     }
 
     draw(){ 
         
-        this.debug()
+        if (this.is_debug) this.debug()
 
         //draw shield first (up only)
         if(this.state.side == 'up' && this.state.defending){
@@ -307,7 +308,6 @@ class Player{
         if(this.state.running){
             this.cooldown.staminaCooldown = 20
             setRumble('running')
-            this.attributes_values.stamina = 100
         }
         this.updateCooldowns()
 
@@ -446,7 +446,7 @@ class Player{
         this.attributes_values.flee = flee_value(this.attributes.agility, this.attributes.dexterity)
         
         this.attributes_values.speed = speed_value(this.attributes.agility) 
-        this.attributes_values.attack_speed = attack_speed_value(this.attributes.agility) + this.attributes_values.attack_speed
+        this.attributes_values.attack_speed = attack_speed_value(this.attributes.agility)-12// + this.attributes_values.attack_speed
         this.attributes_values.hp_recovery = hp_recovery(this.attributes.vitality)   
         this.attributes_values.sp_recovery = sp_recovery(this.attributes.inteligence, this.attributes.dexterity) 
     }

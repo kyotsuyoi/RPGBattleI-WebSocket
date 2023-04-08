@@ -52,11 +52,23 @@ function attack_vs_defense(attack, dexterity, defense){
 }
 
 function dexterity_vs_flee(dexterity, agility){
-    var percent = Math.round(Math.random() * ((100) - 0) + 0);
-    var hit = (dexterity*100/agility)/2;        
+    //var random_percent = Math.round(Math.random() * ((100) - 0) + 0)
+    // var hit = (dexterity*100/agility)        
+
+    console.log('dex:'+dexterity +' | agi:'+agility)  
+
+    agility *=0.7
+    var diff = dexterity - agility
+    var mean = (dexterity + agility) / 2
+    var ratio = diff / mean
+    var angle = Math.atan(ratio)
+    var percentage = (2 / Math.PI) * angle * (1 + Math.abs(diff) / mean) * 100
+  
+    var random_num = Math.round(Math.random() * 201) - 100
+    console.log('percentage:'+percentage +' | random_num:'+random_num)
     
     //is hit?
-    if(percent < hit){
+    if(percentage > random_num){
         return true;
     }
     return false;
@@ -97,4 +109,3 @@ function spell_cooldown(cooldown_value, inteligence, dexterity){
     }
     return val
 }
-

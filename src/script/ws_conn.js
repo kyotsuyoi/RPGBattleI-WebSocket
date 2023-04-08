@@ -34,6 +34,38 @@ function send_message() {
     if (text === ''){
         return
     }
+    if(text.substring(0,6)=='code:>'){
+        var code = text.substring(6,10)
+        switch (code){
+            case 'pow:':
+                var value = Number(text.replace('code:>pow:',''))
+                player.attributes.power = value
+            break
+            case 'agi:':
+                var value = Number(text.replace('code:>agi:',''))
+                player.attributes.agility = value
+            break
+            case 'dex:':
+                var value = Number(text.replace('code:>dex:',''))
+                player.attributes.dexterity = value
+            break
+            case 'vit:':
+                var value = Number(text.replace('code:>vit:',''))
+                player.attributes.vitality = value
+            break
+            case 'int:':
+                var value = Number(text.replace('code:>int:',''))
+                player.attributes.inteligence = value
+            break
+            case 'deb:':
+                var value = text.replace('code:>deb:','')
+                if(value=='player') player.is_debug = !player.is_debug
+            break
+        }
+        player.setAttributesValues()
+        player.setMessage('CODE RUNNER')
+        return
+    }
     output.append('Eu (' + player_id + '): ' + text, document.createElement('br'))
     //let json = JSON.parse('{ "type":"chat" , "text":"' + value + '" }')
     conn.send('{ "type":"chat" , "text":"' + text + '" }')

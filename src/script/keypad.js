@@ -28,10 +28,12 @@ const keys = {
 }
 
 window.addEventListener('keydown', ({keyCode}) => {
+    if (connectedGamepad()) return
     keyCodeDown(keyCode)    
 })
 
 window.addEventListener('keyup', ({keyCode}) => {
+    if (connectedGamepad()) return
     keyCodeUp(keyCode)   
 })
 
@@ -279,7 +281,8 @@ function gamepadHandler(event, connecting) {
         gamepads[gamepad.index] = gamepad
         console.log('Gamepad Index ID:' + gamepad.index + ' is connected')
     } else {
-        delete gamepads[gamepad.index]
+        delete gamepads[gamepad.index]        
+        console.log('Gamepad Index ID:' + gamepad.index + ' is disconnected')
     }
 }
 

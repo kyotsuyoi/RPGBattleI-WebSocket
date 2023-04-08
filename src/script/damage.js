@@ -223,7 +223,7 @@ class Damage{
 
     draw(){
 
-        this.debug()
+        //this.debug()
 
         if(this.type == 'cure'){
             // context.fillStyle = '#1b690f55'
