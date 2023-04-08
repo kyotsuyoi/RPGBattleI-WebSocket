@@ -83,11 +83,13 @@ class Player{
             message : '',
             time : 0
         }
+
+        this.framespeed 
     }
 
     draw(){ 
         
-        //this.debug()
+        this.debug()
 
         //draw shield first (up only)
         if(this.state.side == 'up' && this.state.defending){
@@ -304,6 +306,13 @@ class Player{
 
         if(this.state.running){
             this.cooldown.staminaCooldown = 20
+            gamepads[0].vibrationActuator.playEffect("dual-rumble", {
+                startDelay: 0,
+                duration: 10,
+                weakMagnitude: 0.01,
+                strongMagnitude: 0.01,
+            })
+            this.attributes_values.stamina = 100
         }
         this.updateCooldowns()
 
@@ -368,21 +377,23 @@ class Player{
                 this.lastTimestamp = lastTimestamp
             }
         }
+        
+        this.setFrameSpeed()
 
         //walk
         if (!this.state.attacking && this.state.walking){
             if(this.frame.frames > 3){
                 this.frame.frames = 0
                 if(this.state.running){
-                    this.frame.frameTime = this.frame.runningFrameTime
+                    this.frame.frameTime = this.frame.runningFrameTime * this.framespeed
                 }else{
-                    this.frame.frameTime = this.frame.walkingFrameTime
+                    this.frame.frameTime = this.frame.walkingFrameTime * this.framespeed
                 }
                 this.lastTimestamp = lastTimestamp
             }
             if(!(this.frame.frames >= 0 && this.frame.frames <= 3)){
                 this.frame.frames = 0
-                this.frame.frameTime = this.frame.walkingFrameTime
+                this.frame.frameTime = this.frame.walkingFrameTime * this.framespeed
                 this.lastTimestamp = lastTimestamp
             }
         } 
@@ -539,6 +550,11 @@ class Player{
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
         context.fillText('atk_cdown: ' + this.cooldown.attackCooldown, center_x +2, this.position.y + 52 +24+12+6)
+
+        context.font = "10px Arial Black"
+        context.fillStyle = 'black'
+        context.fillText('framespeed: ' + this.framespeed, center_x +2, this.position.y + 52 +24+12+12)
+
     }
 
     setMessage(text){        
@@ -548,5 +564,32 @@ class Player{
             time_length = 5
         }
         this.message.time = 20 * time_length
+    }
+
+    //to synch the character frames with joystick axes 
+    setFrameSpeed(){
+        this.framespeed = 1
+        // this.framespeed = this.attributes_values.speed
+        // var vel_x = Math.abs(player.velocity.x)
+        // var vel_y = Math.abs(player.velocity.y)
+        // if(vel_x > 0.1 && vel_y < 0.1){
+        //     this.framespeed = this.attributes_values.speed-vel_x
+        // }else if(vel_x < 0.1 && vel_y > 0.1){
+        //     this.framespeed = this.attributes_values.speed-vel_y
+        // }else if(vel_x > 0.1 && vel_y > 0.1){
+        //     if(vel_x > vel_y){
+        //         var vel = (vel_x+(vel_y*0.293))
+        //         if(this.attributes_values.speed < vel){vel=this.attributes_values.speed}
+        //         if(vel < 0){vel=0}
+        //         this.framespeed = this.attributes_values.speed-vel
+        //     }else if(vel_x < vel_y){
+        //         var vel = (vel_y+(vel_x*0.293))
+        //         if(this.attributes_values.speed < vel){vel=this.attributes_values.speed}
+        //         if(vel < 0){vel=0}
+        //         this.framespeed = this.attributes_values.speed-vel
+        //     }            
+        // }
+        // this.framespeed *= 3
+        // if(this.framespeed < 0.5) this.framespeed = 0.5
     }
 }

@@ -1,4 +1,7 @@
-let lastKey, lastKey2
+let lastKey
+var gamepads = {}
+var axes_x = 1
+var axes_y = 1
 
 const keys = {
     right : {
@@ -43,6 +46,9 @@ function keyCodeDown(keyCode){
                 keys.up.pressed = true       
                 lastKey = 'up'  
                 player.state.walking = true
+                if(keys.run.pressed){
+                    player.state.running = true
+                }
                 //console.log('keydown:'+keyCode)     
             }     
         break
@@ -52,6 +58,9 @@ function keyCodeDown(keyCode){
                 keys.down.pressed = true     
                 lastKey = 'down'
                 player.state.walking = true
+                if(keys.run.pressed){
+                    player.state.running = true
+                }
                 //console.log('keydown:'+keyCode)
             }
         break
@@ -61,6 +70,9 @@ function keyCodeDown(keyCode){
                 keys.left.pressed = true      
                 lastKey = 'left'
                 player.state.walking = true
+                if(keys.run.pressed){
+                    player.state.running = true
+                }
                 //console.log('keydown:'+keyCode)
             }
         break
@@ -70,6 +82,9 @@ function keyCodeDown(keyCode){
                 keys.right.pressed = true      
                 lastKey = 'right'
                 player.state.walking = true
+                if(keys.run.pressed){
+                    player.state.running = true
+                }
                 //console.log('keydown:'+keyCode)
             }
         break
@@ -99,8 +114,14 @@ function keyCodeDown(keyCode){
                     'type' : 'action_attack',
                     'attack_type' : 'common'
                 }        
-                conn.send(JSON.stringify(json_obj))   
+                conn.send(JSON.stringify(json_obj)) 
 
+                gamepads[0].vibrationActuator.playEffect("dual-rumble", {
+                    startDelay: 0,
+                    duration: 100,
+                    weakMagnitude: 1.0,
+                    strongMagnitude: 1.0,
+                })
             }
         break
         
@@ -117,7 +138,9 @@ function keyCodeDown(keyCode){
         case 98:
             if(!keys.run.pressed && player.attributes_values.stamina>=5){
                 keys.run.pressed = true  
-                player.state.running = true                
+                if (player.velocity.x != 0 || player.velocity.y != 0){
+                    player.state.running = true 
+                }             
                 //player.stamina.staminaCooldown = 50
                 //runSound()
             }
@@ -195,24 +218,58 @@ function keyCodeUp(keyCode){
 
     if(keys.up.pressed == false && keys.down.pressed == false && keys.left.pressed == false && keys.right.pressed == false){
         player.state.walking = false
+        player.state.running = false
     }
 }
 
 function keypadLoop(){
     if(player === undefined) return
 
-    if(keys.right.pressed && (player.position.x + player.width <= background.width)){
-        player.velocity.x = player.attributes_values.speed
+    var diagonal_move = 1 
+    if(axes_x == 1 && axes_y == 1){ 
+        diagonal_move = 0.707 //to correct move speed on diagonal (digital)  
+    }
+
+    if(keys.right.pressed && (player.position.x + player.width <= background.width)){  
+        if(keys.up.pressed || keys.down.pressed){
+            player.velocity.x = player.attributes_values.speed * diagonal_move * axes_x
+        }else{
+            player.velocity.x = player.attributes_values.speed * axes_x
+        }
+        if(axes_x > axes_y){
+            lastKey = 'right'
+        }
     } else if (keys.left.pressed && (player.position.x > 0)){
-        player.velocity.x = -player.attributes_values.speed
+        if(keys.up.pressed || keys.down.pressed){
+            player.velocity.x = -player.attributes_values.speed * diagonal_move * axes_x
+        }else{
+            player.velocity.x = -player.attributes_values.speed * axes_x
+        }
+        if(axes_x > axes_y){
+            lastKey = 'left'
+        }
     }else{
         player.velocity.x = 0
     }
 
     if (keys.up.pressed && (player.position.y > 0)){
-        player.velocity.y = -player.attributes_values.speed
+        if(keys.right.pressed || keys.left.pressed){
+            player.velocity.y = -player.attributes_values.speed * diagonal_move * axes_y
+        }else{
+            player.velocity.y = -player.attributes_values.speed * axes_y
+        }
+        if(axes_y > axes_x){
+            lastKey = 'up'
+        }
     } else if (keys.down.pressed && (player.position.y + player.height <= background.height)){
-        player.velocity.y = player.attributes_values.speed    
+        if(keys.right.pressed || keys.left.pressed){
+            player.velocity.y = player.attributes_values.speed * diagonal_move * axes_y
+        }else{
+            player.velocity.y = player.attributes_values.speed * axes_y
+        }   
+        if(axes_y > axes_x){
+            lastKey = 'down'
+        }
     }else{
         player.velocity.y = 0
     }
@@ -225,7 +282,7 @@ function gamepadHandler(event, connecting) {
 
     if (connecting) {
         gamepads[gamepad.index] = gamepad
-        console.log('gamepad_connected')
+        console.log('Gamepad Index ID:' + gamepad.index + ' is connected')
     } else {
         delete gamepads[gamepad.index]
     }
@@ -251,71 +308,43 @@ function padLoop() {
     var gp = gamepads[0]
     if(gp==null)return
 
-    //console.log(gp)
+    //console.log(gp) 
+    
+    if (gp.axes[0] < -0.1 || gp.axes[0] > 0.1){
+        axes_x = Math.abs(gp.axes[0])   
+    }else{
+        axes_x = 1
+    }
 
-    //left
-    if (buttonPressed(gp.buttons[14])) {
+    if (gp.axes[1] < -0.1 || gp.axes[1] > 0.1){
+        axes_y = Math.abs(gp.axes[1])   
+    }else{
+        axes_y = 1
+    }
+
+    //TS L Left
+    if (gp.axes[0] < -0.1 || buttonPressed(gp.buttons[14])){
         keyCodeDown(37)
     }else{
         keyCodeUp(37)
     }
 
-    if (buttonPressed(gp.axes[0])) {
-        console.log('ts l right')
-    }
-
-    if (buttonPressed(gp.axes[1])) {
-        console.log('ts l down')
-    }
-
-    if (buttonPressed(gp.axes[2])) {
-        console.log('ts r right')
-    }
-
-    if (buttonPressed(gp.axes[3])) {
-        console.log('3')
-    }
-
-    if (buttonPressed(gp.axes[4])) {
-        console.log('4')
-    }
-
-    if (buttonPressed(gp.axes[5])) {
-        console.log('ts r right')
-    }
-
-    if (buttonPressed(gp.axes[6])) {
-        console.log('6')
-    }
-
-    if (buttonPressed(gp.axes[7])) {
-        console.log('7')
-    }
-
-    if (buttonPressed(gp.axes[8])) {
-        console.log('8')
-    }
-
-    if (buttonPressed(gp.axes[9])) {
-        console.log('9')
-    }
-
-    //right
-    if (buttonPressed(gp.buttons[15])) {
+    //TS L Right
+    if (gp.axes[0] > 0.1 || buttonPressed(gp.buttons[15])){
         keyCodeDown(39)
     }else{
         keyCodeUp(39)
     }
 
-    //up
-    if (buttonPressed(gp.buttons[12])) {
+    //TS L Up
+    if (gp.axes[1] < -0.1 || buttonPressed(gp.buttons[12])){
         keyCodeDown(38)
     } else {
         keyCodeUp(38)
     }
 
-    //down
-    if (buttonPressed(gp.buttons[13])) {
+    //TS L Down
+    if (gp.axes[1] > 0.1 || buttonPressed(gp.buttons[13])){
         keyCodeDown(40)
     } else {
         keyCodeUp(40)
@@ -330,7 +359,7 @@ function padLoop() {
 
     //x
     if (buttonPressed(gp.buttons[2])) {
-        keyCodeDown(97)
+        keyCodeDown(97)        
     }else{
         keyCodeUp(97)
     }

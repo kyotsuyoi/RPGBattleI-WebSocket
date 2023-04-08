@@ -285,7 +285,8 @@ class Damage{
         // }else{
         //     context.fillStyle = 'green'
         // }
-        // context.fillRect(this.position.x, this.position.y, this.width, this.height)
+        context.fillStyle = 'red'
+        context.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
 

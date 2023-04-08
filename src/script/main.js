@@ -1,8 +1,8 @@
 const background = document.getElementById('background')
 const context = background.getContext('2d')
 
-background.width = 800
-background.height = 800
+// background.width = 800
+// background.height = 800
 
 const perfectFrameTime = 1000 / 60
 let deltaTime = 0
@@ -51,6 +51,8 @@ function animate(timestamp){
 
     context.clearRect(0, 0, background.width, background.height)  
     context.closePath() 
+    background.width = 800
+    background.height = 800
 
     padLoop()
     keypadLoop()

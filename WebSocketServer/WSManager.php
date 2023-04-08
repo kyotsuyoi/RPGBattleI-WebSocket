@@ -9,6 +9,7 @@ class WSManager implements MessageComponentInterface {
 
     public function __construct() {
         $this->clients = new \SplObjectStorage;
+        echo "WS Server is online\n";
     }
 
     public function onOpen(ConnectionInterface $conn) {
@@ -166,7 +167,7 @@ class WSManager implements MessageComponentInterface {
                         'knockback_val' => $json->knockback_val,
                         'stamina_result' => $json->stamina_result]
                     ));
-                    echo "Type: {$json->type} from ID:{$from->resourceId} to ID: {$json->id}\n";                
+                    //echo "Type: {$json->type} from ID:{$from->resourceId} to ID: {$json->id}\n";                
                 } 
 
                 if($json->type === 'login'){
@@ -231,8 +232,6 @@ class WSManager implements MessageComponentInterface {
 
         $conn->close();
     }
-
-
 }
 
 function getUserNameById($id, $players) {
