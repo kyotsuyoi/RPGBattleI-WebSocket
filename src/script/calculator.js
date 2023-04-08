@@ -55,7 +55,7 @@ function dexterity_vs_flee(dexterity, agility){
     //var random_percent = Math.round(Math.random() * ((100) - 0) + 0)
     // var hit = (dexterity*100/agility)        
 
-    console.log('dex:'+dexterity +' | agi:'+agility)  
+    //console.log('dex:'+dexterity +' | agi:'+agility)  
 
     agility *=0.7
     var diff = dexterity - agility
@@ -65,7 +65,7 @@ function dexterity_vs_flee(dexterity, agility){
     var percentage = (2 / Math.PI) * angle * (1 + Math.abs(diff) / mean) * 100
   
     var random_num = Math.round(Math.random() * 201) - 100
-    console.log('percentage:'+percentage +' | random_num:'+random_num)
+    //console.log('percentage:'+percentage +' | random_num:'+random_num)
     
     //is hit?
     if(percentage > random_num){

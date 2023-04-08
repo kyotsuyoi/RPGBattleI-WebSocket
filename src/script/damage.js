@@ -400,235 +400,235 @@ function damage_action(damage){
     }
 }
 
-function enemyDamage(damage, player){
+// function enemyDamage(damage, player){
 
-    if(player == null){
-        return
-    }
+//     if(player == null){
+//         return
+//     }
     
-    if (square_colision_area(damage, player)) {
+//     if (square_colision_area(damage, player)) {
           
-        //If enemy is dead
-        var enemy = enemies.find(element => element.id == damage.owner_id)
-        if(enemy == undefined){
-            //console.log('undefined enemy')
-            return
-        } 
+//         //If enemy is dead
+//         var enemy = enemies.find(element => element.id == damage.owner_id)
+//         if(enemy == undefined){
+//             //console.log('undefined enemy')
+//             return
+//         } 
 
-        //if the player has already been hit
-        var id = damage.lastDamage.filter(element => element == player.id)
-        if(id == 'p1' || id == 'p2'){
-            return
-        }
-        damage.lastDamage.push(player.id)          
+//         //if the player has already been hit
+//         var id = damage.lastDamage.filter(element => element == player.id)
+//         if(id == 'p1' || id == 'p2'){
+//             return
+//         }
+//         damage.lastDamage.push(player.id)          
 
-        var is_hit = dexterity_vs_flee(enemy.attributes.dexterity, player.attributes.agility)            
-        if(player.state.defending){
-            is_hit = true
-        }
+//         var is_hit = dexterity_vs_flee(enemy.attributes.dexterity, player.attributes.agility)            
+//         if(player.state.defending){
+//             is_hit = true
+//         }
 
-        if(is_hit){   
+//         if(is_hit){   
 
-            var result = attack_vs_defense(enemy.attributes_values.attack, enemy.attributes.dexterity, player.attributes_values.defense)
-            if(player.state.defending){ 
+//             var result = attack_vs_defense(enemy.attributes_values.attack, enemy.attributes.dexterity, player.attributes_values.defense)
+//             if(player.state.defending){ 
 
-                res_stm = player.attributes_values.stamina - result
-                if(res_stm < 0){
-                    player.attributes_values.stamina = 0 
-                    player.state.defending = false
-                    //result += Math.round(res_stm)
-                    //result += res_stm
-                    player.attributes_values.hp += res_stm  
-                    if(player.attributes_values.hp <= 0){
-                        player.attributes_values.hp = 0.0
-                    }                       
-                    swordSlashSound()  
-                    display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
-                    displays.push(display)                     
+//                 res_stm = player.attributes_values.stamina - result
+//                 if(res_stm < 0){
+//                     player.attributes_values.stamina = 0 
+//                     player.state.defending = false
+//                     //result += Math.round(res_stm)
+//                     //result += res_stm
+//                     player.attributes_values.hp += res_stm  
+//                     if(player.attributes_values.hp <= 0){
+//                         player.attributes_values.hp = 0.0
+//                     }                       
+//                     swordSlashSound()  
+//                     display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
+//                     displays.push(display)                     
 
-                }else{
-                    shieldSound()
-                    player.attributes_values.stamina = player.attributes_values.stamina - stamina_vs_attack(result)
-                    //damages.pop(damage)
-                    if(damage.type==''){  
-                        damage.finished = true
-                    }
-                }  
+//                 }else{
+//                     shieldSound()
+//                     player.attributes_values.stamina = player.attributes_values.stamina - stamina_vs_attack(result)
+//                     //damages.pop(damage)
+//                     if(damage.type==''){  
+//                         damage.finished = true
+//                     }
+//                 }  
                 
-                player.stamina.staminaCooldown = 50
+//                 player.stamina.staminaCooldown = 50
 
-            }else{
-                player.attributes_values.hp -= result  
-                if(player.attributes_values.hp < 0){
-                    player.attributes_values.hp = 0
-                }                  
-                swordSlashSound()          
-                display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
-                displays.push(display)
-            }
+//             }else{
+//                 player.attributes_values.hp -= result  
+//                 if(player.attributes_values.hp < 0){
+//                     player.attributes_values.hp = 0
+//                 }                  
+//                 swordSlashSound()          
+//                 display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'red', text : result, type : 'damage'})
+//                 displays.push(display)
+//             }
             
-            var knock_val = knock_back(damage.power, enemy.attributes.power, player.attributes.power)
-            if(damage.isKnockBack){
-                switch (damage.side){
-                    case 'up': 
-                        if(player.position.y - knock_val <= 0){
-                            player.position.y = 0
-                        }else{
-                            player.position.y -= knock_val
-                        }                      
-                    break
+//             var knock_val = knock_back(damage.power, enemy.attributes.power, player.attributes.power)
+//             if(damage.isKnockBack){
+//                 switch (damage.side){
+//                     case 'up': 
+//                         if(player.position.y - knock_val <= 0){
+//                             player.position.y = 0
+//                         }else{
+//                             player.position.y -= knock_val
+//                         }                      
+//                     break
     
-                    case 'down':
-                        if(player.position.y + player.height + knock_val >= background.height){
-                            player.position.y = background.height - player.height
-                        }else{
-                            player.position.y += knock_val
-                        }
-                    break
+//                     case 'down':
+//                         if(player.position.y + player.height + knock_val >= background.height){
+//                             player.position.y = background.height - player.height
+//                         }else{
+//                             player.position.y += knock_val
+//                         }
+//                     break
     
-                    case 'left':
-                        if(player.position.x - knock_val <= 0){
-                            player.position.x = 0
-                        }else{
-                            player.position.x -= knock_val
-                        }
-                    break
+//                     case 'left':
+//                         if(player.position.x - knock_val <= 0){
+//                             player.position.x = 0
+//                         }else{
+//                             player.position.x -= knock_val
+//                         }
+//                     break
     
-                    case 'right':
-                        if(player.position.x + player.width + knock_val >= background.width){
-                            player.position.x = background.width - player.width
-                        }else{
-                            player.position.x += knock_val
-                        }
-                    break                    
-                }
-            }
+//                     case 'right':
+//                         if(player.position.x + player.width + knock_val >= background.width){
+//                             player.position.x = background.width - player.width
+//                         }else{
+//                             player.position.x += knock_val
+//                         }
+//                     break                    
+//                 }
+//             }
 
-        }else{
-            display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
-            displays.push(display)
-        }  
+//         }else{
+//             display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
+//             displays.push(display)
+//         }  
 
-        if(player.attributes_values.hp <= 0){
-            return
-        }
-    }
-}
+//         if(player.attributes_values.hp <= 0){
+//             return
+//         }
+//     }
+// }
 
-function playerDamage(damage){
-    enemies.forEach(enemy => {
-        if(damage.owner == 'cpu'){
-            console.log('wrong damage detected')
-        }
-        if (square_colision_area(damage, enemy)) {
+// function playerDamage(damage){
+//     enemies.forEach(enemy => {
+//         if(damage.owner == 'cpu'){
+//             console.log('wrong damage detected')
+//         }
+//         if (square_colision_area(damage, enemy)) {
             
-            //this is to not double damage
-            var p = damage.lastDamage.filter(element => element == enemy.id)
-            if(p == enemy.id){
-                return
-            }
-            damage.lastDamage.push(enemy.id)
+//             //this is to not double damage
+//             var p = damage.lastDamage.filter(element => element == enemy.id)
+//             if(p == enemy.id){
+//                 return
+//             }
+//             damage.lastDamage.push(enemy.id)
             
-            var is_hit = false
-            switch(damage.owner_id){
-                case 'p1':
-                    is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.attributes.agility)
-                break
-                case 'p2':
-                    is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.attributes.agility)
-                break
-            }                    
+//             var is_hit = false
+//             switch(damage.owner_id){
+//                 case 'p1':
+//                     is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.attributes.agility)
+//                 break
+//                 case 'p2':
+//                     is_hit = dexterity_vs_flee(player.attributes.dexterity + damage.bonus_dexterity, enemy.attributes.agility)
+//                 break
+//             }                    
             
-            if(is_hit){                        
-                var result = 0
-                switch(damage.owner_id){
-                    case 'p1':
-                        result = attack_vs_defense(
-                            player.attributes_values.attack * damage.attack_percentage / 100, 
-                            player.attributes.dexterity + damage.bonus_dexterity, 
-                            enemy.attributes_values.defense
-                        )
-                    break
-                    case 'p2':
-                        result = attack_vs_defense(
-                            player2.attributes_values.attack * damage.attack_percentage / 100, 
-                            player2.attributes.dexterity + damage.bonus_dexterity, 
-                            enemy.attributes_values.defense
-                        )
-                    break
-                }  
+//             if(is_hit){                        
+//                 var result = 0
+//                 switch(damage.owner_id){
+//                     case 'p1':
+//                         result = attack_vs_defense(
+//                             player.attributes_values.attack * damage.attack_percentage / 100, 
+//                             player.attributes.dexterity + damage.bonus_dexterity, 
+//                             enemy.attributes_values.defense
+//                         )
+//                     break
+//                     case 'p2':
+//                         result = attack_vs_defense(
+//                             player2.attributes_values.attack * damage.attack_percentage / 100, 
+//                             player2.attributes.dexterity + damage.bonus_dexterity, 
+//                             enemy.attributes_values.defense
+//                         )
+//                     break
+//                 }  
 
-                enemy.attributes_values.hp -= result   
-                enemy.stunTime = damage.stun  
+//                 enemy.attributes_values.hp -= result   
+//                 enemy.stunTime = damage.stun  
 
-                if(!damage.isSoundPlayed){
-                    swordSlashSound() 
-                    damage.isSoundPlayed = true 
-                }    
+//                 if(!damage.isSoundPlayed){
+//                     swordSlashSound() 
+//                     damage.isSoundPlayed = true 
+//                 }    
 
-                if(enemy.attributes_values.hp <= 0){
-                    screamSound()
-                }          
-                display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
-                displays.push(display)
+//                 if(enemy.attributes_values.hp <= 0){
+//                     screamSound()
+//                 }          
+//                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'red', text : result, type : 'damage'})
+//                 displays.push(display)
 
-                if(!enemy.knock_back || !damage.isKnockBack){
-                    return
-                }
+//                 if(!enemy.knock_back || !damage.isKnockBack){
+//                     return
+//                 }
 
-                var pl
-                switch(damage.owner_id){
-                    case 'p1':
-                        pl = player
-                    break                      
+//                 var pl
+//                 switch(damage.owner_id){
+//                     case 'p1':
+//                         pl = player
+//                     break                      
 
-                    case 'p2':
-                        pl = player2
-                    break                             
-                }
+//                     case 'p2':
+//                         pl = player2
+//                     break                             
+//                 }
 
-                var knock_val = knock_back(damage.power, pl.attributes.power, enemy.attributes.power)
-                switch (damage.side){
-                    case 'up':   
+//                 var knock_val = knock_back(damage.power, pl.attributes.power, enemy.attributes.power)
+//                 switch (damage.side){
+//                     case 'up':   
                         
-                        if(enemy.position.y - knock_val <= 0){
-                            enemy.position.y = 0
-                        }else{                     
-                            enemy.position.y -= knock_val
-                        }
-                    break
+//                         if(enemy.position.y - knock_val <= 0){
+//                             enemy.position.y = 0
+//                         }else{                     
+//                             enemy.position.y -= knock_val
+//                         }
+//                     break
 
-                    case 'down':
-                        if(enemy.position.y + enemy.height + knock_val >= background.height){
-                            enemy.position.y = background.height - enemy.height
-                        }else{
-                            enemy.position.y += knock_val
-                        }
-                    break
+//                     case 'down':
+//                         if(enemy.position.y + enemy.height + knock_val >= background.height){
+//                             enemy.position.y = background.height - enemy.height
+//                         }else{
+//                             enemy.position.y += knock_val
+//                         }
+//                     break
 
-                    case 'left':
-                        if(enemy.position.x - knock_val <= 0){
-                            enemy.position.x = 0
-                        }else{
-                            enemy.position.x -= knock_val
-                        }
-                    break
+//                     case 'left':
+//                         if(enemy.position.x - knock_val <= 0){
+//                             enemy.position.x = 0
+//                         }else{
+//                             enemy.position.x -= knock_val
+//                         }
+//                     break
 
-                    case 'right':
-                        if(enemy.position.x + enemy.width + knock_val >= background.width){
-                            enemy.position.x = background.width - enemy.width
-                        }else{
-                            enemy.position.x += knock_val
-                        }
-                    break 
-                }
-            }else{
-                display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
-                displays.push(display)
-            }    
-        }
-    }) 
-}
+//                     case 'right':
+//                         if(enemy.position.x + enemy.width + knock_val >= background.width){
+//                             enemy.position.x = background.width - enemy.width
+//                         }else{
+//                             enemy.position.x += knock_val
+//                         }
+//                     break 
+//                 }
+//             }else{
+//                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
+//                 displays.push(display)
+//             }    
+//         }
+//     }) 
+// }
 
 function playerDamagePlayer(damage){
     players.forEach(enemy => {
@@ -667,13 +667,13 @@ function playerDamagePlayer(damage){
                         if(enemy.attributes_values.hp <= 0){
                             enemy.attributes_values.hp = 0.0
                         }                       
-                        //swordSlashSound()  
+                        swordSlashSound()  
                         // display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
                         // enemy.height/2, color : 'red', text : result, type : 'damage'})
                         // displays.push(display)                     
     
                     }else{
-                        //shieldSound()
+                        shieldSound()
                         stamina_result = stamina_vs_attack(result)
                         enemy.attributes_values.stamina = enemy.attributes_values.stamina - stamina_result
                         if(damage.type==''){  
@@ -690,7 +690,7 @@ function playerDamagePlayer(damage){
                     if(enemy.attributes_values.hp < 0){
                         enemy.attributes_values.hp = 0
                     }                  
-                    //swordSlashSound()          
+                    swordSlashSound()          
                     // display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
                     //     enemy.height/2, color : 'red', text : result, type : 'damage'})
                     // displays.push(display)

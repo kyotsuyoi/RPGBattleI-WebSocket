@@ -106,7 +106,7 @@ function keyCodeDown(keyCode){
                 player.state.attacking = true
 
                 player.cooldown.attackCooldown = Math.round(player.attributes_values.attack_speed)
-                // swordSound()
+                swordSound()
 
                 damages.push(damage)   
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : 'sword_1', side : player.state.side})
@@ -118,7 +118,7 @@ function keyCodeDown(keyCode){
                 }        
                 conn.send(JSON.stringify(json_obj)) 
 
-                setRumble('attack')
+                //setRumble('attack')
             }
         break
         
@@ -127,7 +127,7 @@ function keyCodeDown(keyCode){
             if(!keys.defense.pressed && player.attributes_values.stamina>=5){
                 keys.defense.pressed = true  
                 player.state.defending = true
-                //shieldGrabSound()
+                shieldGrabSound()
             }
         break
 
@@ -441,6 +441,15 @@ function setRumble(type){
                 duration: 10,
                 weakMagnitude: 0.01,
                 strongMagnitude: 0.01,
+            })
+        break
+
+        case 'damage':
+            gamepads[0].vibrationActuator.playEffect("dual-rumble", {
+                startDelay: 0,
+                duration: 100,
+                weakMagnitude: 1.0,
+                strongMagnitude: 1.0,
             })
         break
     }

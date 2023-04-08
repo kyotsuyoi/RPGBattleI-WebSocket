@@ -168,6 +168,7 @@ function setConnection(user_name){
                 if(p.attributes_values.hp < 0){
                     p.attributes_values.hp = 0 
                 }
+                setRumble('damage')
             }
 
             display = new Display({x : p.position.x + p.width/2, y : p.position.y + p.height/2, 
@@ -246,6 +247,8 @@ function setConnection(user_name){
             output.append('Encontrou ' + data.user_name + ' (' + data.id + ')', document.createElement('br'))
             var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender)
             p.start = true
+            p.state.side = data.side
+            p.state.defending = data.defending
             players.push(p)
         }
     

@@ -317,7 +317,7 @@ class Player{
 
     updateOther(){
         //sprite switching
-        if(!this.state.attacking && this.state.walking){
+        //if(!this.state.attacking && this.state.walking){
             switch (this.state.side){
                 case 'right':
                     this.currentCropHeight = this.sprites.character.cropHeight * 1
@@ -335,8 +335,7 @@ class Player{
                     this.currentCropHeight = this.sprites.character.cropHeight * 3
                 break
             }
-
-        }
+        //}
 
         this.updateSpritesOnTime()
     }
@@ -434,21 +433,43 @@ class Player{
 
     setAttributesValues(){
 
-        this.attributes_values.max_hp = hp_value(this.attributes.vitality, this.attributes.power)
-        this.attributes_values.max_sp = sp_value(this.attributes.inteligence, this.attributes.dexterity)
+        var attributes = {
+            power : this.attributes.power,
+            agility : this.attributes.agility,
+            dexterity : this.attributes.dexterity,
+            vitality : this.attributes.vitality,
+            inteligence : this.attributes.inteligence
+        }
+        switch(this.gender){
+            case 'male':
+                attributes.power *= 1.1
+                attributes.vitality *= 1.1               
+            break
+
+            case 'female':
+                attributes.agility *= 1.1
+                attributes.inteligence *= 1.1
+            break
+
+            default:
+                console.log('Gender is not defined')
+        }
+
+        this.attributes_values.max_hp = hp_value(attributes.vitality, attributes.power)
+        this.attributes_values.max_sp = sp_value(attributes.inteligence, attributes.dexterity)
 
         this.attributes_values.hp = this.attributes_values.max_hp
         this.attributes_values.sp = this.attributes_values.max_sp
         this.attributes_values.stamina = this.attributes_values.max_stamina
         
-        this.attributes_values.attack = attack_value(this.attributes.power, this.attributes.dexterity)
-        this.attributes_values.defense = defense_value(this.attributes.vitality, this.attributes.dexterity)
-        this.attributes_values.flee = flee_value(this.attributes.agility, this.attributes.dexterity)
+        this.attributes_values.attack = attack_value(attributes.power, attributes.dexterity)
+        this.attributes_values.defense = defense_value(attributes.vitality, attributes.dexterity)
+        this.attributes_values.flee = flee_value(attributes.agility, attributes.dexterity)
         
-        this.attributes_values.speed = speed_value(this.attributes.agility) 
-        this.attributes_values.attack_speed = attack_speed_value(this.attributes.agility)-12// + this.attributes_values.attack_speed
-        this.attributes_values.hp_recovery = hp_recovery(this.attributes.vitality)   
-        this.attributes_values.sp_recovery = sp_recovery(this.attributes.inteligence, this.attributes.dexterity) 
+        this.attributes_values.speed = speed_value(attributes.agility) 
+        this.attributes_values.attack_speed = attack_speed_value(attributes.agility) -12
+        this.attributes_values.hp_recovery = hp_recovery(attributes.vitality)   
+        this.attributes_values.sp_recovery = sp_recovery(attributes.inteligence, attributes.dexterity) 
     }
 
     setGender(){
