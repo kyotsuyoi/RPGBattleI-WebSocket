@@ -11,7 +11,6 @@ Para executar servidor WebSocket no terminal (em outro terminal):
 
 Correções:
     -Defesa não desabilita quando stamina acaba (animação somente)
-    -Segunda conexão pega posição errada do personagem que já está conectado
     -buscar marcações //need adjust
 
 Melhorias:

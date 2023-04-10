@@ -104,7 +104,7 @@ class Hud {
         }else{
             context.fillStyle = 'green'
         }
-        context.fillRect(this.position.x + 55, this.position.y + 6, bar_value, 6)   
+        context.fillRect(this.position.x + 55, this.position.y + 5, bar_value, 8)   
         
         //HP text
         context.font = "8px Arial Black";
@@ -115,7 +115,7 @@ class Hud {
         var sp_percent = Math.round(sp * 100) / max_sp
         var bar_value = (76 * sp_percent) / 100
         context.fillStyle = '#2865c7'        
-        context.fillRect(this.position.x + 55, this.position.y + 21, bar_value, 6)  
+        context.fillRect(this.position.x + 55, this.position.y + 20, bar_value, 8)  
         
         //SP text
         context.font = "8px Arial Black";
@@ -129,7 +129,7 @@ class Hud {
         }else{
             context.fillStyle = 'yellow'
         }       
-        context.fillRect(this.position.x + 55, this.position.y + 21 + 15, bar_value, 6)
+        context.fillRect(this.position.x + 55, this.position.y + 21 + 14, bar_value, 8)
 
         //Stamina text
         context.font = "8px Arial Black";

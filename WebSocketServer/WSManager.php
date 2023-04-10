@@ -62,7 +62,6 @@ class WSManager implements MessageComponentInterface {
                                 $inner_attacking = $player['attacking'];
                                 $inner_defending = $player['defending'];
                                 $inner_attributes_values = $player['attributes_values'];
-
                                 //var_dump($player);
                             }
                         }
@@ -81,7 +80,7 @@ class WSManager implements MessageComponentInterface {
                             'attacking' => $inner_attacking, 
                             'defending' => $inner_defending,
                             'attributes_values' => $inner_attributes_values]
-                        ));    
+                        )); 
                     }
                 }
             }
@@ -108,7 +107,6 @@ class WSManager implements MessageComponentInterface {
                         'user_name' => $user_name, 
                         'text' => $json->text]
                     ));
-
                     // echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
                     // , $from->resourceId, $json->text, $numRecv, $numRecv == 1 ? '' : 's');
                 }
@@ -125,21 +123,7 @@ class WSManager implements MessageComponentInterface {
                         'attacking' => $json->attacking, 
                         'defending' => $json->defending, 
                         'attributes_values' => $json->attributes_values]
-                    ));
-
-                    foreach ($this->players as $key => $player) {
-                        if ($player['id'] == $from->resourceId) {
-                            $this->players[$key]['x'] = $json->x;
-                            $this->players[$key]['y'] = $json->y;
-                            $this->players[$key]['side'] = $json->side;
-                            $this->players[$key]['walking'] = $json->walking;
-                            $this->players[$key]['running'] = $json->running;
-                            $this->players[$key]['attacking'] = $json->attacking;
-                            $this->players[$key]['defending'] = $json->defending;
-                            $this->players[$key]['attributes_values'] = $json->attributes_values;
-                        }
-                    }
-                    
+                    ));                   
                 }  
                 
                 if($json->type === 'action_attack'){
@@ -188,6 +172,7 @@ class WSManager implements MessageComponentInterface {
                 } 
             }
 
+            //To save actual state for the player (login only)
             if ($from === $client) {
                 if($json->type === 'login'){
 
@@ -203,6 +188,22 @@ class WSManager implements MessageComponentInterface {
                     }                
                 } 
             }
+        }
+
+        //To save actual state for the player
+        if($json->type === 'action'){
+            foreach ($this->players as $key => $player) {
+                if ($player['id'] == $from->resourceId) {
+                    $this->players[$key]['x'] = $json->x;
+                    $this->players[$key]['y'] = $json->y;
+                    $this->players[$key]['side'] = $json->side;
+                    $this->players[$key]['walking'] = $json->walking;
+                    $this->players[$key]['running'] = $json->running;
+                    $this->players[$key]['attacking'] = $json->attacking;
+                    $this->players[$key]['defending'] = $json->defending;
+                    $this->players[$key]['attributes_values'] = $json->attributes_values;
+                }
+            } 
         }
     }
 
