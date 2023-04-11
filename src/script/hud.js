@@ -14,15 +14,16 @@ class Hud {
         if(id == 'player'){
             this.position.x = 0 + 2
             this.position.y = 800 - this.height - 2
-            this.sprite_spell = createImage('src/image/hud_spell.png')
 
             switch (char_gender){
                 case 'male':
                     this.face = createImage('src/image/knight_male_face.png')
+                    this.sprite_spell = createImage('src/image/hud_spell2.png')
                 break
 
                 case 'female':
                     this.face = createImage('src/image/knight_female_face.png')
+                    this.sprite_spell = createImage('src/image/hud_spell.png')
                 break
 
                 default:
@@ -89,10 +90,10 @@ class Hud {
         var max_sp = player.attributes_values.max_sp
         var stamina = player.attributes_values.stamina
         var max_stamina = player.attributes_values.max_stamina            
-        var powerBladeCoolDown = player.powerBladeCoolDown
-        var rapidBladeCoolDown = player.rapidBladeCoolDown
-        var phantonBladeCoolDown = player.phantonBladeCoolDown
-        var cureCoolDown = player.cureCoolDown            
+        var powerBladeCoolDown = player.cooldown.powerBlade
+        var rapidBladeCoolDown = player.cooldown.rapidBlade
+        var phantonBladeCoolDown = player.cooldown.phantonBladeCooldown
+        var cureCoolDown = player.cooldown.cure            
         var inteligence = player.attributes.inteligence          
         var dexterity = player.attributes.dexterity        
 
@@ -139,9 +140,9 @@ class Hud {
 
         //Power Blade bar 
         damage = new Damage({
-            x : player.position.x, y : player.position.y, 
-            owner_id : 'p1', owner : 'player', type : 'power_blade', side : player.side, 
-            character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+            x : undefined, y : undefined, 
+            owner_id : undefined, owner : undefined, type : 'power_blade', side : undefined, 
+            character_width : undefined, character_height: undefined, lastTimestamp : undefined
         })       
            
         var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
@@ -153,17 +154,17 @@ class Hud {
 
         //Rapid Blade bar
         var damage = null    
-        if (this.id=='p1'){
+        if (player.gender=='female'){
             damage = new Damage({
-                x : player.position.x, y : player.position.y, 
-                owner_id : 'p1', owner : 'player', type : 'rapid_blade', side : player.side, 
-                character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                x : undefined, y : undefined, 
+                owner_id : undefined, owner : undefined, type : 'rapid_blade', side : undefined, 
+                character_width : undefined, character_height: undefined, lastTimestamp : undefined
             }) 
         }else{
             damage = new Damage({
-                x : player.position.x, y : player.position.y, 
-                owner_id : 'p2', owner : 'player', type : 'ghost_blade', side : player.side, 
-                character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                x : undefined, y : undefined, 
+                owner_id : undefined, owner : undefined, type : 'ghost_blade', side : undefined, 
+                character_width : undefined, character_height: undefined, lastTimestamp : undefined
             }) 
         }  
         var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
@@ -177,9 +178,9 @@ class Hud {
 
         //Phanton Blade bar
         var damage = new Damage({
-            x : player.position.x, y : player.position.y, 
-            owner_id : 'p1', owner : 'player', type : 'phanton_blade', side : player.side, 
-            character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+            x : undefined, y : undefined, 
+            owner_id : undefined, owner : undefined, type : 'phanton_blade', side : undefined, 
+            character_width : undefined, character_height: undefined, lastTimestamp : undefined
         })    
         var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
         var calc = Math.round(16 * phantonBladeCoolDown / currentCoolDown) 
@@ -190,9 +191,9 @@ class Hud {
 
         //Cure bar
         var damage = new Damage({
-            x : player.position.x, y : player.position.y, 
-            owner_id : 'p1', owner : 'player', type : 'cure', side : player.side, 
-            character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+            x : undefined, y : undefined, 
+            owner_id : undefined, owner : undefined, type : 'cure', side : undefined, 
+            character_width : undefined, character_height: undefined, lastTimestamp : undefined
         })    
         var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
         var calc = Math.round(16 * cureCoolDown / currentCoolDown) 

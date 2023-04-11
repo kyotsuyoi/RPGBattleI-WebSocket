@@ -59,7 +59,7 @@ function swordSlashSound(){
             sound_count--
         }        
     } 
-    console.log('swordSlashSound')
+    //console.log('swordSlashSound')
 }
 
 function shieldSound(){

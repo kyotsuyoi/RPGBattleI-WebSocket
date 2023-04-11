@@ -24,7 +24,16 @@ const keys = {
     },
     run : {
         pressed : false
-    }
+    },
+    power_blade : {
+        pressed : false
+    },
+    rapid_blade : {
+        pressed : false
+    },
+    cure : {
+        pressed : false
+    }   
 }
 
 window.addEventListener('keydown', ({keyCode}) => {
@@ -40,6 +49,7 @@ window.addEventListener('keyup', ({keyCode}) => {
 function keyCodeDown(keyCode){
     
     if (player == undefined) return
+    if (player.bad_status.stun > 0) return
 
     switch (keyCode){
         
@@ -93,7 +103,7 @@ function keyCodeDown(keyCode){
 
         //attack
         case 97:
-            if(!keys.attack.pressed && player.cooldown.attackCooldown <= 0){
+            if(!keys.attack.pressed && player.cooldown.attack <= 0){
 
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
@@ -102,10 +112,10 @@ function keyCodeDown(keyCode){
                 })
 
                 keys.attack.pressed = true      
-                lastKey = 'attack'
+                //lastKey = 'attack'
                 player.state.attacking = true
 
-                player.cooldown.attackCooldown = Math.round(player.attributes_values.attack_speed)
+                player.cooldown.attack = Math.round(player.attributes_values.attack_speed)
                 swordSound()
 
                 damages.push(damage)   
@@ -117,8 +127,6 @@ function keyCodeDown(keyCode){
                     'attack_type' : 'common'
                 }        
                 conn.send(JSON.stringify(json_obj)) 
-
-                //setRumble('attack')
             }
         break
         
@@ -140,6 +148,144 @@ function keyCodeDown(keyCode){
                 }             
                 //player.stamina.staminaCooldown = 50
                 //runSound()
+            }
+        break
+
+        //power_blade
+        case 100:
+            if(!keys.power_blade.pressed && player.cooldown.powerBlade == 0){
+
+                damage = new Damage({
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : player.id, owner : 'player', type : 'power_blade', side : player.state.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                })
+                
+                if(player.attributes_values.sp - damage.sp_value < 0){
+                    return 
+                }
+
+                keys.power_blade.pressed = true      
+                //lastKey = 'power_blade'
+                player.state.attacking = true
+
+                player.cooldown.powerBlade = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
+                rapidBladeSound()
+                powerSwordSound()             
+
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
+                }else{
+                    player.attributes_values.sp -= damage.sp_value
+                }
+                 
+                damages.push(damage)   
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : 'sword_1', side : player.state.side})
+                weapons.push(weapon)
+
+                var json_obj = {
+                    'type' : 'action_attack',
+                    'attack_type' : 'power_blade'
+                }        
+                conn.send(JSON.stringify(json_obj)) 
+
+                setRumble('attack')
+            }
+        break
+
+        //rapid_blade or ghost_blade
+        case 101:
+            if(!keys.rapid_blade.pressed && player.cooldown.rapidBlade == 0){
+                
+                var spell_type = 'rapid_blade'
+                if(player.gender=='male') {
+                    spell_type = 'ghost_blade'
+                }
+
+                damage = new Damage({
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : player.id, owner : 'player', type : spell_type, side : player.state.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                })
+
+                if(player.attributes_values.sp - damage.sp_value < 0){
+                    return 
+                }
+
+                keys.rapid_blade.pressed = true 
+                // = 'rapid_blade'
+                player.state.attacking = true
+
+                player.cooldown.rapidBlade = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
+                rapidBladeSound()
+
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
+                }else{
+                    player.attributes_values.sp -= damage.sp_value
+                }
+
+                damages.push(damage)
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : 'sword_1', side : player.state.side})
+                weapons.push(weapon)
+
+                var json_obj = {
+                    'type' : 'action_attack',
+                    'attack_type' : spell_type
+                }        
+                conn.send(JSON.stringify(json_obj)) 
+
+                setRumble('attack')
+            }
+        break
+
+        //cure or phanton_blade
+        case 104:
+            if(!keys.cure.pressed && player.cooldown.cure == 0){
+
+                var spell_type = 'cure'
+                if(player.gender=='male') {
+                    spell_type = 'phanton_blade'
+                }                
+
+                damage = new Damage({
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : player.id, owner : 'player', type : spell_type, side : player.state.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                });
+
+                if(player.attributes_values.sp - damage.sp_value < 0){
+                    return 
+                }
+
+                keys.cure.pressed = true      
+                //lastKey = 'cure'
+                player.state.attacking = true
+
+                player.cooldown.cure = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
+                if(spell_type=='cure'){
+                    cureSound()
+                }else{
+                    phantonBladeSound()
+                }
+
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
+                }else{
+                    player.attributes_values.sp -= damage.sp_value
+                }
+
+                damages.push(damage)
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : 'sword_1', side : player.state.side})
+                weapons.push(weapon)
+
+                var json_obj = {
+                    'type' : 'action_attack',
+                    'attack_type' : spell_type
+                }        
+                conn.send(JSON.stringify(json_obj)) 
+
+                setRumble('attack')
             }
         break
     }
@@ -195,10 +341,6 @@ function keyCodeUp(keyCode){
             keys.attack.pressed = false  
         break
 
-        case 100:
-            //keys.power_blade.pressed = false  
-        break
-
         case 103:
             keys.defense.pressed = false  
             player.state.defending = false
@@ -210,6 +352,18 @@ function keyCodeUp(keyCode){
                 player.state.running = false
                 //runSoundStop()
             }
+        break
+
+        case 100:
+            keys.power_blade.pressed = false  
+        break
+
+        case 101:
+            keys.rapid_blade.pressed = false  
+        break
+
+        case 104:
+            keys.cure.pressed = false  
         break
     }
 

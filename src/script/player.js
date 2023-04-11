@@ -37,8 +37,11 @@ class Player{
         }
 
         this.cooldown = {
-            staminaCooldown : 0,
-            attackCooldown : 0
+            stamina : 0,
+            attack : 0,
+            powerBlade : 0,
+            rapidBlade : 0,
+            cure : 0
         }
 
         this.attributes = {
@@ -66,6 +69,14 @@ class Player{
             attack_speed : 0,//-12,  
             hp_recovery : 0,    
             sp_recovery : 0   
+        }
+
+        this.good_status = {
+
+        }
+
+        this.bad_status = {
+            stun : 0
         }
 
         this.setAttributesValues()
@@ -276,7 +287,7 @@ class Player{
     }
 
     update(){
-        //sprite switching - player 1
+        //sprite switching
         if(!this.state.attacking && this.state.walking){
             if(keys.right.pressed && lastKey === 'right'){
                 this.state.side = 'right'
@@ -298,15 +309,8 @@ class Player{
 
         this.updateSpritesOnTime()
 
-        if(this.attributes_values.hp < this.attributes_values.max_hp && this.attributes_values.hp > 0){
-            this.attributes_values.hp += this.attributes_values.hp_recovery
-            if(this.attributes_values.hp > this.attributes_values.max_hp){
-                this.attributes_values.hp = this.attributes_values.max_hp
-            }
-        }
-
         if(this.state.running){
-            this.cooldown.staminaCooldown = 20
+            this.cooldown.stamina = 20
             setRumble('running')
         }
         this.updateCooldowns()
@@ -413,21 +417,51 @@ class Player{
         }else{
             return
         }
+        
+        if(this.attributes_values.hp < this.attributes_values.max_hp && this.attributes_values.hp > 0){
+            this.attributes_values.hp += this.attributes_values.hp_recovery
+            if(this.attributes_values.hp > this.attributes_values.max_hp){
+                this.attributes_values.hp = this.attributes_values.max_hp
+            }
+        }
+
+        if(this.attributes_values.sp < this.attributes_values.max_sp && this.attributes_values.sp > 0){
+            this.attributes_values.sp += this.attributes_values.sp_recovery
+            if(this.attributes_values.sp > this.attributes_values.max_sp){
+                this.attributes_values.sp = this.attributes_values.max_sp
+            }
+        }
 
         if(this.attributes_values.stamina < this.attributes_values.max_stamina 
-            && this.cooldown.staminaCooldown <= 0 && !this.state.running){
+            && this.cooldown.stamina <= 0 && !this.state.running){
             this.attributes_values.stamina += 1
             if(this.attributes_values.stamina > this.attributes_values.max_stamina){
                 this.attributes_values.stamina = this.attributes_values.max_stamina
             }
         }else{
-            if(this.cooldown.staminaCooldown > 0){
-                this.cooldown.staminaCooldown -= 1
+            if(this.cooldown.stamina > 0){
+                this.cooldown.stamina -= 1
             }
         }
 
-        if(this.cooldown.attackCooldown > 0){
-            this.cooldown.attackCooldown -= 1
+        if(this.cooldown.attack > 0){
+            this.cooldown.attack -= 1
+        }
+
+        if(this.cooldown.powerBlade > 0){
+            this.cooldown.powerBlade -= 1
+        }
+        
+        if(this.cooldown.rapidBlade > 0){
+            this.cooldown.rapidBlade -= 1
+        }
+
+        if(this.cooldown.cure > 0){
+            this.cooldown.cure -= 1
+        }
+
+        if(this.bad_status.stun > 0){
+            this.bad_status.stun -= 1
         }
     }
 
@@ -561,11 +595,11 @@ class Player{
 
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
-        context.fillText('stm_cdown: ' + this.cooldown.staminaCooldown, center_x +2, this.position.y + 52 + 12 +24)
+        context.fillText('stm_cdown: ' + this.cooldown.stamina, center_x +2, this.position.y + 52 + 12 +24)
 
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
-        context.fillText('atk_cdown: ' + this.cooldown.attackCooldown, center_x +2, this.position.y + 52 +24+12+6)
+        context.fillText('atk_cdown: ' + this.cooldown.attack, center_x +2, this.position.y + 52 +24+12+6)
 
         context.font = "10px Arial Black"
         context.fillStyle = 'black'

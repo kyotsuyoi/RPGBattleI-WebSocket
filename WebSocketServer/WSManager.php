@@ -149,9 +149,19 @@ class WSManager implements MessageComponentInterface {
                         'result' => $json->result, 
                         'knockback_side' => $json->knockback_side, 
                         'knockback_val' => $json->knockback_val,
-                        'stamina_result' => $json->stamina_result]
+                        'stamina_result' => $json->stamina_result,
+                        'stun' => $json->stun]
                     ));
                     //echo "Type: {$json->type} from ID:{$from->resourceId} to ID: {$json->id}\n";                
+                } 
+
+                if($json->type === 'action_retore'){
+                    $client->send(json_encode(
+                        ['type' => 'action_retore', 
+                        'id' => $json->id, 
+                        'result' => $json->result, 
+                        'retore_type' => $json->retore_type]
+                    ));             
                 } 
 
                 if($json->type === 'login'){

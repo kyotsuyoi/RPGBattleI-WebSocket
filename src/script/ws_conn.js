@@ -128,19 +128,63 @@ function setConnection(user_name){
             
             weapon = new Weapon({x : p.position.x, y : p.position.y, owner_id : id, 
                 type : 'sword_1', side : p.state.side})
-            weapons.push(weapon)   
+            weapons.push(weapon)  
             
-            damage = new Damage({
-                x : p.position.x, y : p.position.y, 
-                owner_id : p.id, owner : 'player', side : p.state.side, 
-                character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
-            })
-            damages.push(damage) 
-                
+            switch (attack_type){
+                case 'common':
+                    damage = new Damage({
+                        x : p.position.x, y : p.position.y, 
+                        owner_id : p.id, owner : 'player', side : p.state.side, 
+                        character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
+                    })
+                break
+
+                case 'power_blade':
+                    damage = new Damage({
+                        x : p.position.x, y : p.position.y, 
+                        owner_id : p.id, owner : 'player', type : 'power_blade', side : p.state.side, 
+                        character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
+                    })
+                break
+
+                case 'rapid_blade':
+                    damage = new Damage({
+                        x : p.position.x, y : p.position.y, 
+                        owner_id : p.id, owner : 'player', type : 'rapid_blade', side : p.state.side, 
+                        character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
+                    })
+                break
+
+                case 'ghost_blade':
+                    damage = new Damage({
+                        x : p.position.x, y : p.position.y, 
+                        owner_id : p.id, owner : 'player', type : 'ghost_blade', side : p.state.side, 
+                        character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
+                    })
+                break
+
+                case 'cure':
+                    damage = new Damage({
+                        x : p.position.x, y : p.position.y, 
+                        owner_id : p.id, owner : 'player', type : 'cure', side : p.state.side, 
+                        character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
+                    })
+                break
+
+                case 'phanton_blade':
+                    damage = new Damage({
+                        x : p.position.x, y : p.position.y, 
+                        owner_id : p.id, owner : 'player', type : 'phanton_blade', side : p.state.side, 
+                        character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
+                    })
+                break
+            }            
+            
+            damages.push(damage)                 
         }
 
         if (data.type === 'action_damage'){
-            console.log('action:'+data.type + ' from id:'+data.id)
+            //console.log('action:'+data.type + ' from id:'+data.id)
             var p
             if(data.id === player_id){
                 p = player
@@ -160,7 +204,7 @@ function setConnection(user_name){
 
             if(data.stamina_result > 0){
                 p.attributes_values.stamina -= data.stamina_result
-                p.cooldown.staminaCooldown = 50
+                p.cooldown.stamina = 50
             }
 
             if(data.result > 0){
@@ -168,6 +212,7 @@ function setConnection(user_name){
                 if(p.attributes_values.hp < 0){
                     p.attributes_values.hp = 0 
                 }
+                p.bad_status.stun = 4
                 setRumble('damage')
             }
 
@@ -210,6 +255,36 @@ function setConnection(user_name){
                     }
                 break 
             }
+        }
+
+        if(data.type === 'action_retore'){
+            var p
+            if(data.id === player_id){
+                p = player
+            }else{
+                p = players.find(element => element.id == data.id)
+            } 
+
+            if(p === undefined){
+                console.log('action_damage: player is not defined')
+                return
+            }
+            
+            var color = 'green'
+            if(data.retore_type === 'area_cure'){
+                color = 'green'
+            }
+
+            if(data.result > 0){
+                p.attributes_values.hp += data.result
+                if(p.attributes_values.hp > p.attributes_values.max_hp){
+                    p.attributes_values.hp = p.attributes_values.max_hp
+                }
+            }
+
+            display = new Display({x : p.position.x + p.width/2, y : p.position.y + p.height/2, 
+                color : color, text : data.result, type : 'damage'})
+            displays.push(display) 
         }
     
         if(data.type === 'first_connection'){

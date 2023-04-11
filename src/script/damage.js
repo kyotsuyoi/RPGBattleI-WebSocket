@@ -384,10 +384,7 @@ function damage_action(damage){
             var inteligence = player.attributes.inteligence            
 
             if(damage.type == 'cure'){
-                playerCure(damage, player, inteligence)
-                if(player2 != null){
-                    playerCure(damage, player2, inteligence)
-                }                
+                playerCure(damage, player, inteligence)            
             }else{
                 playerDamagePlayer(damage)                
             }
@@ -711,7 +708,7 @@ function playerDamagePlayer(damage){
                 displays.push(display)
 
                 if(!damage.isKnockBack){
-                    sendDamage(enemy.id, result, null, null, stamina_result)
+                    sendDamage(enemy.id, result, null, null, stamina_result, 0)
                     return
                 }
                 var knock_val = knock_back(damage.power, player.attributes.power, enemy.attributes.power)
@@ -749,11 +746,11 @@ function playerDamagePlayer(damage){
                         }
                     break 
                 }
-                sendDamage(enemy.id, result, damage.side, knock_val, stamina_result)
+                sendDamage(enemy.id, result, damage.side, knock_val, stamina_result, damage.stun)
             }else{
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
                 displays.push(display)                
-                sendDamage(enemy.id, 'MISS', null, null, 0)
+                sendDamage(enemy.id, 'MISS', null, null, 0, 0)
             }    
         }
     }) 
@@ -766,9 +763,10 @@ function playerCure(cure, player, inteligence){
         if(player.attributes_values.hp >= player.attributes_values.max_hp){
             return
         }
-        
+
+        //this is to not double cure        
         var id = damage.lastDamage.filter(element => element == player.id)
-        if(id == 'p1' || id == 'p2'){
+        if(id == player.id){
             return
         }
         damage.lastDamage.push(player.id) 
@@ -780,12 +778,12 @@ function playerCure(cure, player, inteligence){
             player.attributes_values.hp += cure_value
         }
         display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'green', text : Math.round(cure_value), type : 'damage'})
-        displays.push(display)
- 
+        displays.push(display)              
+        sendRetore(player.id, Math.round(cure_value), 'area_cure')
     }
 }
 
-function sendDamage(id, result, knockback_side, knockback_val, stamina_result){
+function sendDamage(id, result, knockback_side, knockback_val, stamina_result, stun){
     
     var json_obj = {
         'type' : 'action_damage',
@@ -793,10 +791,23 @@ function sendDamage(id, result, knockback_side, knockback_val, stamina_result){
         'result' : result,
         'knockback_side' : knockback_side,
         'knockback_val' : knockback_val,
-        'stamina_result': stamina_result
+        'stamina_result': stamina_result,
+        'stun': stun
     }
 
     conn.send(JSON.stringify(json_obj))
     //console.log('send dmg type:action_damage '+ ' from:'+player.id+' to:'+id)    
+}
+
+function sendRetore(id, result, retore_type){
+    
+    var json_obj = {
+        'type' : 'action_retore',
+        'id' : id,
+        'result' : result,
+        'retore_type' : retore_type
+    }
+
+    conn.send(JSON.stringify(json_obj)) 
 }
 
