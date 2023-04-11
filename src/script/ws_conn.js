@@ -212,7 +212,15 @@ function setConnection(user_name){
                 if(p.attributes_values.hp < 0){
                     p.attributes_values.hp = 0 
                 }
-                p.bad_status.stun = 4
+                if(data.stun > 0){
+                    p.bad_status.stun = data.stun
+                    p.state.walking = false
+                    keys.up.pressed = false 
+                    keys.down.pressed = false 
+                    keys.left.pressed = false 
+                    keys.right.pressed = false
+                }
+                
                 setRumble('damage')
             }
 

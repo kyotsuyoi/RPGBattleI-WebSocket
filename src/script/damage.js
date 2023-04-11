@@ -708,7 +708,7 @@ function playerDamagePlayer(damage){
                 displays.push(display)
 
                 if(!damage.isKnockBack){
-                    sendDamage(enemy.id, result, null, null, stamina_result, 0)
+                    sendDamage(enemy.id, result, null, null, stamina_result, damage.stun)
                     return
                 }
                 var knock_val = knock_back(damage.power, player.attributes.power, enemy.attributes.power)
