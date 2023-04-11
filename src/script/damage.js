@@ -167,7 +167,7 @@ class Damage{
                 this.attack_percentage = 100
                 this.bonus_dexterity = 0                
                 this.speed = 4
-                this.stun = 10
+                this.stun = 0
 
                 this.sprites.sprite = createImage('src/image/attack_sword.png')  
                 this.sprites.width = 42
