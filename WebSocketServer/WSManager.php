@@ -36,7 +36,8 @@ class WSManager implements MessageComponentInterface {
                     'user_name' => null, 
                     'color' => $color, 
                     'x' => 0, 'y' => 0, 
-                    'gender' => '',
+                    'gender' => '', 
+                    'character_class' => '',
                     'side' => 'down', 
                     'walking' => false,
                     'running' => false,
@@ -56,6 +57,7 @@ class WSManager implements MessageComponentInterface {
                                 $inner_x = $player['x'];
                                 $inner_y = $player['y'];
                                 $inner_gender = $player['gender'];
+                                $inner_character_class = $player['character_class'];
                                 $inner_side = $player['side'];
                                 $inner_walking = $player['walking'];
                                 $inner_running = $player['running'];
@@ -74,6 +76,7 @@ class WSManager implements MessageComponentInterface {
                             'x' => $inner_x, 
                             'y' => $inner_y, 
                             'gender' => $inner_gender, 
+                            'character_class' => $inner_character_class, 
                             'side' => $inner_side, 
                             'walking' => $inner_walking, 
                             'running' => $inner_running, 
@@ -81,6 +84,7 @@ class WSManager implements MessageComponentInterface {
                             'defending' => $inner_defending,
                             'attributes_values' => $inner_attributes_values]
                         )); 
+                        echo ('New class:'. $player['character_class'] . "\n");
                     }
                 }
             }
@@ -130,7 +134,8 @@ class WSManager implements MessageComponentInterface {
                     $client->send(json_encode(
                         ['type' => 'action_attack', 
                         'id' => $from->resourceId, 
-                        'attack_type' => $json->attack_type]
+                        'attack_type' => $json->attack_type,
+                        'attributes_values' => $json->attributes_values]
                     ));
 
                     //echo ('ID:'.$from->resourceId.' send action_attack' . "\n");
@@ -175,8 +180,9 @@ class WSManager implements MessageComponentInterface {
                                 'id' => $player['id'], 
                                 'color' => $player['color'], 
                                 'user_name' => $json->user_name, 
-                                'gender' => $json->gender
-                            ]));                           
+                                'gender' => $json->gender, 
+                                'character_class' => $json->character_class
+                            ]));                            
                         }
                     }                
                 } 
@@ -192,6 +198,7 @@ class WSManager implements MessageComponentInterface {
                             $this->players[$key]['x'] = $json->x;
                             $this->players[$key]['y'] = $json->y;
                             $this->players[$key]['gender'] = $json->gender;
+                            $this->players[$key]['character_class'] = $json->character_class;
 
                             echo ('ID:'.$from->resourceId.' login:'. $this->players[$key]['user_name'] . "\n");
                         }

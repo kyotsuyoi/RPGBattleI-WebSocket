@@ -124,7 +124,8 @@ function keyCodeDown(keyCode){
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : 'common'
+                    'attack_type' : 'common',
+                    'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
             }
@@ -185,7 +186,8 @@ function keyCodeDown(keyCode){
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : 'power_blade'
+                    'attack_type' : 'power_blade',
+                    'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
 
@@ -231,7 +233,8 @@ function keyCodeDown(keyCode){
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : spell_type
+                    'attack_type' : spell_type,
+                    'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
 
@@ -281,7 +284,8 @@ function keyCodeDown(keyCode){
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : spell_type
+                    'attack_type' : spell_type,
+                    'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
 

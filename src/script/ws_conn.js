@@ -8,7 +8,8 @@ const button_send = document.getElementById('button_send')
 const login = document.getElementById('login')
 const button_user_name = document.getElementById('button_user_name')
 const checkbox_char_gender = document.getElementById('checkbox_char_gender')
-var char_gender
+const checkbox_char_class = document.getElementById('checkbox_char_class')
+var char_gender, character_class
 
 var button_user_name_click_count = 0
 
@@ -86,6 +87,7 @@ function send_user_name() {
         return
     }  
     char_gender = checkbox_char_gender.options[checkbox_char_gender.selectedIndex].value
+    character_class = checkbox_char_class.options[checkbox_char_class.selectedIndex].value
     button_user_name_click_count++  
     setConnection(value)  
 }
@@ -115,8 +117,10 @@ function setConnection(user_name){
                 p.state.running = data.running
                 p.state.attacking = data.attacking
                 p.state.defending = data.defending
-                p.attributes_values.hp = data.attributes_values.hp
-                p.attributes_values.stamina = data.attributes_values.stamina
+                p.attributes_values = data.attributes_values
+                // p.attributes_values.hp = data.attributes_values.hp
+                // p.attributes_values.sp = data.attributes_values.sp
+                // p.attributes_values.stamina = data.attributes_values.stamina
             }
             //console.log('def:'+data.defending)
         }
@@ -125,6 +129,7 @@ function setConnection(user_name){
             var id = data.id
             var attack_type = data.attack_type
             var p = players.find(element => element.id == id)
+            p.attributes_values = data.attributes_values
             
             weapon = new Weapon({x : p.position.x, y : p.position.y, owner_id : id, 
                 type : 'sword_1', side : p.state.side})
@@ -298,7 +303,7 @@ function setConnection(user_name){
         if(data.type === 'first_connection'){
             player_id = data.id
             output.append('Seu ID: ' + player_id, document.createElement('br'))
-            player = new Player(player_id, user_name, lastTimestamp, 350, 700, data.color, char_gender)
+            player = new Player(player_id, user_name, lastTimestamp, 350, 700, data.color, char_gender, character_class)
             player.start = true
             start()
 
@@ -308,7 +313,8 @@ function setConnection(user_name){
                 'x' : player.position.x,
                 'y' : player.position.y,
                 'user_name' : user_name,
-                'gender' : char_gender
+                'gender' : char_gender,
+                'character_class' : character_class
             }
 
             conn.send(JSON.stringify(json_obj))
@@ -320,7 +326,7 @@ function setConnection(user_name){
         if(data.type === 'first_connection_wellcome'){
             var id = data.id
             output.append(data.user_name + ' (' + data.id + ') entrou', document.createElement('br'))
-            var p = new Player(id, data.user_name, lastTimestamp, 350, 700, data.color, data.gender)
+            var p = new Player(id, data.user_name, lastTimestamp, 350, 700, data.color, data.gender, data.character_class)
             p.start = true
             players.push(p)
         }
@@ -328,7 +334,7 @@ function setConnection(user_name){
         if(data.type === 'get_player'){
             var id = data.id
             output.append('Encontrou ' + data.user_name + ' (' + data.id + ')', document.createElement('br'))
-            var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender)
+            var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)
             p.start = true
             p.state.side = data.side
             p.state.defending = data.defending

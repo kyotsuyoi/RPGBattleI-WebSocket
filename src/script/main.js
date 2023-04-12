@@ -129,12 +129,14 @@ function sendUpdates(){
         player_last_walking !=  player.state.walking || player_last_running !=  player.state.running || 
         player_last_attacking !=  player.state.attacking || player_last_defending !=  player.state.defending ||
         player_last_attributes_values.hp != player.attributes_values.hp ||
+        player_last_attributes_values.sp != player.attributes_values.sp ||
         player_last_attributes_values.stamina != player.attributes_values.stamina){
 
-        var json_attributes_values = {
-            'hp' : player.attributes_values.hp,
-            'stamina' : player.attributes_values.stamina
-        }
+        // var json_attributes_values = {
+        //     'hp' : player.attributes_values.hp,
+        //     'stamina' : player.attributes_values.stamina
+        // }
+        var json_attributes_values = player.attributes_values
 
         var json_obj = {
             'type' : 'action',
@@ -157,6 +159,7 @@ function sendUpdates(){
         player_last_attacking = player.state.attacking
         player_last_defending = player.state.defending
         player_last_attributes_values.hp = player.attributes_values.hp
+        player_last_attributes_values.sp = player.attributes_values.sp
         player_last_attributes_values.stamina = player.attributes_values.stamina
 
         send_tax++

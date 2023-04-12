@@ -1,9 +1,10 @@
 class Player{
-    constructor(id, user_name, lastTimestamp, x, y, color, gender){
+    constructor(id, user_name, lastTimestamp, x, y, color, gender, character_class){
         this.id = id
         this.user_name = user_name
         this.start = false
         this.gender = gender
+        this.character_class = character_class
         this.position ={
             x : x,
             y : y
@@ -507,50 +508,95 @@ class Player{
     }
 
     setGender(){
-        switch(this.gender){
-            case 'male':
-                this.currentCropWidth = 34
-                this.currentCropHeight = 0
-    
-                this.sprites = {
-                    character : {
-                        sprite : createImage('src/image/knight_male.png'),
-                        width : 32,
-                        height : 48,
-                        cropWidth : 32,
-                        cropHeight : 45
-                    },
-                    shield : {
-                        sprite : createImage('src/image/shield_2.png'),
-                        cropWidth : 45,
-                        width : 45
-                    }
-                } 
-            break
+        
+        this.currentCropWidth = 33
+        this.currentCropHeight = 0
 
-            case 'female':
-                this.currentCropWidth = 33
-                this.currentCropHeight = 0
-    
-                this.sprites = {
-                    character : {
-                        sprite : createImage('src/image/knight_female.png'),
-                        width : 32,
-                        height : 43,
-                        cropWidth : 32,
-                        cropHeight : 43
-                    },
-                    shield : {
-                        sprite : createImage('src/image/shield_1.png'),
-                        cropWidth : 45,
-                        width : 45
-                    }
-                }
-            break
+        this.sprites = {
+            character : {
+                sprite : createImage('src/image/undefined.png'),
+                width : 32,
+                height : 43,
+                cropWidth : 32,
+                cropHeight : 43
+            },
+            shield : {
+                sprite : createImage('src/image/shield_2.png'),
+                cropWidth : 45,
+                width : 45
+            }
+        } 
 
-            default:
-                console.log('Gender is not defined')
+        if(this.gender=='male'){
+            switch(this.character_class){
+                case 'knight':
+                    this.sprites.character.sprite = createImage('src/image/knight_male.png')
+                break
+
+                case 'wizzard':
+                    this.sprites.character.sprite = createImage('src/image/wizzard_male.png')
+                break
+            }
         }
+
+        if(this.gender=='female'){
+            switch(this.character_class){
+                case 'knight':
+                    this.sprites.character.sprite = createImage('src/image/knight_female.png')
+                break
+
+                case 'wizzard':
+                    this.sprites.character.sprite = createImage('src/image/wizzard_female.png')
+                break
+            }
+        }
+
+        // switch(this.gender){
+        //     case 'male':
+        //         this.currentCropWidth = 33
+        //         this.currentCropHeight = 0
+    
+        //         this.sprites = {
+        //             character : {
+        //                 //sprite : createImage('src/image/knight_male.png'),
+        //                 sprite : createImage('src/image/wizzard_male.png'),
+        //                 width : 32,
+        //                 height : 43,
+        //                 cropWidth : 32,
+        //                 cropHeight : 43
+        //             },
+        //             shield : {
+        //                 sprite : createImage('src/image/shield_2.png'),
+        //                 cropWidth : 45,
+        //                 width : 45
+        //             }
+        //         } 
+        //     break
+
+        //     case 'female':
+        //         this.currentCropWidth = 33
+        //         this.currentCropHeight = 0
+    
+        //         this.sprites = {
+        //             character : {
+        //                 //sprite : createImage('src/image/knight_female.png'),
+        //                 sprite : createImage('src/image/wizzard_female.png'),
+        //                 width : 32,
+        //                 height : 43,
+        //                 cropWidth : 32,
+        //                 cropHeight : 43
+        //             },
+        //             shield : {
+        //                 sprite : createImage('src/image/shield_1.png'),
+        //                 cropWidth : 45,
+        //                 width : 45
+        //             }
+        //         }
+        //     break
+
+        //     default:
+        //         console.log('Gender is not defined')
+        // }
     }
 
     debug(){
