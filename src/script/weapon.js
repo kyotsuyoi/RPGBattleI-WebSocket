@@ -20,12 +20,25 @@ class Weapon{
 
         var sprite = undefined
         switch(type){
+            case 'dagger':
+                sprite = createImage('src/image/dagger.png')
+            break
+
             case 'sword_1':
                 sprite = createImage('src/image/sword_1.png')
-                break
+            break
+
             case 'sword_2':
                 sprite = createImage('src/image/sword_2.png')
-                break
+            break
+
+            case 'arrow':
+                sprite = createImage('src/image/arrow.png')
+            break
+
+            case 'rod':
+                sprite = createImage('src/image/rod.png')
+            break
         }
 
         this.sprites = {            

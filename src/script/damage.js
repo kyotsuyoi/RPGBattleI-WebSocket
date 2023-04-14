@@ -157,6 +157,27 @@ class Damage{
                 this.sprites.cropHeight = 84
             break
 
+            case 'dagger':
+                this.width = this.width
+                this.height = this.height  
+
+                this.power = 5
+                this.time = 4  
+                this.count_time = 0
+                this.attack_percentage = 80
+                this.bonus_dexterity = 5               
+                this.speed = 4
+                this.stun = 0
+
+                this.sprites.sprite = createImage('src/image/attack_sword.png')  
+                this.sprites.width = 42
+                this.sprites.height = 42
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
             default:       
                 this.width = this.width
                 this.height = this.height  

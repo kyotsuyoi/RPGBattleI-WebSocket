@@ -107,7 +107,7 @@ function keyCodeDown(keyCode){
 
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
-                    owner_id : player.id, owner : 'player', side : player.state.side, 
+                    owner_id : player.id, owner : 'player', type : player.primary_weapon_type, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 })
 
@@ -119,12 +119,12 @@ function keyCodeDown(keyCode){
                 swordSound()
 
                 damages.push(damage)   
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : 'sword_1', side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : 'common',
+                    'attack_type' : player.primary_weapon_type,
                     'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
@@ -181,7 +181,7 @@ function keyCodeDown(keyCode){
                 }
                  
                 damages.push(damage)   
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : 'sword_1', side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
@@ -228,7 +228,7 @@ function keyCodeDown(keyCode){
                 }
 
                 damages.push(damage)
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : 'sword_1', side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
@@ -279,7 +279,7 @@ function keyCodeDown(keyCode){
                 }
 
                 damages.push(damage)
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : 'sword_1', side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {

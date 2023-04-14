@@ -5,6 +5,8 @@ class Player{
         this.start = false
         this.gender = gender
         this.character_class = character_class
+        this.primary_weapon_type
+        this.secondary_weapon_type
         this.position ={
             x : x,
             y : y
@@ -352,7 +354,7 @@ class Player{
         }
 
         this.attributes_values.speed = speed_value(this.attributes.agility)
-        //need adjust: stamina on timestamp
+        
         if(this.state.running && !this.state.defending && this.attributes_values.stamina > 0){
             this.attributes_values.speed = speed_value(this.attributes.agility)*2
             if (keys.up.pressed || keys.down.pressed || keys.left.pressed ||keys.right.pressed){             
@@ -531,10 +533,26 @@ class Player{
             switch(this.character_class){
                 case 'knight':
                     this.sprites.character.sprite = createImage('src/image/knight_male.png')
+                    this.primary_weapon_type = 'sword_2'
+                    this.secondary_weapon_type = 'spear'
                 break
 
                 case 'wizzard':
                     this.sprites.character.sprite = createImage('src/image/wizzard_male.png')
+                    this.primary_weapon_type = 'rod'
+                    this.secondary_weapon_type = 'rod'
+                break
+
+                case 'mage':
+                    this.sprites.character.sprite = createImage('src/image/mage_male.png')
+                    this.primary_weapon_type = 'dagger'
+                    this.secondary_weapon_type = 'rod'
+                break
+
+                case 'archer':
+                    this.sprites.character.sprite = createImage('src/image/archer_male.png')
+                    this.primary_weapon_type = 'dagger'
+                    this.secondary_weapon_type = 'arrow'
                 break
             }
         }
@@ -543,10 +561,26 @@ class Player{
             switch(this.character_class){
                 case 'knight':
                     this.sprites.character.sprite = createImage('src/image/knight_female.png')
+                    this.primary_weapon_type = 'sword_2'                    
+                    this.secondary_weapon_type = 'spear'
                 break
 
                 case 'wizzard':
                     this.sprites.character.sprite = createImage('src/image/wizzard_female.png')
+                    this.primary_weapon_type = 'rod'                    
+                    this.secondary_weapon_type = 'rod'
+                break
+
+                case 'mage':
+                    this.sprites.character.sprite = createImage('src/image/mage_female.png')
+                    this.primary_weapon_type = 'dagger'
+                    this.secondary_weapon_type = 'rod'
+                break
+
+                case 'archer':
+                    this.sprites.character.sprite = createImage('src/image/archer_female.png')
+                    this.primary_weapon_type = 'dagger'
+                    this.secondary_weapon_type = 'arrow'
                 break
             }
         }
@@ -649,7 +683,7 @@ class Player{
 
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
-        context.fillText('framespeed: ' + this.framespeed, center_x +2, this.position.y + 52 +24+12+12)
+        context.fillText('speed: ' + this.attributes_values.speed, center_x +2, this.position.y + 52 +24+24)
 
     }
 
