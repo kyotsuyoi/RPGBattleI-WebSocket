@@ -516,7 +516,7 @@ class Player{
 
         this.sprites = {
             character : {
-                sprite : createImage('src/image/undefined.png'),
+                sprite : createImage('src/image/class_undefined.png'),
                 width : 32,
                 height : 43,
                 cropWidth : 32,
@@ -532,26 +532,32 @@ class Player{
         if(this.gender=='male'){
             switch(this.character_class){
                 case 'knight':
-                    this.sprites.character.sprite = createImage('src/image/knight_male.png')
+                    this.sprites.character.sprite = createImage('src/image/class_knight_male.png')
                     this.primary_weapon_type = 'sword_2'
                     this.secondary_weapon_type = 'spear'
                 break
 
                 case 'wizzard':
-                    this.sprites.character.sprite = createImage('src/image/wizzard_male.png')
+                    this.sprites.character.sprite = createImage('src/image/class_wizzard_male.png')
                     this.primary_weapon_type = 'rod'
                     this.secondary_weapon_type = 'rod'
                 break
 
                 case 'mage':
-                    this.sprites.character.sprite = createImage('src/image/mage_male.png')
+                    this.sprites.character.sprite = createImage('src/image/class_mage_male.png')
                     this.primary_weapon_type = 'dagger'
                     this.secondary_weapon_type = 'rod'
                 break
 
                 case 'archer':
-                    this.sprites.character.sprite = createImage('src/image/archer_male.png')
+                    this.sprites.character.sprite = createImage('src/image/class_archer_male.png')
                     this.primary_weapon_type = 'dagger'
+                    this.secondary_weapon_type = 'arrow'
+                break
+
+                case 'squire':
+                    this.sprites.character.sprite = createImage('src/image/class_squire_male.png')
+                    this.primary_weapon_type = 'sword_1'
                     this.secondary_weapon_type = 'arrow'
                 break
             }
@@ -560,77 +566,36 @@ class Player{
         if(this.gender=='female'){
             switch(this.character_class){
                 case 'knight':
-                    this.sprites.character.sprite = createImage('src/image/knight_female.png')
+                    this.sprites.character.sprite = createImage('src/image/class_knight_female.png')
                     this.primary_weapon_type = 'sword_2'                    
                     this.secondary_weapon_type = 'spear'
                 break
 
                 case 'wizzard':
-                    this.sprites.character.sprite = createImage('src/image/wizzard_female.png')
+                    this.sprites.character.sprite = createImage('src/image/class_wizzard_female.png')
                     this.primary_weapon_type = 'rod'                    
                     this.secondary_weapon_type = 'rod'
                 break
 
                 case 'mage':
-                    this.sprites.character.sprite = createImage('src/image/mage_female.png')
+                    this.sprites.character.sprite = createImage('src/image/class_mage_female.png')
                     this.primary_weapon_type = 'dagger'
                     this.secondary_weapon_type = 'rod'
                 break
 
                 case 'archer':
-                    this.sprites.character.sprite = createImage('src/image/archer_female.png')
+                    this.sprites.character.sprite = createImage('src/image/class_archer_female.png')
                     this.primary_weapon_type = 'dagger'
+                    this.secondary_weapon_type = 'arrow'
+                break
+
+                case 'squire':
+                    this.sprites.character.sprite = createImage('src/image/class_squire_female.png')
+                    this.primary_weapon_type = 'sword_1'
                     this.secondary_weapon_type = 'arrow'
                 break
             }
         }
-
-        // switch(this.gender){
-        //     case 'male':
-        //         this.currentCropWidth = 33
-        //         this.currentCropHeight = 0
-    
-        //         this.sprites = {
-        //             character : {
-        //                 //sprite : createImage('src/image/knight_male.png'),
-        //                 sprite : createImage('src/image/wizzard_male.png'),
-        //                 width : 32,
-        //                 height : 43,
-        //                 cropWidth : 32,
-        //                 cropHeight : 43
-        //             },
-        //             shield : {
-        //                 sprite : createImage('src/image/shield_2.png'),
-        //                 cropWidth : 45,
-        //                 width : 45
-        //             }
-        //         } 
-        //     break
-
-        //     case 'female':
-        //         this.currentCropWidth = 33
-        //         this.currentCropHeight = 0
-    
-        //         this.sprites = {
-        //             character : {
-        //                 //sprite : createImage('src/image/knight_female.png'),
-        //                 sprite : createImage('src/image/wizzard_female.png'),
-        //                 width : 32,
-        //                 height : 43,
-        //                 cropWidth : 32,
-        //                 cropHeight : 43
-        //             },
-        //             shield : {
-        //                 sprite : createImage('src/image/shield_1.png'),
-        //                 cropWidth : 45,
-        //                 width : 45
-        //             }
-        //         }
-        //     break
-
-        //     default:
-        //         console.log('Gender is not defined')
-        // }
     }
 
     debug(){
