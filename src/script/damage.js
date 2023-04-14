@@ -178,6 +178,27 @@ class Damage{
                 this.sprites.cropHeight = 42
             break
 
+            case 'rod':
+                this.width = this.width
+                this.height = this.height  
+
+                this.power = 4
+                this.time = 8
+                this.count_time = 0
+                this.attack_percentage = 60
+                this.bonus_dexterity = 6              
+                this.speed = 4
+                this.stun = 0
+
+                this.sprites.sprite = createImage('src/image/attack_sword.png')  
+                this.sprites.width = 42
+                this.sprites.height = 42
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
             default:       
                 this.width = this.width
                 this.height = this.height  
