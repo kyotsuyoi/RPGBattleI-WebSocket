@@ -158,8 +158,8 @@ class Damage{
             break
 
             case 'shield_reinforce':
-                this.width = 100
-                this.height = 100
+                this.width = 45
+                this.height = 45
 
                 this.power = 0 
                 this.time = 50   
@@ -173,12 +173,12 @@ class Damage{
                 this.isKnockBack = false
 
                 this.sprites.sprite = createImage('src/image/shield_1.png')        
-                this.sprites.width = 100
-                this.sprites.height = 100     
-                this.sprites.currentCropWidth = 84
+                this.sprites.width = 45
+                this.sprites.height = 45     
+                this.sprites.currentCropWidth = 45
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 84
-                this.sprites.cropHeight = 84
+                this.sprites.cropWidth = 45
+                this.sprites.cropHeight = 45
             break
 
             case 'dagger':
