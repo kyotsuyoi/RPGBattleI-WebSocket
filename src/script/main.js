@@ -32,6 +32,8 @@ var player_last_attributes_values = {
     stamina : 0
 }
 
+var player_last_good_status
+
 var players = new Array()
 var weapons = new Array()
 var damages = new Array()
@@ -130,13 +132,8 @@ function sendUpdates(){
         player_last_attacking !=  player.state.attacking || player_last_defending !=  player.state.defending ||
         player_last_attributes_values.hp != player.attributes_values.hp ||
         player_last_attributes_values.sp != player.attributes_values.sp ||
-        player_last_attributes_values.stamina != player.attributes_values.stamina){
-
-        // var json_attributes_values = {
-        //     'hp' : player.attributes_values.hp,
-        //     'stamina' : player.attributes_values.stamina
-        // }
-        var json_attributes_values = player.attributes_values
+        player_last_attributes_values.stamina != player.attributes_values.stamina ||
+        player_last_good_status != player.good_status){
 
         var json_obj = {
             'type' : 'action',
@@ -147,7 +144,8 @@ function sendUpdates(){
             'running' : player.state.running,
             'attacking' : player.state.attacking,
             'defending' : player.state.defending,
-            'attributes_values' : json_attributes_values
+            'attributes_values' : player.attributes_values,
+            'good_status' : player.good_status
         }
 
         conn.send(JSON.stringify(json_obj))
@@ -161,6 +159,7 @@ function sendUpdates(){
         player_last_attributes_values.hp = player.attributes_values.hp
         player_last_attributes_values.sp = player.attributes_values.sp
         player_last_attributes_values.stamina = player.attributes_values.stamina
+        player_last_good_status = player.good_status
 
         send_tax++
     }

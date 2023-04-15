@@ -4,9 +4,8 @@ class Player{
         this.user_name = user_name
         this.start = false
         this.gender = gender
-        this.character_class = character_class
-        this.primary_weapon_type
-        this.secondary_weapon_type
+        this.character_class = character_class                     
+        
         this.position ={
             x : x,
             y : y
@@ -42,9 +41,10 @@ class Player{
         this.cooldown = {
             stamina : 0,
             attack : 0,
-            powerBlade : 0,
-            rapidBlade : 0,
-            cure : 0
+            spell_type_1 : 0,
+            spell_type_2 : 0,
+            spell_type_3 : 0,
+            spell_type_4 : 0
         }
 
         this.attributes = {
@@ -75,12 +75,22 @@ class Player{
         }
 
         this.good_status = {
-
+            shield_reinforce : 0,
+            shield_reflect : 0
         }
 
         this.bad_status = {
             stun : 0
         }
+        
+        this.skill = {
+            spell_type_1 : '',    
+            spell_type_2 : '',   
+            spell_type_3 : '',    
+            spell_type_4 : '',
+            primary_weapon_type : '',
+            secondary_weapon_type : ''
+        }  
 
         this.setAttributesValues()
 
@@ -451,20 +461,32 @@ class Player{
             this.cooldown.attack -= 1
         }
 
-        if(this.cooldown.powerBlade > 0){
-            this.cooldown.powerBlade -= 1
+        if(this.cooldown.spell_type_1 > 0){
+            this.cooldown.spell_type_1 -= 1
         }
         
-        if(this.cooldown.rapidBlade > 0){
-            this.cooldown.rapidBlade -= 1
+        if(this.cooldown.spell_type_2 > 0){
+            this.cooldown.spell_type_2 -= 1
         }
 
-        if(this.cooldown.cure > 0){
-            this.cooldown.cure -= 1
+        if(this.cooldown.spell_type_3 > 0){
+            this.cooldown.spell_type_3 -= 1
         }
+
+        // if(this.cooldown.spell_type_4 > 0){
+        //     this.cooldown.spell_type_4 -= 1
+        // }
 
         if(this.bad_status.stun > 0){
             this.bad_status.stun -= 1
+        }
+
+        if(this.good_status.shield_reinforce > 0){
+            this.good_status.shield_reinforce -= 1
+        }
+
+        if(this.good_status.shield_reflect > 0){
+            this.good_status.shield_reflect -= 1
         }
     }
 
@@ -533,32 +555,22 @@ class Player{
             switch(this.character_class){
                 case 'knight':
                     this.sprites.character.sprite = createImage('src/image/class_knight_male.png')
-                    this.primary_weapon_type = 'sword_2'
-                    this.secondary_weapon_type = 'spear'
                 break
 
                 case 'wizzard':
                     this.sprites.character.sprite = createImage('src/image/class_wizzard_male.png')
-                    this.primary_weapon_type = 'rod'
-                    this.secondary_weapon_type = 'rod'
                 break
 
                 case 'mage':
                     this.sprites.character.sprite = createImage('src/image/class_mage_male.png')
-                    this.primary_weapon_type = 'dagger'
-                    this.secondary_weapon_type = 'rod'
                 break
 
                 case 'archer':
                     this.sprites.character.sprite = createImage('src/image/class_archer_male.png')
-                    this.primary_weapon_type = 'dagger'
-                    this.secondary_weapon_type = 'arrow'
                 break
 
                 case 'squire':
                     this.sprites.character.sprite = createImage('src/image/class_squire_male.png')
-                    this.primary_weapon_type = 'sword_1'
-                    this.secondary_weapon_type = 'arrow'
                 break
             }
         }
@@ -567,34 +579,71 @@ class Player{
             switch(this.character_class){
                 case 'knight':
                     this.sprites.character.sprite = createImage('src/image/class_knight_female.png')
-                    this.primary_weapon_type = 'sword_2'                    
-                    this.secondary_weapon_type = 'spear'
                 break
 
                 case 'wizzard':
                     this.sprites.character.sprite = createImage('src/image/class_wizzard_female.png')
-                    this.primary_weapon_type = 'rod'                    
-                    this.secondary_weapon_type = 'rod'
                 break
 
                 case 'mage':
                     this.sprites.character.sprite = createImage('src/image/class_mage_female.png')
-                    this.primary_weapon_type = 'dagger'
-                    this.secondary_weapon_type = 'rod'
                 break
 
                 case 'archer':
                     this.sprites.character.sprite = createImage('src/image/class_archer_female.png')
-                    this.primary_weapon_type = 'dagger'
-                    this.secondary_weapon_type = 'arrow'
                 break
 
                 case 'squire':
                     this.sprites.character.sprite = createImage('src/image/class_squire_female.png')
-                    this.primary_weapon_type = 'sword_1'
-                    this.secondary_weapon_type = 'arrow'
                 break
             }
+        }
+
+        switch(this.character_class){
+            case 'knight':
+                    this.skill.primary_weapon_type = 'sword_2'                    
+                    this.skill.secondary_weapon_type = 'spear'
+                    this.skill.spell_type_1 = 'power_blade'
+                    this.skill.spell_type_2 = 'ghost_blade'
+                    this.skill.spell_type_3 = 'phanton_blade'
+                    this.skill.spell_type_4 = 'spear'
+                break
+
+                case 'wizzard':
+                    this.skill.primary_weapon_type = 'rod'                    
+                    this.skill.secondary_weapon_type = 'rod'
+                    this.skill.spell_type_1 = ''
+                    this.skill.spell_type_2 = ''
+                    this.skill.spell_type_3 = ''
+                    this.skill.spell_type_4 = ''
+                break
+
+                case 'mage':
+                    this.skill.primary_weapon_type = 'dagger'
+                    this.skill.secondary_weapon_type = 'rod'
+                    this.skill.spell_type_1 = ''
+                    this.skill.spell_type_2 = ''
+                    this.skill.spell_type_3 = 'cure'
+                    this.skill.spell_type_4 = ''
+                break
+
+                case 'archer':
+                    this.skill.primary_weapon_type = 'dagger'
+                    this.skill.secondary_weapon_type = 'arrow'
+                    this.skill.spell_type_1 = ''
+                    this.skill.spell_type_2 = ''
+                    this.skill.spell_type_3 = ''
+                    this.skill.spell_type_4 = ''
+                break
+
+                case 'squire':
+                    this.skill.primary_weapon_type = 'sword_1'
+                    this.skill.secondary_weapon_type = 'arrow'
+                    this.skill.spell_type_1 = 'rapid_blade'
+                    this.skill.spell_type_2 = 'shield_reinforce'
+                    this.skill.spell_type_3 = ''
+                    this.skill.spell_type_4 = ''
+                break
         }
     }
 
@@ -686,5 +735,21 @@ class Player{
         // }
         // this.framespeed *= 3
         // if(this.framespeed < 0.5) this.framespeed = 0.5
+    }    
+
+    setBadStatus(damage_type){
+        
+    }
+
+    setGoogStatus(damage_type){
+        switch (damage_type){
+            case 'shield_reinforce':
+                this.good_status.shield_reinforce = status_duration('shield_reinforce')
+            break
+
+            case 'shield_reflect':
+                this.good_status.shield_reflect = status_duration('shield_reflect')
+            break
+        }
     }
 }

@@ -157,6 +157,30 @@ class Damage{
                 this.sprites.cropHeight = 84
             break
 
+            case 'shield_reinforce':
+                this.width = 100
+                this.height = 100
+
+                this.power = 0 
+                this.time = 50   
+                this.count_time = 0            
+                this.damageCount = 10
+                this.speed = 0
+                this.stun = 0    
+                this.coolDown = 200
+                this.sp_value = 50      
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/shield_1.png')        
+                this.sprites.width = 100
+                this.sprites.height = 100     
+                this.sprites.currentCropWidth = 84
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 84
+                this.sprites.cropHeight = 84
+            break
+
             case 'dagger':
                 this.width = this.width
                 this.height = this.height  
@@ -225,7 +249,7 @@ class Damage{
         this.currentSprite = this.sprites.sprite
 
         this.side = side
-        if(type == 'phanton_blade' || type == 'cure'){
+        if(type == 'phanton_blade' || type == 'cure' || type == 'shield_reinforce'){
             this.position.x = x - this.width/2 + character_width /2
             this.position.y = (y + character_height /2) - (this.height/2) 
             this.sprites.currentCropHeight = 0
@@ -714,6 +738,9 @@ function playerDamagePlayer(damage){
                     }else{
                         shieldSound()
                         stamina_result = stamina_vs_attack(result)
+                        if(enemy.good_status.shield_reinforce > 0){
+                            stamina_result *= 0.6
+                        }
                         enemy.attributes_values.stamina = enemy.attributes_values.stamina - stamina_result
                         if(damage.type==''){  
                             damage.finished = true
@@ -852,4 +879,3 @@ function sendRetore(id, result, retore_type){
 
     conn.send(JSON.stringify(json_obj)) 
 }
-

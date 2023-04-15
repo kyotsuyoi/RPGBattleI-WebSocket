@@ -118,9 +118,7 @@ function setConnection(user_name){
                 p.state.attacking = data.attacking
                 p.state.defending = data.defending
                 p.attributes_values = data.attributes_values
-                // p.attributes_values.hp = data.attributes_values.hp
-                // p.attributes_values.sp = data.attributes_values.sp
-                // p.attributes_values.stamina = data.attributes_values.stamina
+                p.good_status = data.good_status
             }
             //console.log('def:'+data.defending)
         }
@@ -132,7 +130,7 @@ function setConnection(user_name){
             p.attributes_values = data.attributes_values
             
             weapon = new Weapon({x : p.position.x, y : p.position.y, owner_id : id, 
-                type : attack_type, side : p.state.side})
+                type : p.skill.primary_weapon_type, side : p.state.side})
             weapons.push(weapon)  
 
             damage = new Damage({
@@ -348,7 +346,8 @@ function setConnection(user_name){
             var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)
             p.start = true
             p.state.side = data.side
-            p.state.defending = data.defending
+            p.state.defending = data.defending            
+            p.good_status = data.defending
             players.push(p)
         }
     

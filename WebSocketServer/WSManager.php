@@ -43,7 +43,8 @@ class WSManager implements MessageComponentInterface {
                     'running' => false,
                     'attacking' => false,
                     'defending' => false,
-                    'attributes_values' => '']
+                    'attributes_values' => '',
+                    'good_status' => '']
                 );
                 //var_dump($this->players);
 
@@ -64,6 +65,7 @@ class WSManager implements MessageComponentInterface {
                                 $inner_attacking = $player['attacking'];
                                 $inner_defending = $player['defending'];
                                 $inner_attributes_values = $player['attributes_values'];
+                                $inner_good_status = $player['good_status'];
                                 //var_dump($player);
                             }
                         }
@@ -82,7 +84,8 @@ class WSManager implements MessageComponentInterface {
                             'running' => $inner_running, 
                             'attacking' => $inner_attacking, 
                             'defending' => $inner_defending,
-                            'attributes_values' => $inner_attributes_values]
+                            'attributes_values' => $inner_attributes_values,
+                            'good_status' => $inner_good_status]
                         )); 
                         echo ('New class:'. $player['character_class'] . "\n");
                     }
@@ -126,7 +129,8 @@ class WSManager implements MessageComponentInterface {
                         'running' => $json->running, 
                         'attacking' => $json->attacking, 
                         'defending' => $json->defending, 
-                        'attributes_values' => $json->attributes_values]
+                        'attributes_values' => $json->attributes_values, 
+                        'good_status' => $json->good_status]
                     ));                   
                 }  
                 
@@ -218,7 +222,8 @@ class WSManager implements MessageComponentInterface {
                     $this->players[$key]['running'] = $json->running;
                     $this->players[$key]['attacking'] = $json->attacking;
                     $this->players[$key]['defending'] = $json->defending;
-                    $this->players[$key]['attributes_values'] = $json->attributes_values;
+                    $this->players[$key]['attributes_values'] = $json->attributes_values;                    
+                    $this->players[$key]['good_status'] = $json->good_status;
                 }
             } 
         }

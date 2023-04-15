@@ -25,13 +25,13 @@ const keys = {
     run : {
         pressed : false
     },
-    power_blade : {
+    spell_type_1 : {
         pressed : false
     },
-    rapid_blade : {
+    spell_type_2 : {
         pressed : false
     },
-    cure : {
+    spell_type_3 : {
         pressed : false
     }   
 }
@@ -107,7 +107,7 @@ function keyCodeDown(keyCode){
 
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
-                    owner_id : player.id, owner : 'player', type : player.primary_weapon_type, side : player.state.side, 
+                    owner_id : player.id, owner : 'player', type : player.skill.primary_weapon_type, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 })
 
@@ -119,12 +119,12 @@ function keyCodeDown(keyCode){
                 swordSound()
 
                 damages.push(damage)   
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.primary_weapon_type, side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : player.primary_weapon_type,
+                    'attack_type' : player.skill.primary_weapon_type,
                     'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
@@ -152,13 +152,15 @@ function keyCodeDown(keyCode){
             }
         break
 
-        //power_blade
+        //spell_type_1
         case 100:
-            if(!keys.power_blade.pressed && player.cooldown.powerBlade == 0){
+            if(player.skill.spell_type_1 == undefined || player.skill.spell_type_1 == '') return
+
+            if(!keys.spell_type_1.pressed && player.cooldown.spell_type_1 == 0){
 
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
-                    owner_id : player.id, owner : 'player', type : 'power_blade', side : player.state.side, 
+                    owner_id : player.id, owner : 'player', type : player.skill.spell_type_1, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 })
                 
@@ -166,11 +168,10 @@ function keyCodeDown(keyCode){
                     return 
                 }
 
-                keys.power_blade.pressed = true      
-                //lastKey = 'power_blade'
+                keys.spell_type_1.pressed = true   
                 player.state.attacking = true
 
-                player.cooldown.powerBlade = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
+                player.cooldown.spell_type_1 = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()             
 
@@ -181,12 +182,12 @@ function keyCodeDown(keyCode){
                 }
                  
                 damages.push(damage)   
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.primary_weapon_type, side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : 'power_blade',
+                    'attack_type' : player.skill.spell_type_1,
                     'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
@@ -195,18 +196,15 @@ function keyCodeDown(keyCode){
             }
         break
 
-        //rapid_blade or ghost_blade
-        case 101:
-            if(!keys.rapid_blade.pressed && player.cooldown.rapidBlade == 0){
-                
-                var spell_type = 'rapid_blade'
-                if(player.gender=='male') {
-                    spell_type = 'ghost_blade'
-                }
+        //spell_type_2
+        case 101:            
+            if(player.skill.spell_type_2 == undefined || player.skill.spell_type_2 == '') return
+
+            if(!keys.spell_type_2.pressed && player.cooldown.spell_type_2 == 0){    
 
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
-                    owner_id : player.id, owner : 'player', type : spell_type, side : player.state.side, 
+                    owner_id : player.id, owner : 'player', type : player.skill.spell_type_2, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 })
 
@@ -214,12 +212,12 @@ function keyCodeDown(keyCode){
                     return 
                 }
 
-                keys.rapid_blade.pressed = true 
-                // = 'rapid_blade'
+                keys.spell_type_2.pressed = true 
                 player.state.attacking = true
 
-                player.cooldown.rapidBlade = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
+                player.cooldown.spell_type_2 = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
                 rapidBladeSound()
+                player.setGoogStatus(player.skill.spell_type_2)
 
                 if(player.attributes_values.sp <= 0){
                     player.attributes_values.sp = 0
@@ -228,12 +226,12 @@ function keyCodeDown(keyCode){
                 }
 
                 damages.push(damage)
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.primary_weapon_type, side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : spell_type,
+                    'attack_type' : player.skill.spell_type_2,
                     'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
@@ -242,18 +240,15 @@ function keyCodeDown(keyCode){
             }
         break
 
-        //cure or phanton_blade
+        //spell_type_3
         case 104:
-            if(!keys.cure.pressed && player.cooldown.cure == 0){
+            if(player.skill.spell_type_3 == undefined || player.skill.spell_type_3 == '') return
 
-                var spell_type = 'cure'
-                if(player.gender=='male') {
-                    spell_type = 'phanton_blade'
-                }                
-
+            if(!keys.spell_type_3.pressed && player.cooldown.spell_type_3 == 0){
+        
                 damage = new Damage({
                     x : player.position.x, y : player.position.y, 
-                    owner_id : player.id, owner : 'player', type : spell_type, side : player.state.side, 
+                    owner_id : player.id, owner : 'player', type : player.skill.spell_type_3, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
                 });
 
@@ -261,12 +256,11 @@ function keyCodeDown(keyCode){
                     return 
                 }
 
-                keys.cure.pressed = true      
-                //lastKey = 'cure'
+                keys.spell_type_3.pressed = true  
                 player.state.attacking = true
 
-                player.cooldown.cure = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
-                if(spell_type=='cure'){
+                player.cooldown.spell_type_3 = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
+                if(player.skill.spell_type_3=='cure'){
                     cureSound()
                 }else{
                     phantonBladeSound()
@@ -279,12 +273,12 @@ function keyCodeDown(keyCode){
                 }
 
                 damages.push(damage)
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.primary_weapon_type, side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
                     'type' : 'action_attack',
-                    'attack_type' : spell_type,
+                    'attack_type' : player.skill.spell_type_3,
                     'attributes_values' : player.attributes_values
                 }        
                 conn.send(JSON.stringify(json_obj)) 
@@ -359,15 +353,15 @@ function keyCodeUp(keyCode){
         break
 
         case 100:
-            keys.power_blade.pressed = false  
+            keys.spell_type_1.pressed = false  
         break
 
         case 101:
-            keys.rapid_blade.pressed = false  
+            keys.spell_type_2.pressed = false  
         break
 
         case 104:
-            keys.cure.pressed = false  
+            keys.spell_type_3.pressed = false  
         break
     }
 
