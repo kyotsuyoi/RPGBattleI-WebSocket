@@ -800,7 +800,8 @@ function playerDamagePlayer(damage){
                     player.height/2, color : 'red', text : result, type : 'damage'})
                     displays.push(display) 
 
-                    sendDamage(player.id, result, damage.side, knock_val, 0, damage.stun)
+                    var knock_val = knock_back(damage.power, player.attributes.power, enemy.attributes.power)
+                    sendDamage(player.id, result, damage.side, 0, 0, damage.stun)
                     sendDamage(enemy.id, 0, damage.side, knock_val, stamina_result, damage.stun)
                     player.attributes_values.hp -= result  
                     if(player.attributes_values.hp < 0){
@@ -821,9 +822,11 @@ function playerDamagePlayer(damage){
                     //screamSound()
                 } 
 
-                display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
-                enemy.height/2, color : 'red', text : result, type : 'damage'})
-                displays.push(display)
+                if(result > 0){
+                    display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
+                    enemy.height/2, color : 'red', text : result, type : 'damage'})
+                    displays.push(display)
+                }
 
                 if(!damage.isKnockBack){
                     sendDamage(enemy.id, result, null, null, stamina_result, damage.stun)

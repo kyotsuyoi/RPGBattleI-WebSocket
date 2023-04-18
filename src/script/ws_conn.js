@@ -182,9 +182,11 @@ function setConnection(user_name){
                 setRumble('damage')
             }
 
-            display = new Display({x : p.position.x + p.width/2, y : p.position.y + p.height/2, 
-                color : color, text : data.result, type : 'damage'})
-            displays.push(display) 
+            if(data.result > 0){
+                display = new Display({x : p.position.x + p.width/2, y : p.position.y + p.height/2, 
+                    color : color, text : data.result, type : 'damage'})
+                displays.push(display) 
+            }
             
             if(data.knockback_side === undefined || data.knockback_side === null) return
             switch (data.knockback_side){
