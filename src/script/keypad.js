@@ -265,6 +265,7 @@ function keyCodeDown(keyCode){
                 }else{
                     phantonBladeSound()
                 }
+                player.setGoogStatus(player.skill.spell_type_3)
 
                 if(player.attributes_values.sp <= 0){
                     player.attributes_values.sp = 0

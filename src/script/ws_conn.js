@@ -137,63 +137,7 @@ function setConnection(user_name){
                 x : p.position.x, y : p.position.y, 
                 owner_id : p.id, owner : 'player', type : attack_type, side : p.state.side, 
                 character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
-            })
-            
-            // switch (attack_type){
-            //     case 'dagger':
-            //     case 'rod':
-            //     case 'sword_1':
-            //     case 'sword_2':
-            //     case 'spear':
-            //     case 'arrow':
-            //         damage = new Damage({
-            //             x : p.position.x, y : p.position.y, 
-            //             owner_id : p.id, owner : 'player', type : attack_type, side : p.state.side, 
-            //             character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
-            //         })
-            //     break
-
-            //     case 'power_blade':
-            //         damage = new Damage({
-            //             x : p.position.x, y : p.position.y, 
-            //             owner_id : p.id, owner : 'player', type : 'power_blade', side : p.state.side, 
-            //             character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
-            //         })
-            //     break
-
-            //     case 'rapid_blade':
-            //         damage = new Damage({
-            //             x : p.position.x, y : p.position.y, 
-            //             owner_id : p.id, owner : 'player', type : 'rapid_blade', side : p.state.side, 
-            //             character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
-            //         })
-            //     break
-
-            //     case 'ghost_blade':
-            //         damage = new Damage({
-            //             x : p.position.x, y : p.position.y, 
-            //             owner_id : p.id, owner : 'player', type : 'ghost_blade', side : p.state.side, 
-            //             character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
-            //         })
-            //     break
-
-            //     case 'cure':
-            //         damage = new Damage({
-            //             x : p.position.x, y : p.position.y, 
-            //             owner_id : p.id, owner : 'player', type : 'cure', side : p.state.side, 
-            //             character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
-            //         })
-            //     break
-
-            //     case 'phanton_blade':
-            //         damage = new Damage({
-            //             x : p.position.x, y : p.position.y, 
-            //             owner_id : p.id, owner : 'player', type : 'phanton_blade', side : p.state.side, 
-            //             character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
-            //         })
-            //     break
-            // }            
-            
+            })               
             damages.push(damage)                 
         }
 

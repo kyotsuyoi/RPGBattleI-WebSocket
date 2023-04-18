@@ -641,7 +641,7 @@ class Player{
                     this.skill.secondary_weapon_type = 'arrow'
                     this.skill.spell_type_1 = 'rapid_blade'
                     this.skill.spell_type_2 = 'shield_reinforce'
-                    this.skill.spell_type_3 = ''
+                    this.skill.spell_type_3 = 'shield_reflect'
                     this.skill.spell_type_4 = ''
                 break
         }
@@ -697,7 +697,11 @@ class Player{
 
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
-        context.fillText('speed: ' + this.attributes_values.speed, center_x +2, this.position.y + 52 +24+24)
+        context.fillText('shield_reinf: ' + this.good_status.shield_reinforce, center_x +2, this.position.y + 52 +24+24)
+
+        context.font = "10px Arial Black"
+        context.fillStyle = 'black'
+        context.fillText('shield_refle: ' + this.good_status.shield_reflect, center_x +2, this.position.y + 52 +24+24+24)
 
     }
 

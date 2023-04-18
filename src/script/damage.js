@@ -164,7 +164,7 @@ class Damage{
                 this.power = 0 
                 this.time = 50   
                 this.count_time = 0            
-                this.damageCount = 10
+                this.damageCount = 0
                 this.speed = 0
                 this.stun = 0    
                 this.coolDown = 200
@@ -173,6 +173,30 @@ class Damage{
                 this.isKnockBack = false
 
                 this.sprites.sprite = createImage('src/image/shield_1.png')        
+                this.sprites.width = 45
+                this.sprites.height = 45     
+                this.sprites.currentCropWidth = 45
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 45
+                this.sprites.cropHeight = 45
+            break
+
+            case 'shield_reflect':
+                this.width = 45
+                this.height = 45
+
+                this.power = 0 
+                this.time = 50   
+                this.count_time = 0            
+                this.damageCount = 0
+                this.speed = 0
+                this.stun = 0    
+                this.coolDown = 200
+                this.sp_value = 50      
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/shield_2.png')        
                 this.sprites.width = 45
                 this.sprites.height = 45     
                 this.sprites.currentCropWidth = 45
@@ -249,7 +273,7 @@ class Damage{
         this.currentSprite = this.sprites.sprite
 
         this.side = side
-        if(type == 'phanton_blade' || type == 'cure' || type == 'shield_reinforce'){
+        if(type == 'phanton_blade' || type == 'cure' || type == 'shield_reinforce' || type == 'shield_reflect'){
             this.position.x = x - this.width/2 + character_width /2
             this.position.y = (y + character_height /2) - (this.height/2) 
             this.sprites.currentCropHeight = 0
@@ -698,6 +722,8 @@ function playerDamagePlayer(damage){
         if(damage.owner == undefined){
             console.log('wrong damage detected')
         }
+        if(damage.type=='shield_reinforce' || damage.type=='shield_reflect')return
+
         if (damage.owner_id != enemy.id && square_colision_area(damage, enemy)) {
             
             //this is to not double damage
@@ -720,7 +746,7 @@ function playerDamagePlayer(damage){
                 )
 
                 var stamina_result = 0
-                if(enemy.state.defending){ 
+                if(enemy.state.defending){                    
     
                     res_stm = enemy.attributes_values.stamina - result
                     if(res_stm < 0){
@@ -762,6 +788,28 @@ function playerDamagePlayer(damage){
                     // displays.push(display)
                 }
 
+                //Shield Reflect
+                if(enemy.good_status.shield_reflect > 0 && enemy.state.defending){                    
+                    var result = attack_vs_defense(
+                        player.attributes_values.attack * damage.attack_percentage / 100, 
+                        player.attributes.dexterity + damage.bonus_dexterity, 
+                        enemy.attributes_values.defense
+                    )
+
+                    display = new Display({x : player.position.x + enemy.width/2, y : player.position.y + 
+                    player.height/2, color : 'red', text : result, type : 'damage'})
+                    displays.push(display) 
+
+                    sendDamage(player.id, result, damage.side, knock_val, 0, damage.stun)
+                    sendDamage(enemy.id, 0, damage.side, knock_val, stamina_result, damage.stun)
+                    player.attributes_values.hp -= result  
+                    if(player.attributes_values.hp < 0){
+                        player.attributes_values.hp = 0
+                    } 
+                    swordSlashSound() 
+                    return
+                }
+
                 //enemy.stunTime = damage.stun  
 
                 if(!damage.isSoundPlayed){
@@ -771,7 +819,8 @@ function playerDamagePlayer(damage){
 
                 if(enemy.attributes_values.hp <= 0){
                     //screamSound()
-                }          
+                } 
+
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
                 enemy.height/2, color : 'red', text : result, type : 'damage'})
                 displays.push(display)

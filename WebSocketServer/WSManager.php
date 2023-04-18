@@ -87,7 +87,6 @@ class WSManager implements MessageComponentInterface {
                             'attributes_values' => $inner_attributes_values,
                             'good_status' => $inner_good_status]
                         )); 
-                        echo ('New class:'. $player['character_class'] . "\n");
                     }
                 }
             }
@@ -204,7 +203,7 @@ class WSManager implements MessageComponentInterface {
                             $this->players[$key]['gender'] = $json->gender;
                             $this->players[$key]['character_class'] = $json->character_class;
 
-                            echo ('ID:'.$from->resourceId.' login:'. $this->players[$key]['user_name'] . "\n");
+                            echo ('ID:'.$from->resourceId.' login:'. $this->players[$key]['user_name'] . "\n");      
                         }
                     }                
                 } 

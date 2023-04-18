@@ -113,6 +113,6 @@ function spell_cooldown(cooldown_value, inteligence, dexterity){
 function status_duration(type){
     switch (type){
         case 'shield_reinforce': return 120
-        case 'shield_reflect': return 60        
+        case 'shield_reflect': return 80        
     }
 }

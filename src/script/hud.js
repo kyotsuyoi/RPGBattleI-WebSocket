@@ -52,8 +52,8 @@ class Hud {
             case 'squire':
                 this.sprite_icon_1 = createImage('src/image/icon_rapid_blade.png')
                 this.sprite_icon_2 = createImage('src/image/icon_shield_reinforce.png')
-                //this.sprite_icon_3 = createImage('src/image/icon_shield_reflect.png')
-                this.sprite_icon_3 = createImage('src/image/icon_blocked.png')
+                this.sprite_icon_3 = createImage('src/image/icon_shield_reflect.png')
+                //this.sprite_icon_3 = createImage('src/image/icon_blocked.png')
                 //this.sprite_icon_4 = createImage('src/image/icon_spear.png')
                 this.sprite_icon_4 = createImage('src/image/icon_blocked.png')
             break
@@ -255,16 +255,6 @@ class Hud {
         context.fillStyle = '#555555dd'        
         context.fillRect(this.position.x + 23 + 31, this.position.y - 30, calc, 21) 
 
-        //test-----
-        if(player.good_status.shield_reinforce > 0){
-            var calc = Math.round(22 * player.good_status.shield_reinforce / status_duration('shield_reinforce')) 
-
-            context.fillStyle = 'yellow'        
-            context.fillRect(this.position.x + 23 + 31, this.position.y - 30, calc, 5) 
-        }        
-        //-------
-
-        if(player.cooldown.spell_type_3==0) return
         //sprite_icon_3
         var damage = new Damage({
             x : undefined, y : undefined, 
@@ -279,68 +269,19 @@ class Hud {
         context.fillRect(this.position.x + 23 + 30 + 32, this.position.y - 30, calc, 21) 
 
 
-        // //Power Blade bar 
-        // damage = new Damage({
-        //     x : undefined, y : undefined, 
-        //     owner_id : undefined, owner : undefined, type : 'power_blade', side : undefined, 
-        //     character_width : undefined, character_height: undefined, lastTimestamp : undefined
-        // })       
-           
-        // var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
-        // var calc = Math.round(16 * powerBladeCoolDown / currentCoolDown) 
+        //need adjust-----
+        if(player.good_status.shield_reinforce > 0){
+            var calc = Math.round(22 * player.good_status.shield_reinforce / status_duration('shield_reinforce')) 
 
-        // context.fillStyle = '#555555dd'        
-        // context.fillRect(this.position.x + 47, this.position.y - 20, calc, 16) 
+            context.fillStyle = 'yellow'        
+            context.fillRect(this.position.x + 23 + 31, this.position.y - 30, calc, 5) 
+        }     
+        if(player.good_status.shield_reflect > 0){
+            var calc = Math.round(22 * player.good_status.shield_reflect / status_duration('shield_reflect')) 
 
-
-        // //Rapid Blade bar
-        // var damage = null    
-        // if (player.gender=='female'){
-        //     damage = new Damage({
-        //         x : undefined, y : undefined, 
-        //         owner_id : undefined, owner : undefined, type : 'rapid_blade', side : undefined, 
-        //         character_width : undefined, character_height: undefined, lastTimestamp : undefined
-        //     }) 
-        // }else{
-        //     damage = new Damage({
-        //         x : undefined, y : undefined, 
-        //         owner_id : undefined, owner : undefined, type : 'ghost_blade', side : undefined, 
-        //         character_width : undefined, character_height: undefined, lastTimestamp : undefined
-        //     }) 
-        // }  
-        // var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
-        // var calc = Math.round(16 * rapidBladeCoolDown / currentCoolDown)         
-
-        // //context.fillText(currentCoolDown + '/' + damage.coolDown,this.position.x, this.position.y + 27)
-        
-        // context.fillStyle = '#555555dd'        
-        // context.fillRect(this.position.x + 72, this.position.y - 20, calc, 16) 
-
-
-        // //Phanton Blade bar
-        // var damage = new Damage({
-        //     x : undefined, y : undefined, 
-        //     owner_id : undefined, owner : undefined, type : 'phanton_blade', side : undefined, 
-        //     character_width : undefined, character_height: undefined, lastTimestamp : undefined
-        // })    
-        // var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
-        // var calc = Math.round(16 * phantonBladeCoolDown / currentCoolDown) 
-
-        // context.fillStyle = '#555555dd'        
-        // context.fillRect(this.position.x + 97, this.position.y - 20, calc, 16) 
-
-
-        // //Cure bar
-        // var damage = new Damage({
-        //     x : undefined, y : undefined, 
-        //     owner_id : undefined, owner : undefined, type : 'cure', side : undefined, 
-        //     character_width : undefined, character_height: undefined, lastTimestamp : undefined
-        // })    
-        // var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
-        // var calc = Math.round(16 * cureCoolDown / currentCoolDown) 
-
-        // context.fillStyle = '#555555dd'        
-        // context.fillRect(this.position.x + 97, this.position.y - 20, calc, 16) 
-        
+            context.fillStyle = 'yellow'        
+            context.fillRect(this.position.x + 23 + 31 + 31, this.position.y - 30, calc, 5) 
+        }  
+        //-------
     }
 }
