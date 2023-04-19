@@ -34,7 +34,7 @@ class Player{
             walking : false,
             attacking : false,
             defending : false,
-            running : false,            
+            running : false,
             side : 'down'
         }
 
@@ -606,7 +606,7 @@ class Player{
                     this.skill.spell_type_1 = 'power_blade'
                     this.skill.spell_type_2 = 'ghost_blade'
                     this.skill.spell_type_3 = 'phanton_blade'
-                    this.skill.spell_type_4 = 'spear'
+                    this.skill.spell_type_4 = ''
                 break
 
                 case 'wizzard':
@@ -621,8 +621,8 @@ class Player{
                 case 'mage':
                     this.skill.primary_weapon_type = 'dagger'
                     this.skill.secondary_weapon_type = 'rod'
-                    this.skill.spell_type_1 = ''
-                    this.skill.spell_type_2 = ''
+                    this.skill.spell_type_1 = 'rod_fire'
+                    this.skill.spell_type_2 = 'rod_ice'
                     this.skill.spell_type_3 = 'cure'
                     this.skill.spell_type_4 = ''
                 break
