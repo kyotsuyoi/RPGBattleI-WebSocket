@@ -205,6 +205,58 @@ class Damage{
                 this.sprites.cropHeight = 45
             break
 
+            case 'rod_fire':
+                this.width = 42
+                this.height = 42
+
+                this.power = 0 
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 200   
+                this.count_time = 1           
+                this.damageCount = 0
+                this.speed = 1.5
+                this.stun = 0    
+                this.coolDown = 50
+                this.sp_value = 12      
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/attack_fire.png')        
+                this.sprites.width = 42
+                this.sprites.height = 42     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
+            case 'rod_ice':
+                this.width = 42
+                this.height = 42
+
+                this.power = 0 
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 200   
+                this.count_time = 1           
+                this.damageCount = 0
+                this.speed = 1.5
+                this.stun = 0    
+                this.coolDown = 50
+                this.sp_value = 12      
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/attack_ice.png')        
+                this.sprites.width = 42
+                this.sprites.height = 42     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
             case 'dagger':
                 this.width = this.width
                 this.height = this.height  
@@ -736,7 +788,12 @@ function playerDamagePlayer(damage){
             var is_hit = is_hit = dexterity_vs_flee(
                 player.attributes.dexterity + damage.bonus_dexterity, 
                 enemy.attributes.agility
-            )                                 
+            )    
+            
+            if(damage.type == 'rod_fire' || damage.type == 'rod_ice'){
+                is_hit = true
+                damage.finished = true
+            }
             
             if(is_hit){                        
                 var result = attack_vs_defense(

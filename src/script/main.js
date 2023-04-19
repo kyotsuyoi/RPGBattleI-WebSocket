@@ -25,6 +25,8 @@ var player_last_walking
 var player_last_running
 var player_last_attacking
 var player_last_defending
+//var player_last_state
+
 var last_keys_attack_pressed
 
 var player_last_attributes_values = {
@@ -128,8 +130,11 @@ function animate(timestamp){
 
 function sendUpdates(){
     if(player_last_x != player.position.x || player_last_y != player.position.y || 
+
         player_last_walking !=  player.state.walking || player_last_running !=  player.state.running || 
         player_last_attacking !=  player.state.attacking || player_last_defending !=  player.state.defending ||
+        //player_last_state != player.state ||
+
         player_last_attributes_values.hp != player.attributes_values.hp ||
         player_last_attributes_values.sp != player.attributes_values.sp ||
         player_last_attributes_values.stamina != player.attributes_values.stamina ||
@@ -139,11 +144,12 @@ function sendUpdates(){
             'type' : 'action',
             'x' : player.position.x,
             'y' : player.position.y,
-            'side' : player.state.side,
-            'walking' : player.state.walking,
-            'running' : player.state.running,
-            'attacking' : player.state.attacking,
-            'defending' : player.state.defending,
+            // 'side' : player.state.side,
+            // 'walking' : player.state.walking,
+            // 'running' : player.state.running,
+            // 'attacking' : player.state.attacking,
+            // 'defending' : player.state.defending,
+            'state' : player.state,
             'attributes_values' : player.attributes_values,
             'good_status' : player.good_status
         }
@@ -156,6 +162,7 @@ function sendUpdates(){
         player_last_running = player.state.running
         player_last_attacking = player.state.attacking
         player_last_defending = player.state.defending
+        //player_last_state = player.state
         player_last_attributes_values.hp = player.attributes_values.hp
         player_last_attributes_values.sp = player.attributes_values.sp
         player_last_attributes_values.stamina = player.attributes_values.stamina

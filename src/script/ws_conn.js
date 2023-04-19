@@ -112,15 +112,16 @@ function setConnection(user_name){
             if(p != undefined){
                 p.position.x = data.x
                 p.position.y = data.y
-                p.state.side = data.side
-                p.state.walking = data.walking
-                p.state.running = data.running
-                p.state.attacking = data.attacking
-                p.state.defending = data.defending
+                // p.state.side = data.side
+                // p.state.walking = data.walking
+                // p.state.running = data.running
+                // p.state.attacking = data.attacking
+                // p.state.defending = data.defending
+                p.state = data.state
                 p.attributes_values = data.attributes_values
                 p.good_status = data.good_status
             }
-            //console.log('def:'+data.defending)
+            //console.log(p.state)
         }
     
         if(data.type === 'action_attack'){
@@ -133,7 +134,7 @@ function setConnection(user_name){
                 type : p.skill.primary_weapon_type, side : p.state.side})
             weapons.push(weapon)  
 
-            damage = new Damage({
+            damage = new Damage({ id : data.damage_id,
                 x : p.position.x, y : p.position.y, 
                 owner_id : p.id, owner : 'player', type : attack_type, side : p.state.side, 
                 character_width : p.width, character_height: p.height, lastTimestamp : lastTimestamp
@@ -182,7 +183,7 @@ function setConnection(user_name){
                 setRumble('damage')
             }
 
-            if(data.result > 0){
+            if(data.result > 0 || data.result == 'MISS'){
                 display = new Display({x : p.position.x + p.width/2, y : p.position.y + p.height/2, 
                     color : color, text : data.result, type : 'damage'})
                 displays.push(display) 
@@ -291,9 +292,11 @@ function setConnection(user_name){
             output.append('Encontrou ' + data.user_name + ' (' + data.id + ')', document.createElement('br'))
             var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)
             p.start = true
-            p.state.side = data.side
-            p.state.defending = data.defending            
-            p.good_status = data.defending
+            // p.state.side = data.side
+            // p.state.defending = data.defending  
+            p.state = data.state
+            p.attributes_values = data.attributes_values
+            p.good_status = data.good_status
             players.push(p)
         }
     

@@ -105,7 +105,7 @@ function keyCodeDown(keyCode){
         case 97:
             if(!keys.attack.pressed && player.cooldown.attack <= 0){
 
-                damage = new Damage({
+                damage = new Damage({ id : lastTimestamp,
                     x : player.position.x, y : player.position.y, 
                     owner_id : player.id, owner : 'player', type : player.skill.primary_weapon_type, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
@@ -124,6 +124,7 @@ function keyCodeDown(keyCode){
 
                 var json_obj = {
                     'type' : 'action_attack',
+                    'damage_id' : damage.id,
                     'attack_type' : player.skill.primary_weapon_type,
                     'attributes_values' : player.attributes_values
                 }        
@@ -158,7 +159,7 @@ function keyCodeDown(keyCode){
 
             if(!keys.spell_type_1.pressed && player.cooldown.spell_type_1 == 0){
 
-                damage = new Damage({
+                damage = new Damage({ id : lastTimestamp,
                     x : player.position.x, y : player.position.y, 
                     owner_id : player.id, owner : 'player', type : player.skill.spell_type_1, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
@@ -187,6 +188,7 @@ function keyCodeDown(keyCode){
 
                 var json_obj = {
                     'type' : 'action_attack',
+                    'damage_id' : damage.id,
                     'attack_type' : player.skill.spell_type_1,
                     'attributes_values' : player.attributes_values
                 }        
@@ -202,7 +204,7 @@ function keyCodeDown(keyCode){
 
             if(!keys.spell_type_2.pressed && player.cooldown.spell_type_2 == 0){    
 
-                damage = new Damage({
+                damage = new Damage({ id : lastTimestamp,
                     x : player.position.x, y : player.position.y, 
                     owner_id : player.id, owner : 'player', type : player.skill.spell_type_2, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
@@ -231,6 +233,7 @@ function keyCodeDown(keyCode){
 
                 var json_obj = {
                     'type' : 'action_attack',
+                    'damage_id' : damage.id,
                     'attack_type' : player.skill.spell_type_2,
                     'attributes_values' : player.attributes_values
                 }        
@@ -246,7 +249,7 @@ function keyCodeDown(keyCode){
 
             if(!keys.spell_type_3.pressed && player.cooldown.spell_type_3 == 0){
         
-                damage = new Damage({
+                damage = new Damage({ id : lastTimestamp,
                     x : player.position.x, y : player.position.y, 
                     owner_id : player.id, owner : 'player', type : player.skill.spell_type_3, side : player.state.side, 
                     character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
@@ -279,6 +282,7 @@ function keyCodeDown(keyCode){
 
                 var json_obj = {
                     'type' : 'action_attack',
+                    'damage_id' : damage.id,
                     'attack_type' : player.skill.spell_type_3,
                     'attributes_values' : player.attributes_values
                 }        
