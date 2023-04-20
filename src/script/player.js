@@ -19,7 +19,8 @@ class Player{
 
         this.lastTimestamp = lastTimestamp
         this.cooldownTimestamp = lastTimestamp
-        this.effectTime = lastTimestamp
+        this.effectTime = lastTimestamp        
+        this.effectFrameTime = lastTimestamp
 
         this.frame = {
             frames : 4,
@@ -324,6 +325,15 @@ class Player{
                 80,
                 80
             )
+        }  
+        
+        if(lastTimestamp > this.effectFrameTime + 100){
+            this.effectFrameTime = lastTimestamp
+
+            this.frame.effectFrame++
+            if(this.frame.effectFrame > 3){
+                this.frame.effectFrame = 0
+            }
         }        
     }
 
@@ -528,10 +538,6 @@ class Player{
             this.good_status.shield_reflect -= 1
         }        
 
-        this.frame.effectFrame++
-        if(this.frame.effectFrame > 3){
-            this.frame.effectFrame = 0
-        }
     }
 
     updateEffectTime(){
