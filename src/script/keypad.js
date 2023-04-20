@@ -379,7 +379,7 @@ function keyCodeUp(keyCode){
 function keypadLoop(){
     if(player === undefined) return
 
-    var diagonal_move = 1 
+    var diagonal_move = 0
     if(axes_x == 1 && axes_y == 1){ 
         diagonal_move = 0.707 //to correct move speed on diagonal (digital)  
     }

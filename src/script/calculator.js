@@ -2,8 +2,16 @@ function attack_value(power, dexterity){
     return power + (power/2) + (dexterity/5)
 }
 
+function m_attack_value(inteligence, dexterity){
+    return inteligence + (inteligence/2) + (dexterity/5)
+}
+
 function defense_value(vitality, dexterity){
     return  vitality + (dexterity/4)
+}
+
+function m_defense_value(inteligence, dexterity){
+    return  inteligence + (dexterity/4)
 }
 
 function flee_value(agility, dexterity){
@@ -42,6 +50,21 @@ function attack_vs_defense(attack, dexterity, defense){
     var result = attack + round - defense;  
     if(defense > attack){
         round = Math.round(Math.random() * (attack/(4-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
+        result = round; 
+    }
+
+    if(result <= 0){
+        return 1
+    }
+    return Math.round(result)
+}
+
+function m_attack_vs_m_defense(m_attack, dexterity, m_defense){
+    var round = Math.round(Math.random() * (m_attack/(2-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
+
+    var result = m_attack + round - m_defense;  
+    if(m_defense > m_attack){
+        round = Math.round(Math.random() * (m_attack/(4-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
         result = round; 
     }
 
@@ -112,7 +135,22 @@ function spell_cooldown(cooldown_value, inteligence, dexterity){
 
 function status_duration(type){
     switch (type){
+        //good
         case 'shield_reinforce': return 120
-        case 'shield_reflect': return 80        
+        case 'shield_reflect': return 80
+        
+        //bad
+        case 'burn' : return 40
+        case 'cold' : return 40
+    }
+}
+
+function status_value(type){
+    switch (type){
+        //good
+        
+        //bad
+        case 'burn' : return 10
+        case 'cold' : return 10
     }
 }

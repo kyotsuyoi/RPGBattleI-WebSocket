@@ -133,7 +133,8 @@ class WSManager implements MessageComponentInterface {
                         // 'defending' => $json->defending, 
                         'state' => $json->state, 
                         'attributes_values' => $json->attributes_values, 
-                        'good_status' => $json->good_status]
+                        'good_status' => $json->good_status, 
+                        'bad_status' => $json->bad_status]
                     ));                   
                 }  
                 
@@ -166,6 +167,22 @@ class WSManager implements MessageComponentInterface {
                         'stun' => $json->stun]
                     ));
                     //echo "Type: {$json->type} from ID:{$from->resourceId} to ID: {$json->id}\n";                
+                } 
+
+                if($json->type === 'action_damage_finish'){
+                    $client->send(json_encode(
+                        ['type' => 'action_damage_finish', 
+                        'id' => $json->id, 
+                        'damage_id' => $json->damage_id]
+                    ));               
+                } 
+
+                if($json->type === 'set_bad_status'){
+                    $client->send(json_encode(
+                        ['type' => 'set_bad_status', 
+                        'id' => $json->id, 
+                        'damage_type' => $json->damage_type]
+                    ));               
                 } 
 
                 if($json->type === 'action_retore'){

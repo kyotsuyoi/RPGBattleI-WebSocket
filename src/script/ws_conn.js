@@ -112,14 +112,10 @@ function setConnection(user_name){
             if(p != undefined){
                 p.position.x = data.x
                 p.position.y = data.y
-                // p.state.side = data.side
-                // p.state.walking = data.walking
-                // p.state.running = data.running
-                // p.state.attacking = data.attacking
-                // p.state.defending = data.defending
                 p.state = data.state
                 p.attributes_values = data.attributes_values
                 p.good_status = data.good_status
+                p.bad_status = data.bad_status
             }
             //console.log(p.state)
         }
@@ -142,7 +138,7 @@ function setConnection(user_name){
             damages.push(damage)                 
         }
 
-        if (data.type === 'action_damage'){
+        if(data.type === 'action_damage'){
             //console.log('action:'+data.type + ' from id:'+data.id)
             var p
             if(data.id === player_id){
@@ -179,7 +175,7 @@ function setConnection(user_name){
                     keys.left.pressed = false 
                     keys.right.pressed = false
                 }
-                
+
                 setRumble('damage')
             }
 
@@ -226,6 +222,11 @@ function setConnection(user_name){
             }
         }
 
+        if(data.type === 'action_damage_finish'){
+            var damage = damages.find(element => element.id == data.damage_id && element.owner_id == data.id)
+            damage.finished = true
+        }
+
         if(data.type === 'action_retore'){
             var p
             if(data.id === player_id){
@@ -254,6 +255,42 @@ function setConnection(user_name){
             display = new Display({x : p.position.x + p.width/2, y : p.position.y + p.height/2, 
                 color : color, text : data.result, type : 'damage'})
             displays.push(display) 
+        }
+
+        if(data.type === 'set_good_status'){
+            
+        }
+
+        if(data.type === 'set_bad_status'){
+            var damage = new Damage({
+                x : undefined, y : undefined, 
+                owner_id : undefined, owner : undefined, type : data.damage_type, side : undefined, 
+                character_width : undefined, character_height: undefined, lastTimestamp : undefined
+            })  
+
+            if(data.id == player_id){
+                switch(damage.bad_status){
+                    case 'burn':
+                        player.bad_status.burn = status_duration(damage.bad_status)
+                    break
+    
+                    case 'cold':
+                        player.bad_status.cold = status_duration(damage.bad_status)
+                    break
+                }
+            }else{
+                var p = players.find(element => element.id == data.id)
+                switch(damage.bad_status){
+                    case 'burn':
+                        p.bad_status.burn = status_duration(damage.bad_status)
+                    break
+    
+                    case 'cold':
+                        p.bad_status.cold = status_duration(damage.bad_status)
+                    break
+                }
+            }
+            
         }
     
         if(data.type === 'first_connection'){

@@ -218,7 +218,9 @@ class Damage{
                 this.speed = 1.5
                 this.stun = 0    
                 this.coolDown = 50
-                this.sp_value = 12      
+                this.sp_value = 12   
+                
+                this.bad_status = 'burn'
                 
                 this.isKnockBack = false
 
@@ -244,7 +246,9 @@ class Damage{
                 this.speed = 1.5
                 this.stun = 0    
                 this.coolDown = 50
-                this.sp_value = 12      
+                this.sp_value = 12    
+                
+                this.bad_status = 'cold'
                 
                 this.isKnockBack = false
 
@@ -793,6 +797,18 @@ function playerDamagePlayer(damage){
             if(damage.type == 'rod_fire' || damage.type == 'rod_ice'){
                 is_hit = true
                 damage.finished = true
+                sendDamageFinish(player.id, damage.id)
+                sendBadStatus(enemy.id, damage.type)
+
+                switch(damage.bad_status){
+                    case 'burn':
+                        enemy.bad_status.burn = status_duration(damage.bad_status)
+                    break
+    
+                    case 'cold':
+                        enemy.bad_status.cold = status_duration(damage.bad_status)
+                    break
+                }
             }
             
             if(is_hit){                        
@@ -972,9 +988,28 @@ function sendDamage(id, result, knockback_side, knockback_val, stamina_result, s
         'stamina_result': stamina_result,
         'stun': stun
     }
-
     conn.send(JSON.stringify(json_obj))
     //console.log('send dmg type:action_damage '+ ' from:'+player.id+' to:'+id)    
+}
+
+function sendDamageFinish(id, damage_id){
+    
+    var json_obj = {
+        'type' : 'action_damage_finish',
+        'id' : id,
+        'damage_id' : damage_id,
+    }
+    conn.send(JSON.stringify(json_obj))   
+}
+
+function sendBadStatus(id, damage_type){
+    
+    var json_obj = {
+        'type' : 'set_bad_status',
+        'id' : id,
+        'damage_type' : damage_type,
+    }
+    conn.send(JSON.stringify(json_obj))   
 }
 
 function sendRetore(id, result, retore_type){
@@ -985,6 +1020,5 @@ function sendRetore(id, result, retore_type){
         'result' : result,
         'retore_type' : retore_type
     }
-
     conn.send(JSON.stringify(json_obj)) 
 }

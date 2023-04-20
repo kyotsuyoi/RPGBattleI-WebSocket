@@ -19,6 +19,7 @@ class Player{
 
         this.lastTimestamp = lastTimestamp
         this.cooldownTimestamp = lastTimestamp
+        this.effectTime = lastTimestamp
 
         this.frame = {
             frames : 4,
@@ -26,7 +27,8 @@ class Player{
             standFrameTime : 500,    
             walkingFrameTime : 100,
             runningFrameTime : 0,      
-            attackFrameTime : 150
+            attackFrameTime : 150,
+            effectFrame : 0
         }
         this.frame.runningFrameTime = this.frame.walkingFrameTime/2
 
@@ -67,6 +69,9 @@ class Player{
             attack : 0,
             defense : 0,
             flee : 0,
+
+            m_attack : 0,
+            m_defense : 0,
             
             speed : 3,
             attack_speed : 0,//-12,  
@@ -80,7 +85,9 @@ class Player{
         }
 
         this.bad_status = {
-            stun : 0
+            stun : 0,
+            burn : 0,
+            cold : 0
         }
         
         this.skill = {
@@ -114,7 +121,8 @@ class Player{
 
     draw(){ 
         
-        if (this.is_debug) this.debug()
+        //if (this.is_debug) 
+        this.debug()
 
         //draw shield first (up only)
         if(this.state.side == 'up' && this.state.defending){
@@ -197,8 +205,8 @@ class Player{
         } 
 
         this.drawBars()
-
         this.drawPlayerMessage()
+        this.drawEffect()
     }
 
     drawBars(){
@@ -299,6 +307,27 @@ class Player{
         }
     }
 
+    drawEffect(){
+        if(this.bad_status.burn > 0){
+            
+            this.effectCropWidth = 42 
+            var center_x = (this.position.x + this.width/2) - (80/2)
+            var center_y = (this.position.y + this.height/2) - (80/2)
+            
+            context.drawImage(          
+                createImage('src/image/effect_burn.png'), 
+                this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
+                0, //corte no eixo y
+                42, //largura do corte
+                42, //altura do corte
+                center_x, 
+                center_y-6,
+                80,
+                80
+            )
+        }        
+    }
+
     update(){
         //sprite switching
         if(!this.state.attacking && this.state.walking){
@@ -327,6 +356,7 @@ class Player{
             setRumble('running')
         }
         this.updateCooldowns()
+        this.updateEffectTime()
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -477,16 +507,56 @@ class Player{
         //     this.cooldown.spell_type_4 -= 1
         // }
 
+        //bad status
         if(this.bad_status.stun > 0){
             this.bad_status.stun -= 1
+        }        
+
+        if(this.bad_status.burn > 0){
+            this.bad_status.burn -= 1
         }
 
+        if(this.bad_status.cold > 0){
+            this.bad_status.cold -= 1
+        }
+
+        //good status
         if(this.good_status.shield_reinforce > 0){
             this.good_status.shield_reinforce -= 1
         }
 
         if(this.good_status.shield_reflect > 0){
             this.good_status.shield_reflect -= 1
+        }        
+
+        this.frame.effectFrame++
+        if(this.frame.effectFrame > 3){
+            this.frame.effectFrame = 0
+        }
+    }
+
+    updateEffectTime(){
+        if(lastTimestamp > this.effectTime + 500){
+            this.effectTime = lastTimestamp
+        }else{
+            return
+        }
+
+        var color = 'red'
+        if(this.bad_status.burn > 0){
+            var result = m_attack_vs_m_defense(status_value('burn'), status_value('burn'), this.attributes_values.m_defense)
+            this.attributes_values.hp -= result
+            if(this.attributes_values.hp < 0){
+                this.attributes_values.hp = 0 
+            }
+            display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height/2, 
+                color : color, text : result, type : 'damage'})
+            displays.push(display) 
+            sendDamage(player.id, result, null, null, 0, 0)
+        }
+
+        if(this.bad_status.cold > 0){
+            //this.bad_status.cold -= 1
         }
     }
 
@@ -524,6 +594,9 @@ class Player{
         this.attributes_values.attack = attack_value(attributes.power, attributes.dexterity)
         this.attributes_values.defense = defense_value(attributes.vitality, attributes.dexterity)
         this.attributes_values.flee = flee_value(attributes.agility, attributes.dexterity)
+
+        this.attributes_values.m_attack = m_attack_value(attributes.inteligence, attributes.dexterity)
+        this.attributes_values.m_defense = m_defense_value(attributes.inteligence, attributes.dexterity)
         
         this.attributes_values.speed = speed_value(attributes.agility) 
         this.attributes_values.attack_speed = attack_speed_value(attributes.agility) -12
@@ -657,7 +730,7 @@ class Player{
         var center_x = (this.position.x + this.width/2) - (square_info_width/2)
         
         context.fillStyle = '#'+this.color
-        context.fillRect(center_x, this.position.y + this.height, square_info_width, 70) 
+        context.fillRect(center_x, this.position.y + this.height, square_info_width, 80) 
 
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
@@ -697,12 +770,19 @@ class Player{
 
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
-        context.fillText('shield_reinf: ' + this.good_status.shield_reinforce, center_x +2, this.position.y + 52 +24+24)
+        context.fillText('burn: ' + this.bad_status.burn, center_x +2, this.position.y + 52 +24+24)
 
         context.font = "10px Arial Black"
         context.fillStyle = 'black'
-        context.fillText('shield_refle: ' + this.good_status.shield_reflect, center_x +2, this.position.y + 52 +24+24+24)
+        context.fillText('cold: ' + this.bad_status.cold, center_x +2, this.position.y + 52 +24+24+6)
 
+        context.font = "10px Arial Black"
+        context.fillStyle = 'black'
+        context.fillText('velocity.x: ' + this.velocity.x, center_x +2, this.position.y + 52 +24+24+12)
+
+        context.font = "10px Arial Black"
+        context.fillStyle = 'black'
+        context.fillText('velocity.y: ' + this.velocity.y, center_x +2, this.position.y + 52 +24+24+18)
     }
 
     setMessage(text){        
