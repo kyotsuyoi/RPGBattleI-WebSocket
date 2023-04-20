@@ -121,8 +121,7 @@ class Player{
 
     draw(){ 
         
-        //if (this.is_debug) 
-        this.debug()
+        if (this.is_debug) this.debug()
 
         //draw shield first (up only)
         if(this.state.side == 'up' && this.state.defending){
