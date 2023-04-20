@@ -16,7 +16,7 @@ class Damage{
 
         this.lastDamage = new Array() //saves id of target that has already taken damage
 
-        this.frameTime = 30
+        this.frameTime = 50
         this.frames = 0
         this.damageCount = 1//for mult damages
         this.lastTimestamp = lastTimestamp
