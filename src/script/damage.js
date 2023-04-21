@@ -18,6 +18,7 @@ class Damage{
 
         this.frameTime = 50
         this.frames = 0
+        this.max_frames = 3
         this.damageCount = 1//for mult damages
         this.lastTimestamp = lastTimestamp
         this.positionTimestamp = lastTimestamp
@@ -36,11 +37,11 @@ class Damage{
         this.type = type   
         switch (type){
             case 'power_blade':
-                this.width = 100
-                this.height = 100
+                this.width = 80
+                this.height = 80
 
                 this.power = 40
-                this.attack_percentage = 200
+                this.attack_percentage = 250
                 this.bonus_dexterity = 5
                 this.time = 60
                 this.count_time = 0  
@@ -50,12 +51,14 @@ class Damage{
                 this.sp_value = 40
 
                 this.sprites.sprite = createImage('src/image/attack_power_sword.png')
-                this.sprites.width = 100
-                this.sprites.height = 100
-                this.sprites.currentCropWidth = 42
+                this.sprites.width = 80
+                this.sprites.height = 80
+                this.sprites.currentCropWidth = 36
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 42
-                this.sprites.cropHeight = 42
+                this.sprites.cropWidth = 36
+                this.sprites.cropHeight = 36
+
+                this.max_frames = 7
             break
 
             case 'rapid_blade':
@@ -76,18 +79,20 @@ class Damage{
                 this.sprites.sprite = createImage('src/image/attack_power_sword.png')
                 this.sprites.width = 50
                 this.sprites.height = 50
-                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropWidth = 36
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 42
-                this.sprites.cropHeight = 42
+                this.sprites.cropWidth = 36
+                this.sprites.cropHeight = 36
+
+                this.max_frames = 7
             break
             
             case 'phanton_blade':
-                this.width = 100
-                this.height = 100
+                this.width = 80
+                this.height = 80
 
                 this.power = 0
-                this.attack_percentage = 50
+                this.attack_percentage = 70
                 this.bonus_dexterity = 10
                 this.time = 80  
                 this.count_time = 0                
@@ -99,13 +104,15 @@ class Damage{
 
                 this.isKnockBack = false
 
-                this.sprites.sprite = createImage('src/image/attack_phanton_blade.png')
-                this.sprites.width = 100
-                this.sprites.height = 100     
-                this.sprites.currentCropWidth = 84
+                this.sprites.sprite = createImage('src/image/attack_circular_fire.png')
+                this.sprites.width = 80
+                this.sprites.height = 80     
+                this.sprites.currentCropWidth = 36
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 84
-                this.sprites.cropHeight = 84
+                this.sprites.cropWidth = 36
+                this.sprites.cropHeight = 36
+
+                this.max_frames = 7
             break
 
             case 'ghost_blade':
@@ -128,10 +135,12 @@ class Damage{
                 this.sprites.sprite = createImage('src/image/attack_power_sword.png')
                 this.sprites.width = 50
                 this.sprites.height = 50
-                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropWidth = 36
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 42
-                this.sprites.cropHeight = 42
+                this.sprites.cropWidth = 36
+                this.sprites.cropHeight = 36
+
+                this.max_frames = 7
             break
 
             case 'cure':
@@ -262,6 +271,93 @@ class Damage{
                 this.sprites.currentCropHeight = 0
                 this.sprites.cropWidth = 42
                 this.sprites.cropHeight = 42
+            break
+
+            case 'rod_water':
+                this.width = 50
+                this.height = 50
+
+                this.power = 0 
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 200   
+                this.count_time = 1           
+                this.damageCount = 0
+                this.speed = 1.5
+                this.stun = 0    
+                this.coolDown = 50
+                this.sp_value = 12    
+                
+                this.bad_status = 'wet'
+                this.magic = true
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/attack_water.png')        
+                this.sprites.width = 50
+                this.sprites.height = 50     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
+            case 'rod_lava':
+                this.width = 50
+                this.height = 50
+
+                this.power = 0 
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 200   
+                this.count_time = 1           
+                this.damageCount = 0
+                this.speed = 1.5
+                this.stun = 0    
+                this.coolDown = 50
+                this.sp_value = 12    
+                
+                this.bad_status = 'burn'
+                this.magic = true
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/attack_lava.png')        
+                this.sprites.width = 50
+                this.sprites.height = 50     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
+            case 'rod_wind':
+                this.width = 56
+                this.height = 56
+
+                this.power = 0 
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 60   
+                this.count_time = 0   
+                this.damageCount = 6
+                this.speed = 0.8
+                this.stun = 0    
+                this.coolDown = 50
+                this.sp_value = 12    
+                
+                //this.bad_status = 'burn'
+                this.magic = true
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/attack_wind.png')        
+                this.sprites.width = 56
+                this.sprites.height = 56     
+                this.sprites.currentCropWidth = 56
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 56
+                this.sprites.cropHeight = 56
             break
 
             case 'dagger':
@@ -396,19 +492,47 @@ class Damage{
         this.center_x = (this.position.x + this.width/2) - (this.sprites.width/2)
         this.center_y = (this.position.y + this.height - this.sprites.height)
 
+        context.save()
         context.globalAlpha = 0.8
+        switch (this.side){            
+            case 'right':
+                //default
+                this.center_y-=10
+            break
+
+            case 'left':
+                context.translate(this.position.x + this.width/2, this.position.y + this.height/2)
+                context.rotate(180 * Math.PI/180)
+                context.translate(-this.position.x - this.width/2, -this.position.y  - this.height/2)
+                this.center_y+=10
+            break
+
+            case 'up':
+                context.translate(this.position.x + this.width/2, this.position.y + this.height/2)
+                context.rotate(270 * Math.PI/180)
+                context.translate(-this.position.x - this.width/2, -this.position.y  - this.height/2)
+                this.center_x+=10
+            break
+
+            case 'down':
+                context.translate(this.position.x + this.width/2, this.position.y + this.height/2)
+                context.rotate(90 * Math.PI/180)
+                context.translate(-this.position.x - this.width/2, -this.position.y  - this.height/2)
+                this.center_x-=10
+            break
+        }
         context.drawImage(          
             this.currentSprite, 
             this.sprites.currentCropWidth * this.frames, //corte no eixo x
-            this.sprites.currentCropHeight, //corte no eixo y
+            0, //corte no eixo y
             this.sprites.cropWidth, //largura do corte
             this.sprites.cropHeight, //altura do corte
             this.center_x, 
-            this.center_y - 10,
+            this.center_y,
             this.sprites.width,
             this.sprites.height
         )
-        context.globalAlpha = 1
+        context.restore()
     }
 
     update(){
@@ -417,7 +541,7 @@ class Damage{
             this.lastTimestamp = lastTimestamp
         }
 
-        if(this.frames > 3){            
+        if(this.frames > this.max_frames){            
             this.frames = 0
             this.lastTimestamp = lastTimestamp
         } 
@@ -448,21 +572,10 @@ function damage_action(damage){
 
             case 'rapid_blade':
                 if(damage.damageCount > 1){
-                    switch(damage.owner_id){                
-                        case 'p1':
-                            weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p', type : 'sword_2', side : player.state.side})
-                            weapons.push(weapon)
-                        break
-                        case 'p2':
-                            weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
-                            weapons.push(weapon)
-                        break
-                    }  
                     damage.lastDamage = new Array()
                     damage.damageCount -= 1
                     damage.count_time = damage.time
                 }else{
-                    //damages.pop(damage)  
                     damage.finished = true
                 }  
             break
@@ -473,29 +586,17 @@ function damage_action(damage){
                     damage.damageCount -= 1
                     damage.count_time = damage.time
                 }else{
-                    //damages.pop(damage)  
                     damage.finished = true
                 }  
             break
 
             case 'phanton_blade':
                 if(damage.damageCount > 1){
-                    switch(damage.owner_id){                
-                        case 'p1':
-                            weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : 'p', type : 'sword_2', side : player.state.side})
-                            weapons.push(weapon)
-                        break
-                        case 'p2':
-                            weapon = new Weapon({x : player2.position.x, y : player2.position.y, owner_id : 'p2', type : 'sword_2', side : player2.side})
-                            weapons.push(weapon)
-                        break
-                    }  
                     damage.lastDamage = new Array()
                     damage.damageCount -= 1
                     damage.count_time = 5
                     damage.stun = 5
                 }else{
-                    //damages.pop(damage)  
                     damage.finished = true
                 } 
             break
@@ -505,29 +606,26 @@ function damage_action(damage){
                     damage.lastDamage = new Array()
                     damage.damageCount -= 1
                     damage.count_time = damage.time
-                }else{
-                    //damages.pop(damage)  
+                }else{ 
                     damage.finished = true
                 } 
             break
 
             default:
-                damage.finished = true
+                if(damage.damageCount > 1){
+                    damage.lastDamage = new Array()
+                    damage.damageCount -= 1
+                    damage.count_time = damage.time
+                }else{
+                    damage.finished = true
+                } 
         }
 
     }else{
         damage.count_time -= 1
-        //damage.draw()
-
-        //damage sound is played only 1 time per damage area
-        // if(damage.lastDamage.length > 0 && damage.isSoundPlayed){                    
-        //     //swordSlashSound() 
-        //     damage.isSoundPlayed = false
-        // }
-
         if(damage.owner == 'player'){
 
-            //Do not execute damage if damage owner is not de player
+            //Do not execute damage if damage owner is the player
             if (damage.owner_id !== player.id){
                 return
             }  
@@ -540,11 +638,6 @@ function damage_action(damage){
                 playerDamagePlayer(damage)                
             }
         }  
-        
-        // if(damage.owner == 'cpu'){
-        //     enemyDamage(damage, player)
-        //     enemyDamage(damage, player2)
-        // }
     }
 }
 
@@ -799,7 +892,7 @@ function playerDamagePlayer(damage){
                 enemy.attributes.agility
             )    
             
-            if(damage.type == 'rod_fire' || damage.type == 'rod_ice'){
+            if(damage.type == 'rod_fire' || damage.type == 'rod_ice' || damage.type == 'rod_water' || damage.type == 'rod_lava'){
                 is_hit = true
                 damage.finished = true
                 sendDamageFinish(player.id, damage.id)
@@ -812,6 +905,10 @@ function playerDamagePlayer(damage){
     
                     case 'cold':
                         enemy.bad_status.cold = status_duration(damage.bad_status)
+                    break
+
+                    case 'wet':
+                        enemy.bad_status.wet = status_duration(damage.bad_status)
                     break
                 }
             }

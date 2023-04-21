@@ -277,10 +277,17 @@ function setConnection(user_name){
                         player.bad_status.burn = status_duration(damage.bad_status)
                         player.bad_status.burn_id = data.sender_id
                         player.bad_status.cold = 0
+                        player.bad_status.wet = 0
                     break
     
                     case 'cold':
                         player.bad_status.cold = status_duration(damage.bad_status)
+                        player.bad_status.burn = 0
+                        player.bad_status.burn_id = 0
+                    break
+
+                    case 'wet':
+                        player.bad_status.wet = status_duration(damage.bad_status)
                         player.bad_status.burn = 0
                         player.bad_status.burn_id = 0
                     break
@@ -291,10 +298,17 @@ function setConnection(user_name){
                     case 'burn':
                         p.bad_status.burn = status_duration(damage.bad_status)
                         p.bad_status.cold = 0
+                        p.bad_status.wet = 0
                     break
     
                     case 'cold':
                         p.bad_status.cold = status_duration(damage.bad_status)
+                        p.bad_status.burn = 0
+                        player.bad_status.burn_id = 0
+                    break
+
+                    case 'cold':
+                        p.bad_status.wet = status_duration(damage.bad_status)
                         p.bad_status.burn = 0
                         player.bad_status.burn_id = 0
                     break

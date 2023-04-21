@@ -145,15 +145,6 @@ function status_duration(type){
         //bad
         case 'burn' : return 40
         case 'cold' : return 40
-    }
-}
-
-function status_value(type){
-    switch (type){
-        //good
-        
-        //bad
-        case 'burn' : return 10
-        case 'cold' : return 10
+        case 'wet' : return 120
     }
 }

@@ -33,7 +33,8 @@ var player_last_bad_status = {
     stun : 0,
     burn_id : 0,
     burn : 0,
-    cold : 0
+    cold : 0,
+    wet : 0
 }
 
 var last_keys_attack_pressed
@@ -144,11 +145,8 @@ function sendUpdates(){
         player_last_bad_status.stun != player.bad_status.stun ||
         player_last_bad_status.burn_id != player.bad_status.burn_id ||
         player_last_bad_status.burn != player.bad_status.burn ||
-        player_last_bad_status.cold != player.bad_status.cold){  
-            
-            if(player_last_bad_status.burn != player.bad_status.burn ){
-                console.log('burn')
-            }
+        player_last_bad_status.cold != player.bad_status.cold ||
+        player_last_bad_status.wet != player.bad_status.wet){             
 
         var json_obj = {
             'type' : 'action',
@@ -177,6 +175,7 @@ function sendUpdates(){
         player_last_bad_status.burn_id = player.bad_status.burn_id 
         player_last_bad_status.burn = player.bad_status.burn 
         player_last_bad_status.cold = player.bad_status.cold
+        player_last_bad_status.wet = player.bad_status.wet
 
         send_tax++
     }

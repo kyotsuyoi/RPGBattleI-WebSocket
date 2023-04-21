@@ -95,7 +95,8 @@ class Player{
             stun : 0,
             burn_id : 0,
             burn : 0,
-            cold : 0
+            cold : 0,
+            wet : 0
         }
         
         this.skill = {
@@ -312,13 +313,16 @@ class Player{
     }
 
     drawEffect(){
+        
+        context.save()
+        context.globalAlpha = 0.8
+
         if(this.bad_status.burn > 0){
             
             this.effectCropWidth = 42 
             var center_x = (this.position.x + this.width/2) - (80/2)
             var center_y = (this.position.y + this.height/2) - (80/2)
             
-            context.globalAlpha = 0.8
             context.drawImage(          
                 createImage('src/image/effect_burn.png'), 
                 this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
@@ -330,7 +334,6 @@ class Player{
                 80,
                 80
             )
-            context.globalAlpha = 1
         }  
 
         if(this.bad_status.cold > 0){
@@ -339,7 +342,6 @@ class Player{
             var center_x = (this.position.x + this.width/2) - (64/2)
             var center_y = (this.position.y + this.height/2) - (64/2)
             
-            context.globalAlpha = 0.8
             context.drawImage(          
                 createImage('src/image/effect_cold.png'), 
                 this.effectCropWidth, //corte no eixo x
@@ -351,8 +353,28 @@ class Player{
                 64,
                 64
             )
-            context.globalAlpha = 1
         } 
+
+        if(this.bad_status.wet > 0){
+            
+            this.effectCropWidth = 42 
+            var center_x = (this.position.x + this.width/2) - (42/2)
+            var center_y = (this.position.y + this.height/2) - (42/2)
+            
+            context.drawImage(          
+                createImage('src/image/effect_wet.png'), 
+                this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
+                0, //corte no eixo y
+                42, //largura do corte
+                42, //altura do corte
+                center_x, 
+                center_y,
+                42,
+                42
+            )
+        } 
+
+        context.restore()
         
         if(lastTimestamp > this.effectFrameTime + 100){
             this.effectFrameTime = lastTimestamp
@@ -558,6 +580,10 @@ class Player{
             this.bad_status.cold -= 1
         }
 
+        if(this.bad_status.wet > 0){
+            this.bad_status.wet -= 1
+        }
+
         //good status
         if(this.good_status.shield_reinforce > 0){
             this.good_status.shield_reinforce -= 1
@@ -600,7 +626,7 @@ class Player{
             active_control = false
         }else{
             active_control = true
-        }
+        }        
     }
 
     setAttributesValues(){
@@ -767,18 +793,18 @@ class Player{
                 case 'wizzard':
                     this.skill.primary_weapon_type = 'rod'                    
                     this.skill.secondary_weapon_type = 'rod'
-                    this.skill.spell_type_1 = ''
+                    this.skill.spell_type_1 = 'rod_lava'
                     this.skill.spell_type_2 = 'rod_ice'
                     this.skill.spell_type_3 = ''
                     this.skill.spell_type_4 = ''
                 break
 
                 case 'mage':
-                    this.skill.primary_weapon_type = 'dagger'
+                    this.skill.primary_weapon_type = 'rod'
                     this.skill.secondary_weapon_type = 'rod'
                     this.skill.spell_type_1 = 'rod_fire'
-                    this.skill.spell_type_2 = ''
-                    this.skill.spell_type_3 = ''
+                    this.skill.spell_type_2 = 'rod_water'
+                    this.skill.spell_type_3 = 'rod_wind'
                     this.skill.spell_type_4 = ''
                 break
 
