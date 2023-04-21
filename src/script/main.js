@@ -17,7 +17,6 @@ let send_tax = 0
 let last_recep_tax = 0
 let last_send_tax = 0
 
-//var player = new Player('', lastTimestamp, 0, 0)
 var player
 var player_last_x
 var player_last_y
@@ -25,17 +24,19 @@ var player_last_walking
 var player_last_running
 var player_last_attacking
 var player_last_defending
-//var player_last_state
-
-var last_keys_attack_pressed
-
 var player_last_attributes_values = {
     hp : 0,
     stamina : 0
 }
-
 var player_last_good_status
-var player_last_bad_status
+var player_last_bad_status = {
+    stun : 0,
+    burn_id : 0,
+    burn : 0,
+    cold : 0
+}
+
+var last_keys_attack_pressed
 
 var players = new Array()
 var weapons = new Array()
@@ -134,13 +135,20 @@ function sendUpdates(){
 
         player_last_walking !=  player.state.walking || player_last_running !=  player.state.running || 
         player_last_attacking !=  player.state.attacking || player_last_defending !=  player.state.defending ||
-        //player_last_state != player.state ||
-
         player_last_attributes_values.hp != player.attributes_values.hp ||
         player_last_attributes_values.sp != player.attributes_values.sp ||
         player_last_attributes_values.stamina != player.attributes_values.stamina ||
         player_last_good_status != player.good_status ||
-        player_last_bad_status != player.bad_status){
+
+        //player_last_bad_status != player.bad_status
+        player_last_bad_status.stun != player.bad_status.stun ||
+        player_last_bad_status.burn_id != player.bad_status.burn_id ||
+        player_last_bad_status.burn != player.bad_status.burn ||
+        player_last_bad_status.cold != player.bad_status.cold){  
+            
+            if(player_last_bad_status.burn != player.bad_status.burn ){
+                console.log('burn')
+            }
 
         var json_obj = {
             'type' : 'action',
@@ -165,7 +173,10 @@ function sendUpdates(){
         player_last_attributes_values.sp = player.attributes_values.sp
         player_last_attributes_values.stamina = player.attributes_values.stamina
         player_last_good_status = player.good_status
-        player_last_bad_status = player.bad_status
+        player_last_bad_status.stun = player.bad_status.stun 
+        player_last_bad_status.burn_id = player.bad_status.burn_id 
+        player_last_bad_status.burn = player.bad_status.burn 
+        player_last_bad_status.cold = player.bad_status.cold
 
         send_tax++
     }
@@ -214,4 +225,18 @@ function debug(){
     context.fillText('recep_tax:'+last_recep_tax,5,80)
     context.fillText('send_tax:'+last_send_tax,5,90)
 
+}
+
+function random_area(height, width){
+    var random_x = Math.round(Math.random() * ((background.width - width) - 0 + 1) + 0)
+    var random_y = Math.round(Math.random() * ((background.height - height) - 0 + 1) + 0)
+
+    var coord = {
+        x : random_x,
+        y : random_y
+    }
+    
+    console.log(coord)
+
+    return coord
 }

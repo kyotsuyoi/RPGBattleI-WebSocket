@@ -3,6 +3,8 @@ var gamepads = {}
 var axes_x = 1
 var axes_y = 1
 
+var active_control = true
+
 const keys = {
     right : {
         pressed : false
@@ -47,7 +49,7 @@ window.addEventListener('keyup', ({keyCode}) => {
 })
 
 function keyCodeDown(keyCode){
-    
+    if(!active_control) return
     if (player == undefined) return
     if (player.bad_status.stun > 0) return
 
@@ -183,7 +185,7 @@ function keyCodeDown(keyCode){
                 }
                  
                 damages.push(damage)   
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.primary_weapon_type, side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
@@ -228,7 +230,7 @@ function keyCodeDown(keyCode){
                 }
 
                 damages.push(damage)
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.primary_weapon_type, side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
@@ -277,7 +279,7 @@ function keyCodeDown(keyCode){
                 }
 
                 damages.push(damage)
-                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.primary_weapon_type, side : player.state.side})
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
                 var json_obj = {
@@ -295,7 +297,7 @@ function keyCodeDown(keyCode){
 }
 
 function keyCodeUp(keyCode){
-    
+    if(!active_control) return
     if (player == undefined) return
 
     switch (keyCode){

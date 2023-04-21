@@ -24,6 +24,7 @@ class Damage{
         this.finished = false
         this.isKnockBack = true //enable or disable knock back
         this.isSoundPlayed = false
+        this.magic = false
 
         this.owner = owner
         this.owner_id = owner_id
@@ -206,8 +207,8 @@ class Damage{
             break
 
             case 'rod_fire':
-                this.width = 42
-                this.height = 42
+                this.width = 50
+                this.height = 50
 
                 this.power = 0 
                 this.attack_percentage = 140
@@ -221,12 +222,13 @@ class Damage{
                 this.sp_value = 12   
                 
                 this.bad_status = 'burn'
+                this.magic = true
                 
-                this.isKnockBack = false
+                this.isKnockBack = false                
 
                 this.sprites.sprite = createImage('src/image/attack_fire.png')        
-                this.sprites.width = 42
-                this.sprites.height = 42     
+                this.sprites.width = 50
+                this.sprites.height = 50     
                 this.sprites.currentCropWidth = 42
                 this.sprites.currentCropHeight = 0
                 this.sprites.cropWidth = 42
@@ -234,8 +236,8 @@ class Damage{
             break
 
             case 'rod_ice':
-                this.width = 42
-                this.height = 42
+                this.width = 50
+                this.height = 50
 
                 this.power = 0 
                 this.attack_percentage = 140
@@ -249,12 +251,13 @@ class Damage{
                 this.sp_value = 12    
                 
                 this.bad_status = 'cold'
+                this.magic = true
                 
                 this.isKnockBack = false
 
                 this.sprites.sprite = createImage('src/image/attack_ice.png')        
-                this.sprites.width = 42
-                this.sprites.height = 42     
+                this.sprites.width = 50
+                this.sprites.height = 50     
                 this.sprites.currentCropWidth = 42
                 this.sprites.currentCropHeight = 0
                 this.sprites.cropWidth = 42
@@ -393,6 +396,7 @@ class Damage{
         this.center_x = (this.position.x + this.width/2) - (this.sprites.width/2)
         this.center_y = (this.position.y + this.height - this.sprites.height)
 
+        context.globalAlpha = 0.8
         context.drawImage(          
             this.currentSprite, 
             this.sprites.currentCropWidth * this.frames, //corte no eixo x
@@ -404,6 +408,7 @@ class Damage{
             this.sprites.width,
             this.sprites.height
         )
+        context.globalAlpha = 1
     }
 
     update(){
@@ -798,7 +803,7 @@ function playerDamagePlayer(damage){
                 is_hit = true
                 damage.finished = true
                 sendDamageFinish(player.id, damage.id)
-                sendBadStatus(enemy.id, damage.type)
+                sendBadStatus(enemy.id, player.id, damage.type)
 
                 switch(damage.bad_status){
                     case 'burn':
@@ -811,63 +816,62 @@ function playerDamagePlayer(damage){
                 }
             }
             
-            if(is_hit){                        
-                var result = attack_vs_defense(
-                    player.attributes_values.attack * damage.attack_percentage / 100, 
-                    player.attributes.dexterity + damage.bonus_dexterity, 
-                    enemy.attributes_values.defense
-                )
+            if(is_hit){    
+                
+                if(damage.magic){
+                    var result = m_attack_vs_m_defense(
+                        player.attributes_values.m_attack * damage.attack_percentage / 100, 
+                        player.attributes.dexterity + damage.bonus_dexterity, 
+                        enemy.attributes_values.m_defense
+                    )
+                }else{
+                    var result = attack_vs_defense(
+                        player.attributes_values.attack * damage.attack_percentage / 100, 
+                        player.attributes.dexterity + damage.bonus_dexterity, 
+                        enemy.attributes_values.defense
+                    )
+                }
 
                 var stamina_result = 0
-                if(enemy.state.defending){                    
+                var res_stm = enemy.attributes_values.stamina - result
+                if(enemy.state.defending && res_stm > 0){                    
     
-                    res_stm = enemy.attributes_values.stamina - result
-                    if(res_stm < 0){
-                        enemy.attributes_values.stamina = 0 
-                        enemy.state.defending = false
-                        enemy.attributes_values.hp += res_stm  
-                        if(enemy.attributes_values.hp <= 0){
-                            enemy.attributes_values.hp = 0.0
-                        }                       
-                        swordSlashSound()  
-                        // display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
-                        // enemy.height/2, color : 'red', text : result, type : 'damage'})
-                        // displays.push(display)                     
-    
-                    }else{
-                        shieldSound()
-                        stamina_result = stamina_vs_attack(result)
-                        if(enemy.good_status.shield_reinforce > 0){
-                            stamina_result *= 0.6
-                        }
-                        enemy.attributes_values.stamina = enemy.attributes_values.stamina - stamina_result
-                        if(damage.type==''){  
-                            damage.finished = true
-                        }
-                        
-                        result = 0
-                    }  
+                    shieldSound()
+                    stamina_result = stamina_vs_attack(result)
+                    if(enemy.good_status.shield_reinforce > 0){
+                        stamina_result *= 0.6
+                    }
+                    enemy.attributes_values.stamina = enemy.attributes_values.stamina - stamina_result
+                    if(damage.type==''){  
+                        damage.finished = true
+                    }
                     
-                    //enemy.stamina.staminaCooldown = 50
+                    result = 0                    
     
                 }else{
                     enemy.attributes_values.hp -= result  
                     if(enemy.attributes_values.hp < 0){
                         enemy.attributes_values.hp = 0
                     }                  
-                    swordSlashSound()          
-                    // display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
-                    //     enemy.height/2, color : 'red', text : result, type : 'damage'})
-                    // displays.push(display)
+                    swordSlashSound() 
                 }
 
                 //Shield Reflect
-                if(enemy.good_status.shield_reflect > 0 && enemy.state.defending){                    
-                    var result = attack_vs_defense(
-                        player.attributes_values.attack * damage.attack_percentage / 100, 
-                        player.attributes.dexterity + damage.bonus_dexterity, 
-                        enemy.attributes_values.defense
-                    )
+                if(enemy.good_status.shield_reflect > 0 && enemy.state.defending){   
+
+                    if(damage.magic){
+                        var result = m_attack_vs_m_defense(
+                            player.attributes_values.m_attack * damage.attack_percentage / 100, 
+                            player.attributes.dexterity + damage.bonus_dexterity, 
+                            enemy.attributes_values.m_defense
+                        )
+                    }else{
+                        var result = attack_vs_defense(
+                            player.attributes_values.attack * damage.attack_percentage / 100, 
+                            player.attributes.dexterity + damage.bonus_dexterity, 
+                            enemy.attributes_values.defense
+                        )
+                    }
 
                     display = new Display({x : player.position.x + enemy.width/2, y : player.position.y + 
                     player.height/2, color : 'red', text : result, type : 'damage'})
@@ -1002,11 +1006,12 @@ function sendDamageFinish(id, damage_id){
     conn.send(JSON.stringify(json_obj))   
 }
 
-function sendBadStatus(id, damage_type){
+function sendBadStatus(id, sender_id, damage_type){
     
     var json_obj = {
         'type' : 'set_bad_status',
         'id' : id,
+        'sender_id' : sender_id,
         'damage_type' : damage_type,
     }
     conn.send(JSON.stringify(json_obj))   

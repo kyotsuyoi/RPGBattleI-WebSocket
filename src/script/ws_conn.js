@@ -40,28 +40,31 @@ function send_message() {
         switch (code){
             case 'pow:':
                 var value = Number(text.replace('code:>pow:',''))
-                player.attributes.power = value
+                player.attributes.power = parseInt(value)
             break
             case 'agi:':
                 var value = Number(text.replace('code:>agi:',''))
-                player.attributes.agility = value
+                player.attributes.agility = parseInt(value)
             break
             case 'dex:':
                 var value = Number(text.replace('code:>dex:',''))
-                player.attributes.dexterity = value
+                player.attributes.dexterity = parseInt(value)
             break
             case 'vit:':
                 var value = Number(text.replace('code:>vit:',''))
-                player.attributes.vitality = value
+                player.attributes.vitality = parseInt(value)
             break
             case 'int:':
                 var value = Number(text.replace('code:>int:',''))
-                player.attributes.inteligence = value
+                player.attributes.inteligence = parseInt(value)
             break
             case 'deb:':
                 var value = text.replace('code:>deb:','')
                 if(value=='player') player.is_debug = !player.is_debug
             break
+            default :
+                player.setMessage('BAD CODE')
+                return
         }
         player.setAttributesValues()
         player.setMessage('CODE RUNNER')
@@ -272,10 +275,14 @@ function setConnection(user_name){
                 switch(damage.bad_status){
                     case 'burn':
                         player.bad_status.burn = status_duration(damage.bad_status)
+                        player.bad_status.burn_id = data.sender_id
+                        player.bad_status.cold = 0
                     break
     
                     case 'cold':
                         player.bad_status.cold = status_duration(damage.bad_status)
+                        player.bad_status.burn = 0
+                        player.bad_status.burn_id = 0
                     break
                 }
             }else{
@@ -283,10 +290,13 @@ function setConnection(user_name){
                 switch(damage.bad_status){
                     case 'burn':
                         p.bad_status.burn = status_duration(damage.bad_status)
+                        p.bad_status.cold = 0
                     break
     
                     case 'cold':
                         p.bad_status.cold = status_duration(damage.bad_status)
+                        p.bad_status.burn = 0
+                        player.bad_status.burn_id = 0
                     break
                 }
             }
@@ -296,7 +306,10 @@ function setConnection(user_name){
         if(data.type === 'first_connection'){
             player_id = data.id
             output.append('Seu ID: ' + player_id, document.createElement('br'))
-            player = new Player(player_id, user_name, lastTimestamp, 350, 700, data.color, char_gender, character_class)
+            player = new Player(player_id, user_name, lastTimestamp, 350, 700, data.color, char_gender, character_class)            
+            // var coord = random_area(player.height, player.width) //350, 700
+            // player.position.x = coord.x
+            // player.position.y = coord.y
             player.start = true
             start()
 

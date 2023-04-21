@@ -7,11 +7,11 @@ function m_attack_value(inteligence, dexterity){
 }
 
 function defense_value(vitality, dexterity){
-    return  vitality + (dexterity/4)
+    return  vitality + (dexterity/3)
 }
 
 function m_defense_value(inteligence, dexterity){
-    return  inteligence + (dexterity/4)
+    return  inteligence + (dexterity/3)
 }
 
 function flee_value(agility, dexterity){
@@ -38,6 +38,9 @@ function attack_speed_value(agility){
 
 function speed_value(agility){
     var val = 0.5 + agility / 10
+    if(val < 0.8){
+        val = 0.8
+    }
     if(val > 2){
         val = 2
     }

@@ -24,16 +24,16 @@ class Hud {
             break
 
             case 'wizzard':
-                this.sprite_icon_1 = createImage('src/image/icon_blocked.png')
-                this.sprite_icon_2 = createImage('src/image/icon_blocked.png')
-                this.sprite_icon_3 = createImage('src/image/icon_blocked.png')
+                this.sprite_icon_1 = createImage('src/image/icon_rod_vulcano.png')
+                this.sprite_icon_2 = createImage('src/image/icon_rod_ice.png')
+                this.sprite_icon_3 = createImage('src/image/icon_rod_eletric.png')
                 this.sprite_icon_4 = createImage('src/image/icon_blocked.png')
             break
 
             case 'mage':
                 this.sprite_icon_1 = createImage('src/image/icon_rod_fire.png')
-                this.sprite_icon_2 = createImage('src/image/icon_rod_ice.png')
-                this.sprite_icon_3 = createImage('src/image/icon_cure.png')
+                this.sprite_icon_2 = createImage('src/image/icon_rod_water.png')
+                this.sprite_icon_3 = createImage('src/image/icon_rod_wind.png')
                 this.sprite_icon_4 = createImage('src/image/icon_blocked.png')
             break
 

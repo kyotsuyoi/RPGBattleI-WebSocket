@@ -51,11 +51,17 @@ class Player{
         }
 
         this.attributes = {
-            power : 12,
-            agility : 10,
-            dexterity : 12,
-            vitality : 11,
-            inteligence : 17
+            // power : 12,
+            // agility : 10,
+            // dexterity : 12,
+            // vitality : 11,
+            // inteligence : 17
+
+            power : 1,
+            agility : 1,
+            dexterity : 1,
+            vitality : 1,
+            inteligence : 1
         }
         
         this.attributes_values = {
@@ -87,6 +93,7 @@ class Player{
 
         this.bad_status = {
             stun : 0,
+            burn_id : 0,
             burn : 0,
             cold : 0
         }
@@ -99,11 +106,9 @@ class Player{
             primary_weapon_type : '',
             secondary_weapon_type : ''
         }  
-
-        this.setAttributesValues()
-
         this.color = color
 
+        this.setAttributesValues()
         this.setGender()
 
         this.currentSprite = this.sprites.character.sprite
@@ -148,9 +153,7 @@ class Player{
         }        
 
         this.center_x = (this.position.x + this.width/2)// - (this.sprites.character.width/2)
-        this.center_y = (this.position.y + this.height)// - (this.sprites.character.height)
-        
-        this.drawPlayerName()
+        this.center_y = (this.position.y + this.height)// - (this.sprites.character.height)        
 
         //draw character
         context.drawImage(          
@@ -204,9 +207,10 @@ class Player{
             }
         } 
 
-        this.drawBars()
-        this.drawPlayerMessage()
         this.drawEffect()
+        this.drawBars()      
+        this.drawPlayerName()
+        this.drawPlayerMessage()  
     }
 
     drawBars(){
@@ -314,6 +318,7 @@ class Player{
             var center_x = (this.position.x + this.width/2) - (80/2)
             var center_y = (this.position.y + this.height/2) - (80/2)
             
+            context.globalAlpha = 0.8
             context.drawImage(          
                 createImage('src/image/effect_burn.png'), 
                 this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
@@ -325,7 +330,29 @@ class Player{
                 80,
                 80
             )
+            context.globalAlpha = 1
         }  
+
+        if(this.bad_status.cold > 0){
+            
+            this.effectCropWidth = 0 
+            var center_x = (this.position.x + this.width/2) - (64/2)
+            var center_y = (this.position.y + this.height/2) - (64/2)
+            
+            context.globalAlpha = 0.8
+            context.drawImage(          
+                createImage('src/image/effect_cold.png'), 
+                this.effectCropWidth, //corte no eixo x
+                0, //corte no eixo y
+                64, //largura do corte
+                64, //altura do corte
+                center_x, 
+                center_y-16,
+                64,
+                64
+            )
+            context.globalAlpha = 1
+        } 
         
         if(lastTimestamp > this.effectFrameTime + 100){
             this.effectFrameTime = lastTimestamp
@@ -477,7 +504,7 @@ class Player{
             }
         }
 
-        if(this.attributes_values.sp < this.attributes_values.max_sp && this.attributes_values.sp > 0){
+        if(this.attributes_values.sp < this.attributes_values.max_sp){
             this.attributes_values.sp += this.attributes_values.sp_recovery
             if(this.attributes_values.sp > this.attributes_values.max_sp){
                 this.attributes_values.sp = this.attributes_values.max_sp
@@ -523,6 +550,8 @@ class Player{
 
         if(this.bad_status.burn > 0){
             this.bad_status.burn -= 1
+        }else{
+            this.bad_status.burn_id = 0
         }
 
         if(this.bad_status.cold > 0){
@@ -549,19 +578,28 @@ class Player{
 
         var color = 'red'
         if(this.bad_status.burn > 0){
-            var result = m_attack_vs_m_defense(status_value('burn'), status_value('burn'), this.attributes_values.m_defense)
+            var p = players.find(element => element.id == this.bad_status.burn_id)
+            var result = m_attack_vs_m_defense(p.attributes_values.m_attack * 0.2, 1, this.attributes_values.m_defense)
             this.attributes_values.hp -= result
             if(this.attributes_values.hp < 0){
                 this.attributes_values.hp = 0 
             }
-            display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height/2, 
+            var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height/2, 
                 color : color, text : result, type : 'damage'})
             displays.push(display) 
             sendDamage(player.id, result, null, null, 0, 0)
         }
 
         if(this.bad_status.cold > 0){
-            //this.bad_status.cold -= 1
+            this.state.walking = false
+            this.state.running = false
+            keyCodeUp(38)
+            keyCodeUp(40)
+            keyCodeUp(37)
+            keyCodeUp(39)
+            active_control = false
+        }else{
+            active_control = true
         }
     }
 
@@ -588,25 +626,64 @@ class Player{
             default:
                 console.log('Gender is not defined')
         }
+            
+        var class_bonus_power = 1
+        var class_bonus_agility = 1
+        var class_bonus_dexterity = 1
+        var class_bonus_vitality = 1
+        var class_bonus_inteligence = 1
+        var class_bonus_hp = 1
+        var class_bonus_sp = 1
+        switch(this.character_class){
+            case 'knight':
+                class_bonus_power = 1.15
+                class_bonus_vitality = 1.2
+                class_bonus_hp = 1.25
+            break
 
-        this.attributes_values.max_hp = hp_value(attributes.vitality, attributes.power)
-        this.attributes_values.max_sp = sp_value(attributes.inteligence, attributes.dexterity)
+            case 'wizzard':
+                class_bonus_inteligence = 1.2
+                class_bonus_dexterity = 1.1
+                class_bonus_sp = 1.25
+            break
+
+            case 'mage':
+                class_bonus_inteligence = 1.1
+                class_bonus_dexterity = 1.2
+                class_bonus_sp = 1.25
+            break
+
+            case 'archer':
+                class_bonus_power = 1.1
+                class_bonus_dexterity = 1.15
+                class_bonus_agility = 1.1
+            break
+
+            case 'squire':
+                class_bonus_power = 1.1
+                class_bonus_vitality = 1.3
+                class_bonus_hp = 1.2
+            break
+        }
+
+        this.attributes_values.max_hp = Math.round(hp_value(attributes.vitality, attributes.power) * class_bonus_hp)
+        this.attributes_values.max_sp = Math.round(sp_value(attributes.inteligence, attributes.dexterity) * class_bonus_sp)
 
         this.attributes_values.hp = this.attributes_values.max_hp
         this.attributes_values.sp = this.attributes_values.max_sp
         this.attributes_values.stamina = this.attributes_values.max_stamina
         
-        this.attributes_values.attack = attack_value(attributes.power, attributes.dexterity)
-        this.attributes_values.defense = defense_value(attributes.vitality, attributes.dexterity)
-        this.attributes_values.flee = flee_value(attributes.agility, attributes.dexterity)
+        this.attributes_values.attack = attack_value(attributes.power * class_bonus_power, attributes.dexterity * class_bonus_dexterity)
+        this.attributes_values.defense = defense_value(attributes.vitality * class_bonus_vitality, attributes.dexterity * class_bonus_dexterity)
+        this.attributes_values.flee = flee_value(attributes.agility * class_bonus_agility, attributes.dexterity * class_bonus_dexterity)
 
-        this.attributes_values.m_attack = m_attack_value(attributes.inteligence, attributes.dexterity)
-        this.attributes_values.m_defense = m_defense_value(attributes.inteligence, attributes.dexterity)
+        this.attributes_values.m_attack = m_attack_value(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity)
+        this.attributes_values.m_defense = m_defense_value(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity)
         
-        this.attributes_values.speed = speed_value(attributes.agility) 
-        this.attributes_values.attack_speed = attack_speed_value(attributes.agility) -12
-        this.attributes_values.hp_recovery = hp_recovery(attributes.vitality)   
-        this.attributes_values.sp_recovery = sp_recovery(attributes.inteligence, attributes.dexterity) 
+        this.attributes_values.speed = speed_value(attributes.agility * class_bonus_agility) 
+        this.attributes_values.attack_speed = attack_speed_value(attributes.agility * class_bonus_agility) -12
+        this.attributes_values.hp_recovery = hp_recovery(attributes.vitality * class_bonus_vitality)   
+        this.attributes_values.sp_recovery = sp_recovery(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity) 
     }
 
     setGender(){
@@ -680,7 +757,7 @@ class Player{
         switch(this.character_class){
             case 'knight':
                     this.skill.primary_weapon_type = 'sword_2'                    
-                    this.skill.secondary_weapon_type = 'spear'
+                    this.skill.secondary_weapon_type = 'sword_2'
                     this.skill.spell_type_1 = 'power_blade'
                     this.skill.spell_type_2 = 'ghost_blade'
                     this.skill.spell_type_3 = 'phanton_blade'
@@ -691,7 +768,7 @@ class Player{
                     this.skill.primary_weapon_type = 'rod'                    
                     this.skill.secondary_weapon_type = 'rod'
                     this.skill.spell_type_1 = ''
-                    this.skill.spell_type_2 = ''
+                    this.skill.spell_type_2 = 'rod_ice'
                     this.skill.spell_type_3 = ''
                     this.skill.spell_type_4 = ''
                 break
@@ -700,8 +777,8 @@ class Player{
                     this.skill.primary_weapon_type = 'dagger'
                     this.skill.secondary_weapon_type = 'rod'
                     this.skill.spell_type_1 = 'rod_fire'
-                    this.skill.spell_type_2 = 'rod_ice'
-                    this.skill.spell_type_3 = 'cure'
+                    this.skill.spell_type_2 = ''
+                    this.skill.spell_type_3 = ''
                     this.skill.spell_type_4 = ''
                 break
 
@@ -716,7 +793,7 @@ class Player{
 
                 case 'squire':
                     this.skill.primary_weapon_type = 'sword_1'
-                    this.skill.secondary_weapon_type = 'arrow'
+                    this.skill.secondary_weapon_type = 'sword_1'
                     this.skill.spell_type_1 = 'rapid_blade'
                     this.skill.spell_type_2 = 'shield_reinforce'
                     this.skill.spell_type_3 = 'shield_reflect'
