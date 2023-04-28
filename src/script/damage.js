@@ -360,6 +360,35 @@ class Damage{
                 this.sprites.cropHeight = 56
             break
 
+            case 'rod_eletric':
+                this.width = 56
+                this.height = 56
+
+                this.power = 0 
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 60   
+                this.count_time = 0   
+                this.damageCount = 6
+                this.speed = 0.8
+                this.stun = 0    
+                this.coolDown = 50
+                this.sp_value = 12    
+                
+                //this.bad_status = 'burn'
+                this.magic = true
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/attack_thunder.png')        
+                this.sprites.width = 56
+                this.sprites.height = 56     
+                this.sprites.currentCropWidth = 56
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 56
+                this.sprites.cropHeight = 56
+            break
+
             case 'dagger':
                 this.width = this.width
                 this.height = this.height  
@@ -912,15 +941,27 @@ function playerDamagePlayer(damage){
                     break
                 }
             }
+
+            if(damage.type == 'rod_wind' && enemy.bad_status.wet > 0){
+                enemy.bad_status.cold = status_duration('cold')                
+                sendBadStatus(enemy.id, player.id, 'rod_ice')
+            }
             
             if(is_hit){    
                 
                 if(damage.magic){
-                    var result = m_attack_vs_m_defense(
+
+                    var mult = 1
+                    if((enemy.bad_status.wet > 0 || enemy.bad_status.cold > 0) && damage.type == 'rod_eletric'){
+                        mult = 1.8
+                    }
+                    var res = m_attack_vs_m_defense(
                         player.attributes_values.m_attack * damage.attack_percentage / 100, 
                         player.attributes.dexterity + damage.bonus_dexterity, 
                         enemy.attributes_values.m_defense
                     )
+
+                    var result = Math.round(res * mult)
                 }else{
                     var result = attack_vs_defense(
                         player.attributes_values.attack * damage.attack_percentage / 100, 

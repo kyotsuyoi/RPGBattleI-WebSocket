@@ -795,7 +795,7 @@ class Player{
                     this.skill.secondary_weapon_type = 'rod'
                     this.skill.spell_type_1 = 'rod_lava'
                     this.skill.spell_type_2 = 'rod_ice'
-                    this.skill.spell_type_3 = ''
+                    this.skill.spell_type_3 = 'rod_eletric'
                     this.skill.spell_type_4 = ''
                 break
 

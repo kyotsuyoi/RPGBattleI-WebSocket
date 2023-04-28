@@ -284,6 +284,7 @@ function setConnection(user_name){
                         player.bad_status.cold = status_duration(damage.bad_status)
                         player.bad_status.burn = 0
                         player.bad_status.burn_id = 0
+                        player.bad_status.wet = 0
                     break
 
                     case 'wet':
@@ -305,6 +306,7 @@ function setConnection(user_name){
                         p.bad_status.cold = status_duration(damage.bad_status)
                         p.bad_status.burn = 0
                         player.bad_status.burn_id = 0
+                        player.bad_status.wet = 0
                     break
 
                     case 'cold':
