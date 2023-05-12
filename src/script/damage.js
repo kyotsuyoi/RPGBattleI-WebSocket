@@ -523,7 +523,13 @@ class Damage{
 
         context.save()
         context.globalAlpha = 0.8
-        switch (this.side){            
+
+        //to set default
+        var drow_side = this.side
+        if(this.type == 'rod_wind' || this.type == 'rod_eletric' || this.type == 'rod_lava' || this.type == 'rod_water'){
+            drow_side = 'right'
+        }
+        switch (drow_side){            
             case 'right':
                 //default
                 this.center_y-=10
