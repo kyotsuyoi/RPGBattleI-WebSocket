@@ -31,10 +31,20 @@ var player_last_attributes_values = {
 var player_last_good_status
 var player_last_bad_status = {
     stun : 0,
+    
+    cold : 0,
+    wet : 0,
+
+    heat : 0,
     burn_id : 0,
     burn : 0,
-    cold : 0,
-    wet : 0
+
+    dirty : 0,
+    petrification : 0,
+
+    breeze : 0,
+    eletrification_id : 0,
+    eletrification : 0
 }
 
 var last_keys_attack_pressed
@@ -143,10 +153,21 @@ function sendUpdates(){
 
         //player_last_bad_status != player.bad_status
         player_last_bad_status.stun != player.bad_status.stun ||
+
+        player_last_bad_status.wet != player.bad_status.wet ||        
+        player_last_bad_status.cold != player.bad_status.cold ||
+
+        player_last_bad_status.heat != player.bad_status.heat || 
         player_last_bad_status.burn_id != player.bad_status.burn_id ||
         player_last_bad_status.burn != player.bad_status.burn ||
-        player_last_bad_status.cold != player.bad_status.cold ||
-        player_last_bad_status.wet != player.bad_status.wet){             
+
+        player_last_bad_status.dirty != player.bad_status.dirty ||        
+        player_last_bad_status.petrification != player.bad_status.petrification ||
+        
+        player_last_bad_status.breeze != player.bad_status.breeze || 
+        player_last_bad_status.eletrification_id != player.bad_status.eletrification_id ||
+        player_last_bad_status.eletrification != player.bad_status.eletrification
+        ){           
 
         var json_obj = {
             'type' : 'action',
@@ -172,10 +193,20 @@ function sendUpdates(){
         player_last_attributes_values.stamina = player.attributes_values.stamina
         player_last_good_status = player.good_status
         player_last_bad_status.stun = player.bad_status.stun 
+
+        player_last_bad_status.wet = player.bad_status.wet
+        player_last_bad_status.cold = player.bad_status.cold
+        
+        player_last_bad_status.heat = player.bad_status.heat
         player_last_bad_status.burn_id = player.bad_status.burn_id 
         player_last_bad_status.burn = player.bad_status.burn 
-        player_last_bad_status.cold = player.bad_status.cold
-        player_last_bad_status.wet = player.bad_status.wet
+        
+        player_last_bad_status.dirty = player.bad_status.dirty
+        player_last_bad_status.petrification = player.bad_status.petrification
+
+        player_last_bad_status.breeze = player.bad_status.breeze
+        player_last_bad_status.eletrification_id = player.bad_status.eletrification_id 
+        player_last_bad_status.eletrification = player.bad_status.eletrification
 
         send_tax++
     }

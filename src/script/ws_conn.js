@@ -278,6 +278,7 @@ function setConnection(user_name){
                         player.bad_status.burn_id = data.sender_id
                         player.bad_status.cold = 0
                         player.bad_status.wet = 0
+                        player.bad_status.heat = 0
                     break
     
                     case 'cold':
@@ -285,12 +286,21 @@ function setConnection(user_name){
                         player.bad_status.burn = 0
                         player.bad_status.burn_id = 0
                         player.bad_status.wet = 0
+                        player.bad_status.heat = 0
                     break
 
                     case 'wet':
                         player.bad_status.wet = status_duration(damage.bad_status)
                         player.bad_status.burn = 0
                         player.bad_status.burn_id = 0
+                        player.bad_status.heat = 0
+                    break
+
+                    case 'heat':
+                        player.bad_status.heat = status_duration(damage.bad_status)
+                        player.bad_status.burn_id = data.sender_id
+                        player.bad_status.cold = 0
+                        player.bad_status.wet = 0
                     break
                 }
             }else{
@@ -300,19 +310,28 @@ function setConnection(user_name){
                         p.bad_status.burn = status_duration(damage.bad_status)
                         p.bad_status.cold = 0
                         p.bad_status.wet = 0
+                        p.bad_status.heat = 0
                     break
     
                     case 'cold':
                         p.bad_status.cold = status_duration(damage.bad_status)
                         p.bad_status.burn = 0
-                        player.bad_status.burn_id = 0
-                        player.bad_status.wet = 0
+                        p.bad_status.burn_id = 0
+                        p.bad_status.wet = 0
+                        p.bad_status.heat = 0
                     break
 
                     case 'cold':
                         p.bad_status.wet = status_duration(damage.bad_status)
                         p.bad_status.burn = 0
-                        player.bad_status.burn_id = 0
+                        p.bad_status.burn_id = 0
+                        p.bad_status.heat = 0
+                    break
+
+                    case 'heat':
+                        p.bad_status.heat = status_duration(damage.bad_status)
+                        p.bad_status.cold = 0
+                        p.bad_status.wet = 0
                     break
                 }
             }

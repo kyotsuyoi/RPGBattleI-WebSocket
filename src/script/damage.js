@@ -215,7 +215,7 @@ class Damage{
                 this.sprites.cropHeight = 45
             break
 
-            case 'rod_fire':
+            case 'rod_water':
                 this.width = 50
                 this.height = 50
 
@@ -228,14 +228,14 @@ class Damage{
                 this.speed = 1.5
                 this.stun = 0    
                 this.coolDown = 50
-                this.sp_value = 12   
+                this.sp_value = 12    
                 
-                this.bad_status = 'burn'
+                this.bad_status = 'wet'
                 this.magic = true
                 
-                this.isKnockBack = false                
+                this.isKnockBack = false
 
-                this.sprites.sprite = createImage('src/image/attack_fire.png')        
+                this.sprites.sprite = createImage('src/image/attack_water.png')        
                 this.sprites.width = 50
                 this.sprites.height = 50     
                 this.sprites.currentCropWidth = 42
@@ -273,7 +273,7 @@ class Damage{
                 this.sprites.cropHeight = 42
             break
 
-            case 'rod_water':
+            case 'rod_fire':
                 this.width = 50
                 this.height = 50
 
@@ -286,14 +286,14 @@ class Damage{
                 this.speed = 1.5
                 this.stun = 0    
                 this.coolDown = 50
-                this.sp_value = 12    
+                this.sp_value = 12   
                 
-                this.bad_status = 'wet'
+                this.bad_status = 'heat'
                 this.magic = true
                 
-                this.isKnockBack = false
+                this.isKnockBack = false                
 
-                this.sprites.sprite = createImage('src/image/attack_water.png')        
+                this.sprites.sprite = createImage('src/image/attack_fire.png')        
                 this.sprites.width = 50
                 this.sprites.height = 50     
                 this.sprites.currentCropWidth = 42
@@ -301,7 +301,7 @@ class Damage{
                 this.sprites.cropWidth = 42
                 this.sprites.cropHeight = 42
             break
-
+            
             case 'rod_lava':
                 this.width = 50
                 this.height = 50
@@ -346,7 +346,7 @@ class Damage{
                 this.coolDown = 50
                 this.sp_value = 12    
                 
-                //this.bad_status = 'burn'
+                //this.bad_status = 'breeze'
                 this.magic = true
                 
                 this.isKnockBack = false
@@ -375,17 +375,75 @@ class Damage{
                 this.coolDown = 50
                 this.sp_value = 12    
                 
-                //this.bad_status = 'burn'
+                //this.bad_status = 'eletrification'
                 this.magic = true
                 
                 this.isKnockBack = false
 
                 this.sprites.sprite = createImage('src/image/attack_thunder.png')        
-                this.sprites.width = 56
-                this.sprites.height = 56     
-                this.sprites.currentCropWidth = 56
+                this.sprites.width = 60.5
+                this.sprites.height = 148     
+                this.sprites.currentCropWidth = 60.5
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 56
+                this.sprites.cropWidth = 60.5
+                this.sprites.cropHeight = 56
+            break
+
+            case 'rod_earth':
+                this.width = 56
+                this.height = 56
+
+                this.power = 0 
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 60   
+                this.count_time = 0   
+                this.damageCount = 6
+                this.speed = 0.8
+                this.stun = 0    
+                this.coolDown = 50
+                this.sp_value = 12    
+                
+                //this.bad_status = 'dirty'
+                this.magic = true
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/attack_thunder.png')        
+                this.sprites.width = 60.5
+                this.sprites.height = 148     
+                this.sprites.currentCropWidth = 60.5
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 60.5
+                this.sprites.cropHeight = 56
+            break
+
+            case 'rod_stone':
+                this.width = 56
+                this.height = 56
+
+                this.power = 0 
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 60   
+                this.count_time = 0   
+                this.damageCount = 6
+                this.speed = 0.8
+                this.stun = 0    
+                this.coolDown = 50
+                this.sp_value = 12    
+                
+                //this.bad_status = 'petrification'
+                this.magic = true
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/attack_thunder.png')        
+                this.sprites.width = 60.5
+                this.sprites.height = 148     
+                this.sprites.currentCropWidth = 60.5
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 60.5
                 this.sprites.cropHeight = 56
             break
 
@@ -927,40 +985,100 @@ function playerDamagePlayer(damage){
                 enemy.attributes.agility
             )    
             
-            if(damage.type == 'rod_fire' || damage.type == 'rod_ice' || damage.type == 'rod_water' || damage.type == 'rod_lava'){
-                is_hit = true
-                damage.finished = true
-                sendDamageFinish(player.id, damage.id)
-                sendBadStatus(enemy.id, player.id, damage.type)
+            if(damage.type == 'rod_fire' || damage.type == 'rod_lava' || damage.type == 'rod_water' || damage.type == 'rod_ice'
+            || damage.type == 'rod_earth' || damage.type == 'rod_stone' || damage.type == 'rod_wind' || damage.type == 'rod_eletric'){
+
+                if(damage.type != 'rod_wind' && damage.type != 'rod_eletric'){
+                    is_hit = true
+                    damage.finished = true                    
+                    sendDamageFinish(player.id, damage.id)
+                }                
 
                 switch(damage.bad_status){
                     case 'burn':
-                        enemy.bad_status.burn = status_duration(damage.bad_status)
-                    break
-    
-                    case 'cold':
-                        enemy.bad_status.cold = status_duration(damage.bad_status)
+                        if(status_chance(60)){
+                            enemy.bad_status.burn = status_duration(damage.bad_status)
+                            sendBadStatus(enemy.id, player.id, damage.type)
+                        }
                     break
 
+                    case 'heat':
+                        if(status_chance(100)){
+                            enemy.bad_status.heat = status_duration(damage.bad_status)                                                       
+                            sendBadStatus(enemy.id, player.id, damage.type)
+                        }
+                    break
+    
                     case 'wet':
-                        enemy.bad_status.wet = status_duration(damage.bad_status)
+                        if(status_chance(100)){
+                            enemy.bad_status.wet = status_duration(damage.bad_status)
+                            sendBadStatus(enemy.id, player.id, damage.type)
+                        }
+                    break
+
+                    case 'cold':
+                        if(status_chance(50)){
+                            enemy.bad_status.cold = status_duration(damage.bad_status)
+                            sendBadStatus(enemy.id, player.id, damage.type)
+                        }
+                    break
+
+                    case 'dirty':
+                        if(status_chance(100)){
+                            enemy.bad_status.dirty = status_duration(damage.bad_status)
+                            sendBadStatus(enemy.id, player.id, damage.type)
+                        }
+                    break
+
+                    case 'petrification':
+                        if(status_chance(50)){
+                            enemy.bad_status.petrification = status_duration(damage.bad_status)
+                            sendBadStatus(enemy.id, player.id, damage.type)
+                        }
+                    break
+
+                    case 'breeze':
+                        if(status_chance(100)){
+                            enemy.bad_status.breeze = status_duration(damage.bad_status)
+                            sendBadStatus(enemy.id, player.id, damage.type)
+                        }
+                    break
+
+                    case 'electrification':
+                        if(status_chance(60)){
+                            enemy.bad_status.electrification = status_duration(damage.bad_status)
+                            sendBadStatus(enemy.id, player.id, damage.type)
+                        }
                     break
                 }
             }
 
-            if(damage.type == 'rod_wind' && enemy.bad_status.wet > 0){
+            if(enemy.bad_status.wet > 0 && ((damage.type == 'rod_wind' && status_chance(70)) || damage.type == 'rod_ice')){
                 enemy.bad_status.cold = status_duration('cold')                
                 sendBadStatus(enemy.id, player.id, 'rod_ice')
+            }
+
+            if(enemy.bad_status.heat > 0 && ((damage.type == 'rod_water' && status_chance(80)) || damage.type == 'rod_lava')){
+                enemy.bad_status.cold = status_duration('burn')                
+                sendBadStatus(enemy.id, player.id, 'rod_lava')
+            }
+
+            if(enemy.bad_status.dirty > 0 && ((damage.type == 'rod_fire' && status_chance(70)) || damage.type == 'rod_stone')){
+                enemy.bad_status.cold = status_duration('petrification')                
+                sendBadStatus(enemy.id, player.id, 'rod_stone')
+            }
+
+            if(enemy.bad_status.breeze > 0 && ((damage.type == 'rod_earth' && status_chance(80)) || damage.type == 'rod_eletric')){
+                enemy.bad_status.cold = status_duration('eletrification')                
+                sendBadStatus(enemy.id, player.id, 'rod_eletric')
             }
             
             if(is_hit){    
                 
                 if(damage.magic){
 
-                    var mult = 1
-                    if((enemy.bad_status.wet > 0 || enemy.bad_status.cold > 0) && damage.type == 'rod_eletric'){
-                        mult = 1.8
-                    }
+                    var mult = multiplicatorCalc(enemy, damage)
+
                     var res = m_attack_vs_m_defense(
                         player.attributes_values.m_attack * damage.attack_percentage / 100, 
                         player.attributes.dexterity + damage.bonus_dexterity, 
@@ -1170,4 +1288,43 @@ function sendRetore(id, result, retore_type){
         'retore_type' : retore_type
     }
     conn.send(JSON.stringify(json_obj)) 
+}
+
+function multiplicatorCalc(enemy, damage){
+    var mult = 1
+
+    if((enemy.bad_status.wet > 0 || enemy.bad_status.cold > 0) && (damage.type == 'rod_eletric' || damage.type == 'rod_wind')){
+        mult = 1.8
+    }
+
+    if((enemy.bad_status.burn > 0 || enemy.bad_status.heat > 0) && (damage.type == 'rod_fire' || damage.type == 'rod_lava')){
+        mult = 1.8
+    }
+
+    if((enemy.bad_status.dirty > 0 || enemy.bad_status.petrification > 0) && (damage.type == 'rod_earth' || damage.type == 'rod_stone')){
+        mult = 1.8
+    }
+
+    if((enemy.bad_status.breeze > 0 || enemy.bad_status.electrification > 0) && (damage.type == 'rod_wind' || damage.type == 'rod_eletric')){
+        mult = 1.8
+    }
+
+    
+    if((enemy.bad_status.wet > 0 || enemy.bad_status.cold > 0) && (damage.type == 'rod_fire' || damage.type == 'rod_lava')){
+        mult = 0.5
+    }
+    
+    if((enemy.bad_status.heat > 0 || enemy.bad_status.burn > 0) && (damage.type == 'rod_earth' || damage.type == 'rod_stone')){
+        mult = 0.5
+    }
+
+    if((enemy.bad_status.dirty > 0 || enemy.bad_status.petrification > 0) && (damage.type == 'rod_eletric' || damage.type == 'rod_wind')){
+        mult = 0.5
+    }
+
+    if((enemy.bad_status.breeze > 0 || enemy.bad_status.electrification > 0) && (damage.type == 'rod_water' || damage.type == 'rod_ice')){
+        mult = 0.5
+    }
+
+    return mult
 }

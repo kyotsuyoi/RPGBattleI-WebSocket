@@ -93,10 +93,20 @@ class Player{
 
         this.bad_status = {
             stun : 0,
+
+            cold : 0,
+            wet : 0,
+
+            heat : 0,
             burn_id : 0,
             burn : 0,
-            cold : 0,
-            wet : 0
+
+            dirty : 0,
+            petrification : 0,
+
+            breeze : 0,
+            eletrification_id : 0,
+            eletrification : 0
         }
         
         this.skill = {
@@ -374,6 +384,25 @@ class Player{
             )
         } 
 
+        if(this.bad_status.heat > 0){
+            console.log('heat')
+            this.effectCropWidth = 42 
+            var center_x = (this.position.x + this.width/2) - (42/2)
+            var center_y = (this.position.y + this.height/2) - (42/2)
+            
+            context.drawImage(          
+                createImage('src/image/effect_heat.png'), 
+                this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
+                0, //corte no eixo y
+                42, //largura do corte
+                42, //altura do corte
+                center_x, 
+                center_y,
+                42,
+                42
+            )
+        }
+
         context.restore()
         
         if(lastTimestamp > this.effectFrameTime + 100){
@@ -582,6 +611,10 @@ class Player{
 
         if(this.bad_status.wet > 0){
             this.bad_status.wet -= 1
+        }
+
+        if(this.bad_status.heat > 0){
+            this.bad_status.heat -= 1
         }
 
         //good status

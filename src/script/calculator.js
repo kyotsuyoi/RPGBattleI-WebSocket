@@ -143,8 +143,24 @@ function status_duration(type){
         case 'shield_reflect': return 80
         
         //bad
+        case 'heat' : return 120
         case 'burn' : return 40
-        case 'cold' : return 40
+
         case 'wet' : return 120
+        case 'cold' : return 40
+        
+        case 'dirty' : return 120
+        case 'petrification' : return 40
+        
+        case 'breeze' : return 120
+        case 'eletrification' : return 40
     }
+}
+
+function status_chance(percentage){
+    var val = Math.floor(Math.random() * 101)
+    if (val < percentage){
+        return true
+    }
+    return false
 }
