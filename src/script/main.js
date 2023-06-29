@@ -43,8 +43,8 @@ var player_last_bad_status = {
     petrification : 0,
 
     breeze : 0,
-    eletrification_id : 0,
-    eletrification : 0
+    electrification_id : 0,
+    electrification : 0
 }
 
 var last_keys_attack_pressed
@@ -165,8 +165,8 @@ function sendUpdates(){
         player_last_bad_status.petrification != player.bad_status.petrification ||
         
         player_last_bad_status.breeze != player.bad_status.breeze || 
-        player_last_bad_status.eletrification_id != player.bad_status.eletrification_id ||
-        player_last_bad_status.eletrification != player.bad_status.eletrification
+        player_last_bad_status.electrification_id != player.bad_status.electrification_id ||
+        player_last_bad_status.electrification != player.bad_status.electrification
         ){           
 
         var json_obj = {
@@ -205,8 +205,8 @@ function sendUpdates(){
         player_last_bad_status.petrification = player.bad_status.petrification
 
         player_last_bad_status.breeze = player.bad_status.breeze
-        player_last_bad_status.eletrification_id = player.bad_status.eletrification_id 
-        player_last_bad_status.eletrification = player.bad_status.eletrification
+        player_last_bad_status.electrification_id = player.bad_status.electrification_id 
+        player_last_bad_status.electrification = player.bad_status.electrification
 
         send_tax++
     }

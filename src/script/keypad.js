@@ -35,7 +35,10 @@ const keys = {
     },
     spell_type_3 : {
         pressed : false
-    }   
+    },
+    spell_type_4 : {
+        pressed : false
+    }  
 }
 
 window.addEventListener('keydown', ({keyCode}) => {
@@ -51,10 +54,10 @@ window.addEventListener('keyup', ({keyCode}) => {
 function keyCodeDown(keyCode){
     if(!active_control) return
     if (player == undefined) return
-    if (player.bad_status.stun > 0) return
 
-    switch (keyCode){
-        
+    console.log('keydown:'+keyCode) 
+
+    switch (keyCode){ 
         case 38:
             if(!keys.up.pressed && !keys.down.pressed){
                 keys.up.pressed = true       
@@ -136,10 +139,21 @@ function keyCodeDown(keyCode){
         
         //defend
         case 103:
-            if(!keys.defense.pressed && player.attributes_values.stamina>=5){
-                keys.defense.pressed = true  
-                player.state.defending = true
-                shieldGrabSound()
+            switch (player.character_class){ 
+
+                case 'knight':
+                case 'squire':
+                    if(!keys.defense.pressed && player.attributes_values.stamina>=5){
+                        keys.defense.pressed = true  
+                        player.state.defending = true
+                        shieldGrabSound()
+                    }
+                break
+
+                case 'mage':
+                case 'wizzard':
+                    keys.defense.pressed = true  
+                break
             }
         break
 
@@ -293,6 +307,51 @@ function keyCodeDown(keyCode){
                 setRumble('attack')
             }
         break
+    
+        //spell_type_4
+        case 102:
+            if(player.skill.spell_type_4 == undefined || player.skill.spell_type_4 == '') return
+
+            if(!keys.spell_type_4.pressed && player.cooldown.spell_type_4 == 0){    
+
+                damage = new Damage({ id : lastTimestamp,
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : player.id, owner : 'player', type : player.skill.spell_type_4, side : player.state.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                })
+
+                if(player.attributes_values.sp - damage.sp_value < 0){
+                    return 
+                }
+
+                keys.spell_type_4.pressed = true 
+                player.state.attacking = true
+
+                player.cooldown.spell_type_4 = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
+                rapidBladeSound()
+                player.setGoogStatus(player.skill.spell_type_4)
+
+                if(player.attributes_values.sp <= 0){
+                    player.attributes_values.sp = 0
+                }else{
+                    player.attributes_values.sp -= damage.sp_value
+                }
+
+                damages.push(damage)
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
+                weapons.push(weapon)
+
+                var json_obj = {
+                    'type' : 'action_attack',
+                    'damage_id' : damage.id,
+                    'attack_type' : player.skill.spell_type_4,
+                    'attributes_values' : player.attributes_values
+                }        
+                conn.send(JSON.stringify(json_obj)) 
+
+                setRumble('attack')
+            }
+        break  
     }
 }
 
@@ -369,6 +428,10 @@ function keyCodeUp(keyCode){
 
         case 104:
             keys.spell_type_3.pressed = false  
+        break
+
+        case 102:
+            keys.spell_type_4.pressed = false  
         break
     }
 

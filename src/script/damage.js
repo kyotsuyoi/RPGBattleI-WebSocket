@@ -336,17 +336,17 @@ class Damage{
                 this.height = 56
 
                 this.power = 0 
-                this.attack_percentage = 140
-                this.bonus_dexterity = 3
+                this.attack_percentage = 100
+                this.bonus_dexterity = 5
                 this.time = 60   
                 this.count_time = 0   
                 this.damageCount = 6
                 this.speed = 0.8
                 this.stun = 0    
-                this.coolDown = 50
-                this.sp_value = 12    
+                this.coolDown = 60
+                this.sp_value = 15    
                 
-                //this.bad_status = 'breeze'
+                this.bad_status = 'breeze'
                 this.magic = true
                 
                 this.isKnockBack = false
@@ -365,86 +365,116 @@ class Damage{
                 this.height = 56
 
                 this.power = 0 
-                this.attack_percentage = 140
-                this.bonus_dexterity = 3
+                this.attack_percentage = 100
+                this.bonus_dexterity = 5
                 this.time = 60   
                 this.count_time = 0   
                 this.damageCount = 6
                 this.speed = 0.8
                 this.stun = 0    
-                this.coolDown = 50
-                this.sp_value = 12    
+                this.coolDown = 60
+                this.sp_value = 15    
                 
-                //this.bad_status = 'eletrification'
+                this.bad_status = 'electrification'
                 this.magic = true
                 
                 this.isKnockBack = false
 
                 this.sprites.sprite = createImage('src/image/attack_thunder.png')        
                 this.sprites.width = 60.5
-                this.sprites.height = 148     
+                this.sprites.height = 60     
                 this.sprites.currentCropWidth = 60.5
                 this.sprites.currentCropHeight = 0
                 this.sprites.cropWidth = 60.5
-                this.sprites.cropHeight = 56
+                this.sprites.cropHeight = 60
+
+                this.max_frames = 9
             break
 
             case 'rod_earth':
-                this.width = 56
-                this.height = 56
+                this.width = 42
+                this.height = 42
 
                 this.power = 0 
                 this.attack_percentage = 140
                 this.bonus_dexterity = 3
-                this.time = 60   
-                this.count_time = 0   
-                this.damageCount = 6
-                this.speed = 0.8
+                this.time = 200   
+                this.count_time = 1           
+                this.damageCount = 0
+                this.speed = 1.5
                 this.stun = 0    
                 this.coolDown = 50
-                this.sp_value = 12    
+                this.sp_value = 12   
                 
-                //this.bad_status = 'dirty'
+                this.bad_status = 'dirty'
                 this.magic = true
                 
-                this.isKnockBack = false
+                this.isKnockBack = false                
 
-                this.sprites.sprite = createImage('src/image/attack_thunder.png')        
-                this.sprites.width = 60.5
-                this.sprites.height = 148     
-                this.sprites.currentCropWidth = 60.5
+                this.sprites.sprite = createImage('src/image/attack_earth.png')        
+                this.sprites.width = 42
+                this.sprites.height = 42     
+                this.sprites.currentCropWidth = 42
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 60.5
-                this.sprites.cropHeight = 56
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
             break
 
             case 'rod_stone':
-                this.width = 56
-                this.height = 56
+                this.width = 42
+                this.height = 42
 
                 this.power = 0 
                 this.attack_percentage = 140
                 this.bonus_dexterity = 3
-                this.time = 60   
-                this.count_time = 0   
-                this.damageCount = 6
-                this.speed = 0.8
+                this.time = 200   
+                this.count_time = 1           
+                this.damageCount = 0
+                this.speed = 1.5
                 this.stun = 0    
                 this.coolDown = 50
-                this.sp_value = 12    
+                this.sp_value = 12   
                 
-                //this.bad_status = 'petrification'
+                this.bad_status = 'petrification'
                 this.magic = true
                 
+                this.isKnockBack = false                
+
+                this.sprites.sprite = createImage('src/image/attack_stone.png')        
+                this.sprites.width = 42
+                this.sprites.height = 42     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
+            case 'phanton_blade':
+                this.width = 80
+                this.height = 80
+
+                this.power = 0
+                this.attack_percentage = 70
+                this.bonus_dexterity = 10
+                this.time = 80  
+                this.count_time = 0                
+                this.damageCount = 30
+                this.speed = 0
+                this.stun = 100    
+                this.coolDown = 120
+                this.sp_value = 30
+
                 this.isKnockBack = false
 
-                this.sprites.sprite = createImage('src/image/attack_thunder.png')        
-                this.sprites.width = 60.5
-                this.sprites.height = 148     
-                this.sprites.currentCropWidth = 60.5
+                this.sprites.sprite = createImage('src/image/shield_magic.png')
+                this.sprites.width = 80
+                this.sprites.height = 80     
+                this.sprites.currentCropWidth = 36
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 60.5
-                this.sprites.cropHeight = 56
+                this.sprites.cropWidth = 36
+                this.sprites.cropHeight = 36
+
+                this.max_frames = 7
             break
 
             case 'dagger':
@@ -1069,7 +1099,7 @@ function playerDamagePlayer(damage){
             }
 
             if(enemy.bad_status.breeze > 0 && ((damage.type == 'rod_earth' && status_chance(80)) || damage.type == 'rod_eletric')){
-                enemy.bad_status.cold = status_duration('eletrification')                
+                enemy.bad_status.cold = status_duration('electrification')                
                 sendBadStatus(enemy.id, player.id, 'rod_eletric')
             }
             
@@ -1077,7 +1107,7 @@ function playerDamagePlayer(damage){
                 
                 if(damage.magic){
 
-                    var mult = multiplicatorCalc(enemy, damage)
+                    var mult = elementalCalc(enemy.bad_status, damage.type)
 
                     var res = m_attack_vs_m_defense(
                         player.attributes_values.m_attack * damage.attack_percentage / 100, 
@@ -1288,43 +1318,4 @@ function sendRetore(id, result, retore_type){
         'retore_type' : retore_type
     }
     conn.send(JSON.stringify(json_obj)) 
-}
-
-function multiplicatorCalc(enemy, damage){
-    var mult = 1
-
-    if((enemy.bad_status.wet > 0 || enemy.bad_status.cold > 0) && (damage.type == 'rod_eletric' || damage.type == 'rod_wind')){
-        mult = 1.8
-    }
-
-    if((enemy.bad_status.burn > 0 || enemy.bad_status.heat > 0) && (damage.type == 'rod_fire' || damage.type == 'rod_lava')){
-        mult = 1.8
-    }
-
-    if((enemy.bad_status.dirty > 0 || enemy.bad_status.petrification > 0) && (damage.type == 'rod_earth' || damage.type == 'rod_stone')){
-        mult = 1.8
-    }
-
-    if((enemy.bad_status.breeze > 0 || enemy.bad_status.electrification > 0) && (damage.type == 'rod_wind' || damage.type == 'rod_eletric')){
-        mult = 1.8
-    }
-
-    
-    if((enemy.bad_status.wet > 0 || enemy.bad_status.cold > 0) && (damage.type == 'rod_fire' || damage.type == 'rod_lava')){
-        mult = 0.5
-    }
-    
-    if((enemy.bad_status.heat > 0 || enemy.bad_status.burn > 0) && (damage.type == 'rod_earth' || damage.type == 'rod_stone')){
-        mult = 0.5
-    }
-
-    if((enemy.bad_status.dirty > 0 || enemy.bad_status.petrification > 0) && (damage.type == 'rod_eletric' || damage.type == 'rod_wind')){
-        mult = 0.5
-    }
-
-    if((enemy.bad_status.breeze > 0 || enemy.bad_status.electrification > 0) && (damage.type == 'rod_water' || damage.type == 'rod_ice')){
-        mult = 0.5
-    }
-
-    return mult
 }

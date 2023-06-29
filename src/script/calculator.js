@@ -142,6 +142,8 @@ function status_duration(type){
         case 'shield_reinforce': return 120
         case 'shield_reflect': return 80
         
+        case 'shield_magic': return 30
+        
         //bad
         case 'heat' : return 120
         case 'burn' : return 40
@@ -153,7 +155,7 @@ function status_duration(type){
         case 'petrification' : return 40
         
         case 'breeze' : return 120
-        case 'eletrification' : return 40
+        case 'electrification' : return 40
     }
 }
 
@@ -163,4 +165,128 @@ function status_chance(percentage){
         return true
     }
     return false
+}
+
+function status_execute(bad_status, status_type, sender_id ){
+    switch(status_type){    
+                
+        case 'wet':
+            bad_status.wet = status_duration(status_type)
+            bad_status.cold = 0
+            bad_status.burn_id = 0
+            bad_status.burn = 0
+            bad_status.heat = 0
+        break
+
+        case 'cold':
+            bad_status.cold = status_duration(status_type)
+            bad_status.burn_id = 0
+            bad_status.burn = 0
+            bad_status.wet = 0
+            bad_status.heat = 0
+            bad_status.breeze = 0
+            bad_status.electrification_id = 0
+            bad_status.electrification = 0
+        break
+
+        case 'heat':
+            bad_status.heat = status_duration(status_type)  
+            bad_status.burn_id = 0
+            bad_status.burn = 0                      
+            bad_status.cold = 0
+            bad_status.wet = 0
+        break
+
+        case 'burn':
+            bad_status.burn = status_duration(status_type)                    
+            bad_status.burn_id = sender_id
+            bad_status.cold = 0
+            bad_status.wet = 0
+            bad_status.heat = 0
+            bad_status.breeze = 0
+            bad_status.electrification_id = 0
+            bad_status.electrification = 0                    
+            bad_status.dirty = 0
+        break
+
+        case 'dirty':
+            bad_status.dirty = status_duration(status_type)
+            bad_status.petrification = 0
+            bad_status.breeze = 0
+            bad_status.electrification_id = 0
+            bad_status.electrification = 0
+        break
+
+        case 'petrification':
+            bad_status.petrification = status_duration(status_type)
+            bad_status.burn_id = 0                    
+            bad_status.burn = 0       
+            bad_status.cold = 0
+            bad_status.wet = 0
+            bad_status.heat = 0
+            bad_status.breeze = 0
+            bad_status.dirty = 0
+        break
+
+        case 'breeze':
+            bad_status.breeze = status_duration(status_type)
+            bad_status.electrification_id = 0
+            bad_status.electrification = 0
+            bad_status.cold = 0
+            bad_status.wet = 0
+        break
+
+        case 'electrification':
+            bad_status.electrification = status_duration(status_type)  
+            bad_status.electrification_id = sender_id               
+            bad_status.burn_id = 0                    
+            bad_status.burn = 0       
+            bad_status.cold = 0
+            bad_status.wet = 0
+            bad_status.heat = 0
+            bad_status.breeze = 0
+            bad_status.dirty = 0
+        break
+    }
+
+    return bad_status
+}
+
+function elementalCalc(bad_status, type){
+    var mult = 1
+
+    if((bad_status.wet > 0 || bad_status.cold > 0) && (type == 'rod_eletric' || type == 'rod_wind')){
+        mult = 1.8
+    }
+
+    if((bad_status.burn > 0 || bad_status.heat > 0) && (type == 'rod_water' || type == 'rod_ice')){
+        mult = 1.8
+    }
+
+    if((bad_status.dirty > 0 || bad_status.petrification > 0) && (type == 'rod_fire' || type == 'rod_lava')){
+        mult = 1.8
+    }
+
+    if((bad_status.breeze > 0 || bad_status.electrification > 0) && (type == 'rod_earth' || type == 'rod_stone')){
+        mult = 1.8
+    }
+    
+    
+    if((bad_status.wet > 0 || bad_status.cold > 0) && (type == 'rod_fire' || type == 'rod_lava')){
+        mult = 0.5
+    }
+    
+    if((bad_status.heat > 0 || bad_status.burn > 0) && (type == 'rod_earth' || type == 'rod_stone')){
+        mult = 0.5
+    }
+
+    if((bad_status.dirty > 0 || bad_status.petrification > 0) && (type == 'rod_eletric' || type == 'rod_wind')){
+        mult = 0.5
+    }
+
+    if((bad_status.breeze > 0 || bad_status.electrification > 0) && (type == 'rod_water' || type == 'rod_ice')){
+        mult = 0.5
+    }
+
+    return mult
 }

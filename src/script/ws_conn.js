@@ -271,71 +271,14 @@ function setConnection(user_name){
                 character_width : undefined, character_height: undefined, lastTimestamp : undefined
             })  
 
+            var inner_p
             if(data.id == player_id){
-                switch(damage.bad_status){
-                    case 'burn':
-                        player.bad_status.burn = status_duration(damage.bad_status)
-                        player.bad_status.burn_id = data.sender_id
-                        player.bad_status.cold = 0
-                        player.bad_status.wet = 0
-                        player.bad_status.heat = 0
-                    break
-    
-                    case 'cold':
-                        player.bad_status.cold = status_duration(damage.bad_status)
-                        player.bad_status.burn = 0
-                        player.bad_status.burn_id = 0
-                        player.bad_status.wet = 0
-                        player.bad_status.heat = 0
-                    break
-
-                    case 'wet':
-                        player.bad_status.wet = status_duration(damage.bad_status)
-                        player.bad_status.burn = 0
-                        player.bad_status.burn_id = 0
-                        player.bad_status.heat = 0
-                    break
-
-                    case 'heat':
-                        player.bad_status.heat = status_duration(damage.bad_status)
-                        player.bad_status.burn_id = data.sender_id
-                        player.bad_status.cold = 0
-                        player.bad_status.wet = 0
-                    break
-                }
+                inner_p = player
             }else{
-                var p = players.find(element => element.id == data.id)
-                switch(damage.bad_status){
-                    case 'burn':
-                        p.bad_status.burn = status_duration(damage.bad_status)
-                        p.bad_status.cold = 0
-                        p.bad_status.wet = 0
-                        p.bad_status.heat = 0
-                    break
-    
-                    case 'cold':
-                        p.bad_status.cold = status_duration(damage.bad_status)
-                        p.bad_status.burn = 0
-                        p.bad_status.burn_id = 0
-                        p.bad_status.wet = 0
-                        p.bad_status.heat = 0
-                    break
-
-                    case 'cold':
-                        p.bad_status.wet = status_duration(damage.bad_status)
-                        p.bad_status.burn = 0
-                        p.bad_status.burn_id = 0
-                        p.bad_status.heat = 0
-                    break
-
-                    case 'heat':
-                        p.bad_status.heat = status_duration(damage.bad_status)
-                        p.bad_status.cold = 0
-                        p.bad_status.wet = 0
-                    break
-                }
+                inner_p = players.find(element => element.id == data.id)
             }
-            
+
+            inner_p.bad_status = status_execute(inner_p.bad_status, damage.bad_status, data.sender_id )            
         }
     
         if(data.type === 'first_connection'){

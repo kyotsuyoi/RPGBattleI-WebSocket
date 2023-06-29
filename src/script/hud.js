@@ -268,6 +268,18 @@ class Hud {
         context.fillStyle = '#555555dd'        
         context.fillRect(this.position.x + 23 + 30 + 32, this.position.y - 30, calc, 21) 
 
+        //sprite_icon_4
+        var damage = new Damage({
+            x : undefined, y : undefined, 
+            owner_id : undefined, owner : undefined, type : player.skill.spell_type_4, side : undefined, 
+            character_width : undefined, character_height: undefined, lastTimestamp : undefined
+        })  
+
+        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var calc = Math.round(22 * player.cooldown.spell_type_4 / currentCoolDown) 
+
+        context.fillStyle = '#555555dd'        
+        context.fillRect(this.position.x + 23 + 30 + 63, this.position.y - 30, calc, 21) 
 
         //need adjust-----
         if(player.good_status.shield_reinforce > 0){

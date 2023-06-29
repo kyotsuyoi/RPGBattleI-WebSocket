@@ -105,8 +105,8 @@ class Player{
             petrification : 0,
 
             breeze : 0,
-            eletrification_id : 0,
-            eletrification : 0
+            electrification_id : 0,
+            electrification : 0
         }
         
         this.skill = {
@@ -325,7 +325,27 @@ class Player{
     drawEffect(){
         
         context.save()
-        context.globalAlpha = 0.8
+        context.globalAlpha = 0.8    
+        var total_frames = 3    
+
+        if(this.bad_status.petrification > 0){
+            context.globalAlpha = 1
+            this.effectCropWidth = 0 
+            var center_x = (this.position.x + this.width/2) - (64/2)
+            var center_y = (this.position.y + this.height/2) - (64/2)
+            
+            context.drawImage(          
+                createImage('src/image/effect_petrification.png'), 
+                this.effectCropWidth, //corte no eixo x
+                0, //corte no eixo y
+                64, //largura do corte
+                64, //altura do corte
+                center_x, 
+                center_y-16,
+                64,
+                64
+            )
+        }
 
         if(this.bad_status.burn > 0){
             
@@ -387,11 +407,30 @@ class Player{
         if(this.bad_status.heat > 0){
             console.log('heat')
             this.effectCropWidth = 42 
-            var center_x = (this.position.x + this.width/2) - (42/2)
-            var center_y = (this.position.y + this.height/2) - (42/2)
+            var center_x = (this.position.x + this.width/2) - (100/2)
+            var center_y = (this.position.y + this.height/2) - (100/2) - 10
             
             context.drawImage(          
                 createImage('src/image/effect_heat.png'), 
+                this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
+                0, //corte no eixo y
+                42, //largura do corte
+                42, //altura do corte
+                center_x, 
+                center_y,
+                100,
+                100
+            )
+        }
+
+        if(this.bad_status.dirty > 0){
+            console.log('dirty')
+            this.effectCropWidth = 42 
+            var center_x = (this.position.x + this.width/2) - (42/2)
+            var center_y = (this.position.y + this.height/2) - (42/2) - 5
+            
+            context.drawImage(          
+                createImage('src/image/effect_dirty.png'), 
                 this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
                 0, //corte no eixo y
                 42, //largura do corte
@@ -403,13 +442,53 @@ class Player{
             )
         }
 
+        if(this.bad_status.breeze > 0){
+            context.globalAlpha = 0.7
+            console.log('breeze')
+            this.effectCropWidth = 56 
+            var center_x = (this.position.x + this.width/2) - (56/2) + 5
+            var center_y = (this.position.y + this.height/2) - (56/2)
+            
+            context.drawImage(          
+                createImage('src/image/attack_wind.png'), 
+                this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
+                0, //corte no eixo y
+                56, //largura do corte
+                56, //altura do corte
+                center_x, 
+                center_y,
+                56,
+                56
+            )
+        }
+
+        if(this.bad_status.electrification > 0){
+            total_frames = 10
+            console.log('electrification')
+            this.effectCropWidth = 64 
+            var center_x = (this.position.x + this.width/2) - (64/2)
+            var center_y = (this.position.y + this.height/2) - (64/2)
+            
+            context.drawImage(          
+                createImage('src/image/effect_electrification.png'), 
+                this.effectCropWidth * this.frame.effectFrame, //corte no eixo x
+                0, //corte no eixo y
+                64, //largura do corte
+                64, //altura do corte
+                center_x, 
+                center_y,
+                64,
+                64
+            )
+        }
+
         context.restore()
         
         if(lastTimestamp > this.effectFrameTime + 100){
             this.effectFrameTime = lastTimestamp
 
             this.frame.effectFrame++
-            if(this.frame.effectFrame > 3){
+            if(this.frame.effectFrame > total_frames){
                 this.frame.effectFrame = 0
             }
         }        
@@ -590,9 +669,9 @@ class Player{
             this.cooldown.spell_type_3 -= 1
         }
 
-        // if(this.cooldown.spell_type_4 > 0){
-        //     this.cooldown.spell_type_4 -= 1
-        // }
+        if(this.cooldown.spell_type_4 > 0){
+            this.cooldown.spell_type_4 -= 1
+        }
 
         //bad status
         if(this.bad_status.stun > 0){
@@ -617,6 +696,24 @@ class Player{
             this.bad_status.heat -= 1
         }
 
+        if(this.bad_status.dirty > 0){
+            this.bad_status.dirty -= 1
+        }
+
+        if(this.bad_status.petrification > 0){
+            this.bad_status.petrification -= 1
+        }
+
+        if(this.bad_status.breeze > 0){
+            this.bad_status.breeze -= 1
+        }
+
+        if(this.bad_status.electrification > 0){
+            this.bad_status.electrification -= 1
+        }else{
+            this.bad_status.electrification_id = 0
+        }
+
         //good status
         if(this.good_status.shield_reinforce > 0){
             this.good_status.shield_reinforce -= 1
@@ -638,7 +735,8 @@ class Player{
         var color = 'red'
         if(this.bad_status.burn > 0){
             var p = players.find(element => element.id == this.bad_status.burn_id)
-            var result = m_attack_vs_m_defense(p.attributes_values.m_attack * 0.2, 1, this.attributes_values.m_defense)
+            var mult = elementalCalc(this.bad_status, 'rod_fire')
+            var result = Math.round(m_attack_vs_m_defense(p.attributes_values.m_attack * 0.2, 1, this.attributes_values.m_defense) * mult)
             this.attributes_values.hp -= result
             if(this.attributes_values.hp < 0){
                 this.attributes_values.hp = 0 
@@ -649,7 +747,21 @@ class Player{
             sendDamage(player.id, result, null, null, 0, 0)
         }
 
-        if(this.bad_status.cold > 0){
+        if(this.bad_status.electrification > 0){
+            var p = players.find(element => element.id == this.bad_status.electrification_id)
+            var mult = elementalCalc(this.bad_status, 'rod_eletric')
+            var result = Math.round(m_attack_vs_m_defense(p.attributes_values.m_attack * 0.2, 1, this.attributes_values.m_defense) * mult)
+            this.attributes_values.hp -= result
+            if(this.attributes_values.hp < 0){
+                this.attributes_values.hp = 0 
+            }
+            var display = new Display({x : this.position.x + this.width/2, y : this.position.y + this.height/2, 
+                color : color, text : result, type : 'damage'})
+            displays.push(display) 
+            sendDamage(player.id, result, null, null, 0, 0)
+        }
+
+        if(this.bad_status.cold > 0 || this.bad_status.petrification > 0 || this.bad_status.stun > 0){
             this.state.walking = false
             this.state.running = false
             keyCodeUp(38)
@@ -759,7 +871,7 @@ class Player{
                 cropHeight : 43
             },
             shield : {
-                sprite : createImage('src/image/shield_2.png'),
+                sprite : createImage('src/image/shield_undenfined.png'),
                 cropWidth : 45,
                 width : 45
             }
@@ -769,6 +881,7 @@ class Player{
             switch(this.character_class){
                 case 'knight':
                     this.sprites.character.sprite = createImage('src/image/class_knight_male.png')
+                    this.sprites.shield.sprite = createImage('src/image/shield_1.png')
                 break
 
                 case 'wizzard':
@@ -785,6 +898,7 @@ class Player{
 
                 case 'squire':
                     this.sprites.character.sprite = createImage('src/image/class_squire_male.png')
+                    this.sprites.shield.sprite = createImage('src/image/shield_2.png')
                 break
             }
         }
@@ -793,6 +907,7 @@ class Player{
             switch(this.character_class){
                 case 'knight':
                     this.sprites.character.sprite = createImage('src/image/class_knight_female.png')
+                    this.sprites.shield.sprite = createImage('src/image/shield_1.png')
                 break
 
                 case 'wizzard':
@@ -809,55 +924,56 @@ class Player{
 
                 case 'squire':
                     this.sprites.character.sprite = createImage('src/image/class_squire_female.png')
+                    this.sprites.shield.sprite = createImage('src/image/shield_2.png')
                 break
             }
         }
 
         switch(this.character_class){
             case 'knight':
-                    this.skill.primary_weapon_type = 'sword_2'                    
-                    this.skill.secondary_weapon_type = 'sword_2'
-                    this.skill.spell_type_1 = 'power_blade'
-                    this.skill.spell_type_2 = 'ghost_blade'
-                    this.skill.spell_type_3 = 'phanton_blade'
-                    this.skill.spell_type_4 = ''
-                break
+                this.skill.primary_weapon_type = 'sword_2'                    
+                this.skill.secondary_weapon_type = 'sword_2'
+                this.skill.spell_type_1 = 'power_blade'
+                this.skill.spell_type_2 = 'ghost_blade'
+                this.skill.spell_type_3 = 'phanton_blade'
+                this.skill.spell_type_4 = ''
+            break
 
-                case 'wizzard':
-                    this.skill.primary_weapon_type = 'rod'                    
-                    this.skill.secondary_weapon_type = 'rod'
-                    this.skill.spell_type_1 = 'rod_lava'
-                    this.skill.spell_type_2 = 'rod_ice'
-                    this.skill.spell_type_3 = 'rod_eletric'
-                    this.skill.spell_type_4 = ''
-                break
+            case 'wizzard':
+                this.skill.primary_weapon_type = 'rod'                    
+                this.skill.secondary_weapon_type = 'rod'
+                this.skill.spell_type_1 = 'rod_lava'
+                this.skill.spell_type_2 = 'rod_ice'
+                this.skill.spell_type_3 = 'rod_eletric'
+                this.skill.spell_type_4 = 'rod_stone'
+            break
 
-                case 'mage':
-                    this.skill.primary_weapon_type = 'rod'
-                    this.skill.secondary_weapon_type = 'rod'
-                    this.skill.spell_type_1 = 'rod_fire'
-                    this.skill.spell_type_2 = 'rod_water'
-                    this.skill.spell_type_3 = 'rod_wind'
-                    this.skill.spell_type_4 = ''
-                break
+            case 'mage':
+                this.skill.primary_weapon_type = 'rod'
+                this.skill.secondary_weapon_type = 'rod'
+                this.skill.spell_type_1 = 'rod_fire'
+                this.skill.spell_type_2 = 'rod_water'
+                this.skill.spell_type_3 = 'rod_wind'
+                this.skill.spell_type_4 = 'rod_earth'
+            break
 
-                case 'archer':
-                    this.skill.primary_weapon_type = 'dagger'
-                    this.skill.secondary_weapon_type = 'arrow'
-                    this.skill.spell_type_1 = ''
-                    this.skill.spell_type_2 = ''
-                    this.skill.spell_type_3 = ''
-                    this.skill.spell_type_4 = ''
-                break
+            case 'archer':
+                this.skill.primary_weapon_type = 'dagger'
+                this.skill.secondary_weapon_type = 'arrow'
+                this.skill.spell_type_1 = ''
+                this.skill.spell_type_2 = ''
+                this.skill.spell_type_3 = ''
+                this.skill.spell_type_4 = ''
+            break
 
-                case 'squire':
-                    this.skill.primary_weapon_type = 'sword_1'
-                    this.skill.secondary_weapon_type = 'sword_1'
-                    this.skill.spell_type_1 = 'rapid_blade'
-                    this.skill.spell_type_2 = 'shield_reinforce'
-                    this.skill.spell_type_3 = 'shield_reflect'
-                    this.skill.spell_type_4 = ''
-                break
+            case 'squire':
+                this.skill.primary_weapon_type = 'sword_1'
+                this.skill.secondary_weapon_type = 'sword_1'
+                this.skill.spell_type_1 = 'rapid_blade'
+                this.skill.spell_type_2 = 'shield_reinforce'
+                this.skill.spell_type_3 = 'shield_reflect'
+                this.skill.spell_type_4 = ''
+            break
         }
     }
 
