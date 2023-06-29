@@ -50,7 +50,7 @@ function speed_value(agility){
 function attack_vs_defense(attack, dexterity, defense){
     var round = Math.round(Math.random() * (attack/(2-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
 
-    var result = attack + round - defense;  
+    var result = attack + round - defense/3;  
     if(defense > attack){
         round = Math.round(Math.random() * (attack/(4-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
         result = round; 
@@ -65,7 +65,7 @@ function attack_vs_defense(attack, dexterity, defense){
 function m_attack_vs_m_defense(m_attack, dexterity, m_defense){
     var round = Math.round(Math.random() * (m_attack/(2-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
 
-    var result = m_attack + round - m_defense;  
+    var result = m_attack + round - m_defense/3;  
     if(m_defense > m_attack){
         round = Math.round(Math.random() * (m_attack/(4-(dexterity/100)) - 1 + (dexterity/100)) + 1 + (dexterity/100));
         result = round; 
@@ -187,6 +187,7 @@ function status_execute(bad_status, status_type, sender_id ){
             bad_status.breeze = 0
             bad_status.electrification_id = 0
             bad_status.electrification = 0
+            bad_status.dirty = 0
         break
 
         case 'heat':
@@ -205,7 +206,7 @@ function status_execute(bad_status, status_type, sender_id ){
             bad_status.heat = 0
             bad_status.breeze = 0
             bad_status.electrification_id = 0
-            bad_status.electrification = 0                    
+            bad_status.electrification = 0
             bad_status.dirty = 0
         break
 
@@ -219,8 +220,8 @@ function status_execute(bad_status, status_type, sender_id ){
 
         case 'petrification':
             bad_status.petrification = status_duration(status_type)
-            bad_status.burn_id = 0                    
-            bad_status.burn = 0       
+            bad_status.burn_id = 0
+            bad_status.burn = 0
             bad_status.cold = 0
             bad_status.wet = 0
             bad_status.heat = 0
@@ -238,14 +239,13 @@ function status_execute(bad_status, status_type, sender_id ){
 
         case 'electrification':
             bad_status.electrification = status_duration(status_type)  
-            bad_status.electrification_id = sender_id               
-            bad_status.burn_id = 0                    
-            bad_status.burn = 0       
-            bad_status.cold = 0
-            bad_status.wet = 0
+            bad_status.electrification_id = sender_id             
+            bad_status.burn_id = 0
+            bad_status.burn = 0
             bad_status.heat = 0
             bad_status.breeze = 0
             bad_status.dirty = 0
+            bad_status.wet = 0
         break
     }
 

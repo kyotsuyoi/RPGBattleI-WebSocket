@@ -57,11 +57,11 @@ class Player{
             // vitality : 11,
             // inteligence : 17
 
-            power : 1,
-            agility : 1,
-            dexterity : 1,
-            vitality : 1,
-            inteligence : 1
+            power : 100,
+            agility : 100,
+            dexterity : 100,
+            vitality : 100,
+            inteligence : 100
         }
         
         this.attributes_values = {

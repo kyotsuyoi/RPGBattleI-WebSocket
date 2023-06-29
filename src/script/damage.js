@@ -46,7 +46,7 @@ class Damage{
                 this.time = 60
                 this.count_time = 0  
                 this.speed = 1.5
-                this.stun = 50  
+                this.stun = 10  
                 this.coolDown = 30
                 this.sp_value = 40
 
@@ -65,14 +65,14 @@ class Damage{
                 this.width = 50
                 this.height = 50
 
-                this.power = 10
+                this.power = 3
                 this.attack_percentage = 140
                 this.bonus_dexterity = 3
                 this.time = 10
                 this.count_time = 0  
                 this.damageCount = 3
                 this.speed = 2.5
-                this.stun = 30    
+                this.stun = 5    
                 this.coolDown = 28
                 this.sp_value = 35
 
@@ -98,7 +98,7 @@ class Damage{
                 this.count_time = 0                
                 this.damageCount = 30
                 this.speed = 0
-                this.stun = 100    
+                this.stun = 8    
                 this.coolDown = 120
                 this.sp_value = 30
 
@@ -126,7 +126,7 @@ class Damage{
                 this.count_time = 0  
                 this.damageCount = 50
                 this.speed = 0.2
-                this.stun = 4   
+                this.stun = 5  
                 this.coolDown = 50
                 this.sp_value = 25
 
@@ -449,7 +449,7 @@ class Damage{
                 this.sprites.cropHeight = 42
             break
 
-            case 'phanton_blade':
+            case 'shield_magic':
                 this.width = 80
                 this.height = 80
 
@@ -460,7 +460,7 @@ class Damage{
                 this.count_time = 0                
                 this.damageCount = 30
                 this.speed = 0
-                this.stun = 100    
+                this.stun = 0    
                 this.coolDown = 120
                 this.sp_value = 30
 
@@ -718,7 +718,7 @@ function damage_action(damage){
                     damage.lastDamage = new Array()
                     damage.damageCount -= 1
                     damage.count_time = 5
-                    damage.stun = 5
+                    //damage.stun = 5
                 }else{
                     damage.finished = true
                 } 
