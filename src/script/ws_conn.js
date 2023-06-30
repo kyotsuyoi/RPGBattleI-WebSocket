@@ -264,7 +264,20 @@ function setConnection(user_name){
         }
 
         if(data.type === 'set_good_status'){
-            
+            var damage = new Damage({
+                x : undefined, y : undefined, 
+                owner_id : undefined, owner : undefined, type : data.damage_type, side : undefined, 
+                character_width : undefined, character_height: undefined, lastTimestamp : undefined
+            })  
+
+            var inner_p
+            if(data.id == player_id){
+                inner_p = player
+            }else{
+                inner_p = players.find(element => element.id == data.id)
+            }
+
+            inner_p.good_status = activateGoodStatus(inner_p.good_status, damage.good_status, data.sender_id ) 
         }
 
         if(data.type === 'set_bad_status'){
@@ -281,7 +294,7 @@ function setConnection(user_name){
                 inner_p = players.find(element => element.id == data.id)
             }
 
-            inner_p.bad_status = status_execute(inner_p.bad_status, damage.bad_status, data.sender_id )            
+            inner_p.bad_status = activateBadStatus(inner_p.bad_status, damage.bad_status, data.sender_id )            
         }
     
         if(data.type === 'first_connection'){

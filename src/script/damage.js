@@ -214,7 +214,34 @@ class Damage{
                 this.sprites.cropWidth = 45
                 this.sprites.cropHeight = 45
             break
+            
+            case 'damage_transfer':
+                this.width = 50
+                this.height = 50
 
+                this.power = 0 
+                this.attack_percentage = 0
+                this.bonus_dexterity = 0
+                this.time = 200   
+                this.count_time = 1           
+                this.damageCount = 0
+                this.speed = 1.5
+                this.stun = 0    
+                this.coolDown = 100
+                this.sp_value = 20   
+
+                this.good_status = 'damage_transfer'
+                this.isKnockBack = false             
+
+                this.sprites.sprite = createImage('src/image/skill_damage_transfer.png')        
+                this.sprites.width = 50
+                this.sprites.height = 50     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+            
             case 'rod_water':
                 this.width = 50
                 this.height = 50
@@ -1023,7 +1050,7 @@ function playerDamagePlayer(damage){
         if(damage.owner == undefined){
             console.log('wrong damage detected')
         }
-        if(damage.type=='shield_reinforce' || damage.type=='shield_reflect' || damage.type=='sword_reinforce' || damage.type=='damage_transfer')return
+        if(damage.type=='shield_reinforce' || damage.type=='shield_reflect' || damage.type=='sword_reinforce')return
 
         if (damage.owner_id != enemy.id && square_colision_area(damage, enemy)) {
             
@@ -1033,6 +1060,13 @@ function playerDamagePlayer(damage){
                 return
             }
             damage.lastDamage.push(enemy.id)
+
+            if(damage.type=='damage_transfer'){
+                damage.finished = true                    
+                sendDamageFinish(player.id, damage.id)
+                sendGoodStatus(enemy.id, player.id, 'damage_transfer')
+                return
+            }
             
             var is_hit = is_hit = dexterity_vs_flee(
                 player.attributes.dexterity + damage.bonus_dexterity, 
@@ -1218,13 +1252,22 @@ function playerDamagePlayer(damage){
                 } 
 
                 result = Math.round(result)
-                if(result > 0){
-                    display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
-                    enemy.height/2, color : 'red', text : result, type : 'damage'})
+                if(result > 0){  
+                    var target = enemy
+                    if(enemy.good_status.damage_transfer > 0){
+                        target = players.find(player => player.id == enemy.good_status.damage_transfer_id)
+                    }                 
+                    display = new Display({x : target.position.x + target.width/2, y : target.position.y + 
+                    target.height/2, color : 'red', text : result, type : 'damage'})
                     displays.push(display)
                 }
 
-                if(!damage.isKnockBack){
+                if(enemy.good_status.damage_transfer > 0){
+                    sendDamage(enemy.good_status.damage_transfer_id, result, null, null, 0, 0)
+                    result = 0
+                }
+
+                if(!damage.isKnockBack){                    
                     sendDamage(enemy.id, result, null, null, stamina_result, damage.stun)
                     return
                 }
@@ -1263,7 +1306,9 @@ function playerDamagePlayer(damage){
                         }
                     break 
                 }
+
                 sendDamage(enemy.id, result, damage.side, knock_val, stamina_result, damage.stun)
+                
             }else{
                 display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + enemy.height/2, color : 'yellow', text : 'MISS', type : 'damage'})
                 displays.push(display)                
@@ -1336,6 +1381,17 @@ function sendBadStatus(id, sender_id, damage_type){
     conn.send(JSON.stringify(json_obj))   
 }
 
+function sendGoodStatus(id, sender_id, damage_type){
+    
+    var json_obj = {
+        'type' : 'set_good_status',
+        'id' : id,
+        'sender_id' : sender_id,
+        'damage_type' : damage_type,
+    }
+    conn.send(JSON.stringify(json_obj))   
+}
+
 function sendRestore(id, result, restore_type){
     
     var json_obj = {
@@ -1347,7 +1403,19 @@ function sendRestore(id, result, restore_type){
     conn.send(JSON.stringify(json_obj)) 
 }
 
-function status_execute(bad_status, status_type, sender_id){
+function activateGoodStatus(good_status, status_type, sender_id){
+    switch(status_type){    
+                
+        case 'damage_transfer':            
+            good_status.damage_transfer_id = sender_id
+            good_status.damage_transfer = status_duration(status_type)
+        break
+    }
+
+    return good_status
+}
+
+function activateBadStatus(bad_status, status_type, sender_id){
     switch(status_type){    
                 
         case 'wet':

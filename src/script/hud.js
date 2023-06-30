@@ -14,10 +14,10 @@ class Hud {
 
         this.sprite_spell = createImage('src/image/hud_spell_empty.png')
 
-        this.sprite_icon_1 = this.set_spell_icon(player.skill.spell_type_1)
-        this.sprite_icon_2 = this.set_spell_icon(player.skill.spell_type_2)
-        this.sprite_icon_3 = this.set_spell_icon(player.skill.spell_type_3)
-        this.sprite_icon_4 = this.set_spell_icon(player.skill.spell_type_4)       
+        this.sprite_icon_1 = this.setSpellIcon(player.skill.spell_type_1)
+        this.sprite_icon_2 = this.setSpellIcon(player.skill.spell_type_2)
+        this.sprite_icon_3 = this.setSpellIcon(player.skill.spell_type_3)
+        this.sprite_icon_4 = this.setSpellIcon(player.skill.spell_type_4)       
 
         if(id == 'player'){
             this.position.x = 0 + 2
@@ -261,16 +261,16 @@ class Hud {
             context.fillRect(this.position.x + 23 + 31 + 31 + 31, this.position.y - 30, calc, 5) 
         }   
 
-        if(player.good_status.damage_transfer > 0){
-            var calc = Math.round(22 * player.good_status.damage_transfer / status_duration('damage_transfer')) 
+        // if(player.good_status.damage_transfer > 0){
+        //     var calc = Math.round(22 * player.good_status.damage_transfer / status_duration('damage_transfer')) 
 
-            context.fillStyle = 'yellow'        
-            context.fillRect(this.position.x + 23 + 31 + 31 + 31, this.position.y - 30, calc, 5) 
-        } 
+        //     context.fillStyle = 'yellow'        
+        //     context.fillRect(this.position.x + 23 + 31 + 31 + 31, this.position.y - 30, calc, 5) 
+        // } 
         //-------
     }
 
-    set_spell_icon(skill_type){
+    setSpellIcon(skill_type){
         var sprite_icon
         switch(skill_type){ 
 

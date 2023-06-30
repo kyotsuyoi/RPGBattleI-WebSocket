@@ -28,7 +28,12 @@ var player_last_attributes_values = {
     hp : 0,
     stamina : 0
 }
-var player_last_good_status
+
+var player_last_good_status = {
+    damage_transfer_id : 0,
+    damage_transfer : 0
+}
+
 var player_last_bad_status = {
     stun : 0,
     
@@ -149,7 +154,10 @@ function sendUpdates(){
         player_last_attributes_values.hp != player.attributes_values.hp ||
         player_last_attributes_values.sp != player.attributes_values.sp ||
         player_last_attributes_values.stamina != player.attributes_values.stamina ||
-        player_last_good_status != player.good_status ||
+
+        //player_last_good_status != player.good_status ||
+        player_last_good_status.damage_transfer_id != player.good_status.damage_transfer_id ||
+        player_last_good_status.damage_transfer != player.good_status.damage_transfer ||
 
         //player_last_bad_status != player.bad_status
         player_last_bad_status.stun != player.bad_status.stun ||
@@ -191,7 +199,10 @@ function sendUpdates(){
         player_last_attributes_values.hp = player.attributes_values.hp
         player_last_attributes_values.sp = player.attributes_values.sp
         player_last_attributes_values.stamina = player.attributes_values.stamina
-        player_last_good_status = player.good_status
+
+        player_last_good_status.damage_transfer_id = player.good_status.damage_transfer_id
+        player_last_good_status.damage_transfer = player.good_status.damage_transfer
+
         player_last_bad_status.stun = player.bad_status.stun 
 
         player_last_bad_status.wet = player.bad_status.wet
