@@ -55,7 +55,7 @@ function keyCodeDown(keyCode){
     if(!active_control) return
     if (player == undefined) return
 
-    console.log('keydown:'+keyCode) 
+    //console.log('keydown:'+keyCode) 
 
     switch (keyCode){ 
         case 38:
@@ -501,10 +501,10 @@ function gamepadHandler(event, connecting) {
 
     if (connecting) {
         gamepads[gamepad.index] = gamepad
-        console.log('Gamepad Index ID:' + gamepad.index + ' is connected')
+        //console.log('Gamepad Index ID:' + gamepad.index + ' is connected')
     } else {
         delete gamepads[gamepad.index]        
-        console.log('Gamepad Index ID:' + gamepad.index + ' is disconnected')
+        //console.log('Gamepad Index ID:' + gamepad.index + ' is disconnected')
     }
 }
 

@@ -266,7 +266,7 @@ function random_area(height, width){
         y : random_y
     }
     
-    console.log(coord)
+    //console.log(coord)
 
     return coord
 }

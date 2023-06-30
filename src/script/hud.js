@@ -1,7 +1,7 @@
 class Hud {
     constructor({id}){
         this.id = id
-        this.character_class = character_class
+
         this.position = {
             x : 0,
             y : 0
@@ -14,51 +14,10 @@ class Hud {
 
         this.sprite_spell = createImage('src/image/hud_spell_empty.png')
 
-        switch(player.character_class){
-            case 'knight':
-                this.sprite_icon_1 = createImage('src/image/icon_power_sword.png')
-                this.sprite_icon_2 = createImage('src/image/icon_ghost_blade.png')
-                this.sprite_icon_3 = createImage('src/image/icon_phanton_blade.png')
-                //this.sprite_icon_4 = createImage('src/image/icon_spear.png')
-                this.sprite_icon_4 = createImage('src/image/icon_blocked.png')
-            break
-
-            case 'wizzard':
-                this.sprite_icon_1 = createImage('src/image/icon_rod_vulcano.png')
-                this.sprite_icon_2 = createImage('src/image/icon_rod_ice.png')
-                this.sprite_icon_3 = createImage('src/image/icon_rod_eletric.png')
-                this.sprite_icon_4 = createImage('src/image/icon_rod_stone.png')
-            break
-
-            case 'mage':
-                this.sprite_icon_1 = createImage('src/image/icon_rod_fire.png')
-                this.sprite_icon_2 = createImage('src/image/icon_rod_water.png')
-                this.sprite_icon_3 = createImage('src/image/icon_rod_wind.png')
-                this.sprite_icon_4 = createImage('src/image/icon_rod_earth.png')
-            break
-
-            case 'archer':
-                /*
-                this.sprite_icon_1 = createImage('src/image/icon_arrow_fire.png')
-                this.sprite_icon_2 = createImage('src/image/icon_arrow_piercing.png')
-                this.sprite_icon_3 = createImage('src/image/icon_arrow_tri.png')
-                */
-                this.sprite_icon_1 = createImage('src/image/icon_blocked.png')
-                this.sprite_icon_2 = createImage('src/image/icon_blocked.png')
-                this.sprite_icon_3 = createImage('src/image/icon_blocked.png')
-                this.sprite_icon_4 = createImage('src/image/icon_blocked.png')
-            break
-
-            case 'squire':
-                this.sprite_icon_1 = createImage('src/image/icon_rapid_blade.png')
-                this.sprite_icon_2 = createImage('src/image/icon_shield_reinforce.png')
-                this.sprite_icon_3 = createImage('src/image/icon_shield_reflect.png')
-                //this.sprite_icon_3 = createImage('src/image/icon_blocked.png')
-                //this.sprite_icon_4 = createImage('src/image/icon_spear.png')
-                this.sprite_icon_4 = createImage('src/image/icon_blocked.png')
-            break
-        }
-        
+        this.sprite_icon_1 = this.set_spell_icon(player.skill.spell_type_1)
+        this.sprite_icon_2 = this.set_spell_icon(player.skill.spell_type_2)
+        this.sprite_icon_3 = this.set_spell_icon(player.skill.spell_type_3)
+        this.sprite_icon_4 = this.set_spell_icon(player.skill.spell_type_4)       
 
         if(id == 'player'){
             this.position.x = 0 + 2
@@ -294,6 +253,95 @@ class Hud {
             context.fillStyle = 'yellow'        
             context.fillRect(this.position.x + 23 + 31 + 31, this.position.y - 30, calc, 5) 
         }  
+
+        if(player.good_status.sword_reinforce > 0){
+            var calc = Math.round(22 * player.good_status.sword_reinforce / status_duration('sword_reinforce')) 
+
+            context.fillStyle = 'yellow'        
+            context.fillRect(this.position.x + 23 + 31 + 31 + 31, this.position.y - 30, calc, 5) 
+        }   
+
+        if(player.good_status.damage_transfer > 0){
+            var calc = Math.round(22 * player.good_status.damage_transfer / status_duration('damage_transfer')) 
+
+            context.fillStyle = 'yellow'        
+            context.fillRect(this.position.x + 23 + 31 + 31 + 31, this.position.y - 30, calc, 5) 
+        } 
         //-------
+    }
+
+    set_spell_icon(skill_type){
+        var sprite_icon
+        switch(skill_type){ 
+
+            case 'power_blade':
+                sprite_icon = createImage('src/image/icon_power_sword.png')
+            break
+
+            case 'rapid_blade':
+                sprite_icon = createImage('src/image/icon_rapid_blade.png')
+            break
+
+            case 'phanton_blade':
+                sprite_icon = createImage('src/image/icon_phanton_blade.png')
+            break
+            
+            case 'sword_reinforce':
+                sprite_icon = createImage('src/image/icon_sword_reinforce.png')
+            break
+
+            case 'ghost_blade':
+                sprite_icon = createImage('src/image/icon_ghost_blade.png')
+            break
+
+            case 'shield_reinforce':
+                sprite_icon = createImage('src/image/icon_shield_reinforce.png')
+            break
+
+            case 'shield_reflect':
+                sprite_icon = createImage('src/image/icon_shield_reflect.png')
+            break
+
+            case 'damage_transfer':
+                sprite_icon = createImage('src/image/icon_damage_transfer.png')
+            break
+
+            case 'rod_water':
+                sprite_icon = createImage('src/image/icon_rod_water.png')
+            break
+
+            case 'rod_ice':
+                sprite_icon = createImage('src/image/icon_rod_ice.png')
+            break
+
+            case 'rod_fire':
+                sprite_icon = createImage('src/image/icon_rod_fire.png')
+            break
+
+            case 'rod_lava':
+                sprite_icon = createImage('src/image/icon_rod_vulcano.png')
+            break
+
+            case 'rod_wind':
+                sprite_icon = createImage('src/image/icon_rod_wind.png')
+            break
+
+            case 'rod_eletric':
+                sprite_icon = createImage('src/image/icon_rod_eletric.png')
+            break
+
+            case 'rod_earth':
+                sprite_icon = createImage('src/image/icon_rod_earth.png')
+            break
+
+            case 'rod_stone':
+                sprite_icon = createImage('src/image/icon_rod_stone.png')
+            break
+
+            default:                
+                sprite_icon = createImage('src/image/icon_blocked.png')
+        }
+
+        return sprite_icon
     }
 }

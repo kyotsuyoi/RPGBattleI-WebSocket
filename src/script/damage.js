@@ -143,28 +143,28 @@ class Damage{
                 this.max_frames = 7
             break
 
-            case 'cure':
-                this.width = 100
-                this.height = 100
+            case 'sword_reinforce':
+                this.width = 45
+                this.height = 45
 
                 this.power = 0 
                 this.time = 50   
                 this.count_time = 0            
-                this.damageCount = 10
+                this.damageCount = 0
                 this.speed = 0
                 this.stun = 0    
-                this.coolDown = 100
-                this.sp_value = 40      
+                this.coolDown = 300
+                this.sp_value = 50      
                 
                 this.isKnockBack = false
 
-                this.sprites.sprite = createImage('src/image/cure.png')        
-                this.sprites.width = 100
-                this.sprites.height = 100     
-                this.sprites.currentCropWidth = 84
+                this.sprites.sprite = createImage('src/image/icon_sword_reinforce.png')        
+                this.sprites.width = 45
+                this.sprites.height = 45     
+                this.sprites.currentCropWidth = 45
                 this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 84
-                this.sprites.cropHeight = 84
+                this.sprites.cropWidth = 45
+                this.sprites.cropHeight = 45
             break
 
             case 'shield_reinforce':
@@ -477,6 +477,30 @@ class Damage{
                 this.max_frames = 7
             break
 
+            case 'cure':
+                this.width = 100
+                this.height = 100
+
+                this.power = 0 
+                this.time = 50   
+                this.count_time = 0            
+                this.damageCount = 10
+                this.speed = 0
+                this.stun = 0    
+                this.coolDown = 100
+                this.sp_value = 40      
+                
+                this.isKnockBack = false
+
+                this.sprites.sprite = createImage('src/image/cure.png')        
+                this.sprites.width = 100
+                this.sprites.height = 100     
+                this.sprites.currentCropWidth = 84
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 84
+                this.sprites.cropHeight = 84
+            break
+
             case 'dagger':
                 this.width = this.width
                 this.height = this.height  
@@ -545,7 +569,7 @@ class Damage{
         this.currentSprite = this.sprites.sprite
 
         this.side = side
-        if(type == 'phanton_blade' || type == 'cure' || type == 'shield_reinforce' || type == 'shield_reflect'){
+        if(type == 'phanton_blade' || type == 'cure' || type == 'shield_reinforce' || type == 'shield_reflect' || type == 'sword_reinforce'){
             this.position.x = x - this.width/2 + character_width /2
             this.position.y = (y + character_height /2) - (this.height/2) 
             this.sprites.currentCropHeight = 0
@@ -999,7 +1023,7 @@ function playerDamagePlayer(damage){
         if(damage.owner == undefined){
             console.log('wrong damage detected')
         }
-        if(damage.type=='shield_reinforce' || damage.type=='shield_reflect')return
+        if(damage.type=='shield_reinforce' || damage.type=='shield_reflect' || damage.type=='sword_reinforce' || damage.type=='damage_transfer')return
 
         if (damage.owner_id != enemy.id && square_colision_area(damage, enemy)) {
             
@@ -1103,51 +1127,8 @@ function playerDamagePlayer(damage){
                 sendBadStatus(enemy.id, player.id, 'rod_eletric')
             }
             
-            if(is_hit){    
+            if(is_hit){  
                 
-                if(damage.magic){
-
-                    var mult = elementalCalc(enemy.bad_status, damage.type)
-
-                    var res = m_attack_vs_m_defense(
-                        player.attributes_values.m_attack * damage.attack_percentage / 100, 
-                        player.attributes.dexterity + damage.bonus_dexterity, 
-                        enemy.attributes_values.m_defense
-                    )
-
-                    var result = Math.round(res * mult)
-                }else{
-                    var result = attack_vs_defense(
-                        player.attributes_values.attack * damage.attack_percentage / 100, 
-                        player.attributes.dexterity + damage.bonus_dexterity, 
-                        enemy.attributes_values.defense
-                    )
-                }
-
-                var stamina_result = 0
-                var res_stm = enemy.attributes_values.stamina - result
-                if(enemy.state.defending && res_stm > 0){                    
-    
-                    shieldSound()
-                    stamina_result = stamina_vs_attack(result)
-                    if(enemy.good_status.shield_reinforce > 0){
-                        stamina_result *= 0.6
-                    }
-                    enemy.attributes_values.stamina = enemy.attributes_values.stamina - stamina_result
-                    if(damage.type==''){  
-                        damage.finished = true
-                    }
-                    
-                    result = 0                    
-    
-                }else{
-                    enemy.attributes_values.hp -= result  
-                    if(enemy.attributes_values.hp < 0){
-                        enemy.attributes_values.hp = 0
-                    }                  
-                    swordSlashSound() 
-                }
-
                 //Shield Reflect
                 if(enemy.good_status.shield_reflect > 0 && enemy.state.defending){   
 
@@ -1179,8 +1160,53 @@ function playerDamagePlayer(damage){
                     swordSlashSound() 
                     return
                 }
+                
+                var stamina_result = 0
+                if(damage.magic){
+                    var result = m_attack_vs_m_defense(
+                        player.attributes_values.m_attack * damage.attack_percentage / 100, 
+                        player.attributes.dexterity + damage.bonus_dexterity, 
+                        enemy.attributes_values.m_defense
+                    ) * elementalCalc(enemy.bad_status, damage.type)
+                    stamina_result = stamina_vs_attack(enemy.attributes.power, player.attributes.inteligence)
+                }else{
+                    var result = attack_vs_defense(
+                        player.attributes_values.attack * damage.attack_percentage / 100, 
+                        player.attributes.dexterity + damage.bonus_dexterity, 
+                        enemy.attributes_values.defense
+                    )
+                    stamina_result = stamina_vs_attack(enemy.attributes.power, player.attributes.power)
+                }
 
-                //enemy.stunTime = damage.stun  
+                if(enemy.state.defending && enemy.attributes_values.stamina >= stamina_result){                    
+    
+                    shieldSound()
+                    if(enemy.good_status.shield_reinforce > 0){
+                        stamina_result -= (stamina_result * 0.6)
+                    }
+                    enemy.attributes_values.stamina -= (enemy.attributes_values.stamina - stamina_result)
+                    if(damage.type==''){  
+                        damage.finished = true
+                    }                    
+                    result = 0                    
+    
+                }else{
+                    enemy.attributes_values.hp -= result  
+                    if(enemy.attributes_values.hp < 0){
+                        enemy.attributes_values.hp = 0
+                    }                  
+                    swordSlashSound() 
+
+                    stamina_result = 0
+                }                   
+
+                if(player.good_status.sword_reinforce > 0){
+                    result *= 2
+                }
+
+                if(enemy.good_status.shield_reinforce > 0){
+                    result *= 0.6
+                }
 
                 if(!damage.isSoundPlayed){
                     //swordSlashSound() 
@@ -1191,6 +1217,7 @@ function playerDamagePlayer(damage){
                     //screamSound()
                 } 
 
+                result = Math.round(result)
                 if(result > 0){
                     display = new Display({x : enemy.position.x + enemy.width/2, y : enemy.position.y + 
                     enemy.height/2, color : 'red', text : result, type : 'damage'})
@@ -1269,7 +1296,7 @@ function playerCure(cure, player, inteligence){
         }
         display = new Display({x : player.position.x + player.width/2, y : player.position.y + player.height/2, color : 'green', text : Math.round(cure_value), type : 'damage'})
         displays.push(display)              
-        sendRetore(player.id, Math.round(cure_value), 'area_cure')
+        sendRestore(player.id, Math.round(cure_value), 'area_cure')
     }
 }
 
@@ -1309,13 +1336,98 @@ function sendBadStatus(id, sender_id, damage_type){
     conn.send(JSON.stringify(json_obj))   
 }
 
-function sendRetore(id, result, retore_type){
+function sendRestore(id, result, restore_type){
     
     var json_obj = {
-        'type' : 'action_retore',
+        'type' : 'action_restore',
         'id' : id,
         'result' : result,
-        'retore_type' : retore_type
+        'restore_type' : restore_type
     }
     conn.send(JSON.stringify(json_obj)) 
+}
+
+function status_execute(bad_status, status_type, sender_id){
+    switch(status_type){    
+                
+        case 'wet':
+            bad_status.wet = status_duration(status_type)
+            bad_status.cold = 0
+            // bad_status.burn_id = 0
+            // bad_status.burn = 0
+            // bad_status.heat = 0
+        break
+
+        case 'cold':
+            bad_status.cold = status_duration(status_type)
+            bad_status.burn_id = 0
+            bad_status.burn = 0
+            bad_status.wet = 0
+            bad_status.heat = 0
+            bad_status.breeze = 0
+            bad_status.electrification_id = 0
+            bad_status.electrification = 0
+            bad_status.dirty = 0
+        break
+
+        case 'heat':
+            bad_status.heat = status_duration(status_type)  
+            bad_status.burn_id = 0
+            bad_status.burn = 0                      
+            // bad_status.cold = 0
+            // bad_status.wet = 0
+        break
+
+        case 'burn':
+            bad_status.burn = status_duration(status_type)                    
+            bad_status.burn_id = sender_id
+            bad_status.cold = 0
+            bad_status.wet = 0
+            bad_status.heat = 0
+            bad_status.breeze = 0
+            bad_status.electrification_id = 0
+            bad_status.electrification = 0
+            bad_status.dirty = 0
+        break
+
+        case 'dirty':
+            bad_status.dirty = status_duration(status_type)
+            bad_status.petrification = 0
+            // bad_status.breeze = 0
+            // bad_status.electrification_id = 0
+            // bad_status.electrification = 0
+        break
+
+        case 'petrification':
+            bad_status.petrification = status_duration(status_type)
+            bad_status.burn_id = 0
+            bad_status.burn = 0
+            bad_status.cold = 0
+            bad_status.wet = 0
+            bad_status.heat = 0
+            bad_status.breeze = 0
+            bad_status.dirty = 0
+        break
+
+        case 'breeze':
+            bad_status.breeze = status_duration(status_type)
+            bad_status.electrification_id = 0
+            bad_status.electrification = 0
+            // bad_status.cold = 0
+            // bad_status.wet = 0
+        break
+
+        case 'electrification':
+            bad_status.electrification = status_duration(status_type)  
+            bad_status.electrification_id = sender_id             
+            bad_status.burn_id = 0
+            bad_status.burn = 0
+            bad_status.heat = 0
+            bad_status.breeze = 0
+            bad_status.dirty = 0
+            bad_status.wet = 0
+        break
+    }
+
+    return bad_status
 }

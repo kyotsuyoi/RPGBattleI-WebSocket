@@ -19,7 +19,7 @@ function flee_value(agility, dexterity){
 }
 
 function hp_value(vitality, power){
-    return  100 + (vitality*10) + (power*5)
+    return  100 + (vitality*60) + (power*20)
 }
 
 function sp_value(inteligence, dexterity){
@@ -113,15 +113,17 @@ function knock_back(damage_power, power_a, power_b){
 }
 
 function hp_recovery(vitality){
-    return 0.06 + (vitality/1000)
+    return 0.06 + (vitality/100)
 }
 
 function sp_recovery(inteligence, dexterity){
-    return 0.02 + (inteligence/500) + (dexterity/1000)
+    return 0.02 + (inteligence/250) + (dexterity/300)
 }
 
-function stamina_vs_attack(attack_result){
-    return res = (attack_result/2)
+//power_a is defense and power_or_inteligence_b is attack
+function stamina_vs_attack(power_a, power_or_inteligence_b){
+    var res = (power_or_inteligence_b / power_a) * 100
+    return res * 0.2
 }
 
 function cure_spell(target_max_hp, inteligence){
@@ -140,7 +142,10 @@ function status_duration(type){
     switch (type){
         //good
         case 'shield_reinforce': return 120
-        case 'shield_reflect': return 80
+        case 'shield_reflect': return 80        
+        case 'damage_transfer': return 120
+        
+        case 'sword_reinforce': return 60
         
         case 'shield_magic': return 30
         
@@ -165,91 +170,6 @@ function status_chance(percentage){
         return true
     }
     return false
-}
-
-function status_execute(bad_status, status_type, sender_id ){
-    switch(status_type){    
-                
-        case 'wet':
-            bad_status.wet = status_duration(status_type)
-            bad_status.cold = 0
-            bad_status.burn_id = 0
-            bad_status.burn = 0
-            bad_status.heat = 0
-        break
-
-        case 'cold':
-            bad_status.cold = status_duration(status_type)
-            bad_status.burn_id = 0
-            bad_status.burn = 0
-            bad_status.wet = 0
-            bad_status.heat = 0
-            bad_status.breeze = 0
-            bad_status.electrification_id = 0
-            bad_status.electrification = 0
-            bad_status.dirty = 0
-        break
-
-        case 'heat':
-            bad_status.heat = status_duration(status_type)  
-            bad_status.burn_id = 0
-            bad_status.burn = 0                      
-            bad_status.cold = 0
-            bad_status.wet = 0
-        break
-
-        case 'burn':
-            bad_status.burn = status_duration(status_type)                    
-            bad_status.burn_id = sender_id
-            bad_status.cold = 0
-            bad_status.wet = 0
-            bad_status.heat = 0
-            bad_status.breeze = 0
-            bad_status.electrification_id = 0
-            bad_status.electrification = 0
-            bad_status.dirty = 0
-        break
-
-        case 'dirty':
-            bad_status.dirty = status_duration(status_type)
-            bad_status.petrification = 0
-            bad_status.breeze = 0
-            bad_status.electrification_id = 0
-            bad_status.electrification = 0
-        break
-
-        case 'petrification':
-            bad_status.petrification = status_duration(status_type)
-            bad_status.burn_id = 0
-            bad_status.burn = 0
-            bad_status.cold = 0
-            bad_status.wet = 0
-            bad_status.heat = 0
-            bad_status.breeze = 0
-            bad_status.dirty = 0
-        break
-
-        case 'breeze':
-            bad_status.breeze = status_duration(status_type)
-            bad_status.electrification_id = 0
-            bad_status.electrification = 0
-            bad_status.cold = 0
-            bad_status.wet = 0
-        break
-
-        case 'electrification':
-            bad_status.electrification = status_duration(status_type)  
-            bad_status.electrification_id = sender_id             
-            bad_status.burn_id = 0
-            bad_status.burn = 0
-            bad_status.heat = 0
-            bad_status.breeze = 0
-            bad_status.dirty = 0
-            bad_status.wet = 0
-        break
-    }
-
-    return bad_status
 }
 
 function elementalCalc(bad_status, type){

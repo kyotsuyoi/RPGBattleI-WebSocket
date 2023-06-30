@@ -178,6 +178,9 @@ function setConnection(user_name){
                     keys.left.pressed = false 
                     keys.right.pressed = false
                 }
+                
+                keys.defense.pressed = false
+                p.state.defending = false
 
                 setRumble('damage')
             }
@@ -230,7 +233,7 @@ function setConnection(user_name){
             damage.finished = true
         }
 
-        if(data.type === 'action_retore'){
+        if(data.type === 'action_restore'){
             var p
             if(data.id === player_id){
                 p = player
@@ -244,7 +247,7 @@ function setConnection(user_name){
             }
             
             var color = 'green'
-            if(data.retore_type === 'area_cure'){
+            if(data.restore_type === 'area_cure'){
                 color = 'green'
             }
 

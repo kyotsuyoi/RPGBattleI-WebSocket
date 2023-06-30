@@ -88,7 +88,9 @@ class Player{
 
         this.good_status = {
             shield_reinforce : 0,
-            shield_reflect : 0
+            shield_reflect : 0,
+            sword_reinforce : 0,
+            damage_transfer : 0
         }
 
         this.bad_status = {
@@ -405,7 +407,6 @@ class Player{
         } 
 
         if(this.bad_status.heat > 0){
-            console.log('heat')
             this.effectCropWidth = 42 
             var center_x = (this.position.x + this.width/2) - (100/2)
             var center_y = (this.position.y + this.height/2) - (100/2) - 10
@@ -424,7 +425,6 @@ class Player{
         }
 
         if(this.bad_status.dirty > 0){
-            console.log('dirty')
             this.effectCropWidth = 42 
             var center_x = (this.position.x + this.width/2) - (42/2)
             var center_y = (this.position.y + this.height/2) - (42/2) - 5
@@ -444,7 +444,6 @@ class Player{
 
         if(this.bad_status.breeze > 0){
             context.globalAlpha = 0.7
-            console.log('breeze')
             this.effectCropWidth = 56 
             var center_x = (this.position.x + this.width/2) - (56/2) + 5
             var center_y = (this.position.y + this.height/2) - (56/2)
@@ -464,7 +463,6 @@ class Player{
 
         if(this.bad_status.electrification > 0){
             total_frames = 10
-            console.log('electrification')
             this.effectCropWidth = 64 
             var center_x = (this.position.x + this.width/2) - (64/2)
             var center_y = (this.position.y + this.height/2) - (64/2)
@@ -721,7 +719,15 @@ class Player{
 
         if(this.good_status.shield_reflect > 0){
             this.good_status.shield_reflect -= 1
-        }        
+        }   
+        
+        if(this.good_status.sword_reinforce > 0){
+            this.good_status.sword_reinforce -= 1
+        }
+
+        if(this.good_status.damage_transfer > 0){
+            this.good_status.damage_transfer -= 1
+        }
 
     }
 
@@ -736,7 +742,7 @@ class Player{
         if(this.bad_status.burn > 0){
             var p = players.find(element => element.id == this.bad_status.burn_id)
             var mult = elementalCalc(this.bad_status, 'rod_fire')
-            var result = Math.round(m_attack_vs_m_defense(p.attributes_values.m_attack * 0.2, 1, this.attributes_values.m_defense) * mult)
+            var result = Math.round((m_attack_vs_m_defense(p.attributes_values.m_attack, p.attributes.dexterity, this.attributes_values.m_defense) * 0.2) * mult)
             this.attributes_values.hp -= result
             if(this.attributes_values.hp < 0){
                 this.attributes_values.hp = 0 
@@ -750,7 +756,7 @@ class Player{
         if(this.bad_status.electrification > 0){
             var p = players.find(element => element.id == this.bad_status.electrification_id)
             var mult = elementalCalc(this.bad_status, 'rod_eletric')
-            var result = Math.round(m_attack_vs_m_defense(p.attributes_values.m_attack * 0.2, 1, this.attributes_values.m_defense) * mult)
+            var result = Math.round((m_attack_vs_m_defense(p.attributes_values.m_attack, p.attributes.dexterity, this.attributes_values.m_defense) * 0.2) * mult)
             this.attributes_values.hp -= result
             if(this.attributes_values.hp < 0){
                 this.attributes_values.hp = 0 
@@ -936,25 +942,25 @@ class Player{
                 this.skill.spell_type_1 = 'power_blade'
                 this.skill.spell_type_2 = 'ghost_blade'
                 this.skill.spell_type_3 = 'phanton_blade'
-                this.skill.spell_type_4 = ''
+                this.skill.spell_type_4 = 'sword_reinforce'
             break
 
             case 'wizzard':
                 this.skill.primary_weapon_type = 'rod'                    
                 this.skill.secondary_weapon_type = 'rod'
-                this.skill.spell_type_1 = 'rod_lava'
-                this.skill.spell_type_2 = 'rod_ice'
-                this.skill.spell_type_3 = 'rod_eletric'
-                this.skill.spell_type_4 = 'rod_stone'
+                this.skill.spell_type_1 = 'rod_ice'
+                this.skill.spell_type_2 = 'rod_lava'
+                this.skill.spell_type_3 = 'rod_stone'
+                this.skill.spell_type_4 = 'rod_eletric'
             break
 
             case 'mage':
                 this.skill.primary_weapon_type = 'rod'
                 this.skill.secondary_weapon_type = 'rod'
-                this.skill.spell_type_1 = 'rod_fire'
-                this.skill.spell_type_2 = 'rod_water'
-                this.skill.spell_type_3 = 'rod_wind'
-                this.skill.spell_type_4 = 'rod_earth'
+                this.skill.spell_type_1 = 'rod_water'
+                this.skill.spell_type_2 = 'rod_fire'
+                this.skill.spell_type_3 = 'rod_earth'
+                this.skill.spell_type_4 = 'rod_wind'
             break
 
             case 'archer':
@@ -972,7 +978,7 @@ class Player{
                 this.skill.spell_type_1 = 'rapid_blade'
                 this.skill.spell_type_2 = 'shield_reinforce'
                 this.skill.spell_type_3 = 'shield_reflect'
-                this.skill.spell_type_4 = ''
+                this.skill.spell_type_4 = 'damage_transfer'
             break
         }
     }
@@ -1090,6 +1096,14 @@ class Player{
 
             case 'shield_reflect':
                 this.good_status.shield_reflect = status_duration('shield_reflect')
+            break
+
+            case 'sword_reinforce':
+                this.good_status.sword_reinforce = status_duration('sword_reinforce')
+            break
+
+            case 'damage_transfer':
+                this.good_status.damage_transfer = status_duration('damage_transfer')
             break
         }
     }
