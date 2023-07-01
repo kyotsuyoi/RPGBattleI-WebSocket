@@ -19,11 +19,18 @@ function flee_value(agility, dexterity){
 }
 
 function hp_value(vitality, power){
-    return  100 + (vitality*60) + (power*20)
+    var A = (((vitality-1)/100) * 3000)
+    var B = (((power-1)/100) * 500)
+
+    if(B<0) B=0
+    return Math.round(A + B)
 }
 
 function sp_value(inteligence, dexterity){
-    return  40 + (inteligence*6) + (dexterity*3)
+    var A = (((inteligence-1)/100) * 1100)
+    var B = (((dexterity-1)/100) * 400)
+
+    return Math.round(A + B)
 }
 
 //reverse

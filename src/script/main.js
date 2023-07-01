@@ -242,15 +242,7 @@ function createImage(imageSrc){
     return image
 }
 
-function debug(){
-    
-    var sec_t = Math.round(lastTimestamp /1000)  
-    var min = parseInt((sec_t/60),10)
-    var sec = sec_t - min*60
-
-    if(sec < 10){
-        sec = '0'+sec
-    }
+function debug(){    
 
     //area
     context.fillStyle = '#ffffff88'
@@ -258,7 +250,7 @@ function debug(){
 
     context.font = "12px Arial"
     context.fillStyle = 'black'
-    context.fillText('Time:'+min+':'+sec,5,20)
+    context.fillText('Time:'+clock(),5,20)
     context.fillText('framerate:'+last_framerate,5,40)
     //context.fillText('s_count:'+sound_count,2,50)
     context.fillText('weapon_count:'+weapons.length,5,60)
@@ -280,4 +272,23 @@ function random_area(height, width){
     //console.log(coord)
 
     return coord
+}
+
+function clock(){
+    var total_sec = Math.round(lastTimestamp /1000)  
+    total_min = parseInt((total_sec/60),10)
+    var sec = total_sec - total_min*60
+
+    var total_hour = parseInt((total_min/60),10)
+    var min = total_min - total_hour*60
+
+    if(sec < 10){
+        sec = '0'+sec
+    }
+
+    if(min < 10){
+        min = '0'+min
+    }
+
+    return total_hour+':'+min+':'+sec
 }
