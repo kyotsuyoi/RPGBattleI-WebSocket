@@ -188,7 +188,7 @@ function keyCodeDown(keyCode){
                 keys.spell_type_1.pressed = true   
                 player.state.attacking = true
 
-                player.cooldown.spell_type_1 = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
+                player.cooldown.spell_type_1 = spellCooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
                 rapidBladeSound()
                 powerSwordSound()             
 
@@ -233,7 +233,7 @@ function keyCodeDown(keyCode){
                 keys.spell_type_2.pressed = true 
                 player.state.attacking = true
 
-                player.cooldown.spell_type_2 = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
+                player.cooldown.spell_type_2 = spellCooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
                 rapidBladeSound()
                 player.setGoogStatus(player.skill.spell_type_2)
 
@@ -278,7 +278,7 @@ function keyCodeDown(keyCode){
                 keys.spell_type_3.pressed = true  
                 player.state.attacking = true
 
-                player.cooldown.spell_type_3 = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
+                player.cooldown.spell_type_3 = spellCooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)   
                 if(player.skill.spell_type_3=='cure'){
                     cureSound()
                 }else{
@@ -327,7 +327,7 @@ function keyCodeDown(keyCode){
                 keys.spell_type_4.pressed = true 
                 player.state.attacking = true
 
-                player.cooldown.spell_type_4 = spell_cooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
+                player.cooldown.spell_type_4 = spellCooldown(damage.coolDown, player.attributes.inteligence, player.attributes.dexterity)  
                 rapidBladeSound()
                 player.setGoogStatus(player.skill.spell_type_4)
 

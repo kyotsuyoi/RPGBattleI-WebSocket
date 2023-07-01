@@ -47,7 +47,7 @@ class Damage{
                 this.count_time = 0  
                 this.speed = 1.5
                 this.stun = 10  
-                this.coolDown = 30
+                this.coolDown = 22
                 this.sp_value = 40
 
                 this.sprites.sprite = createImage('src/image/attack_power_sword.png')
@@ -73,8 +73,36 @@ class Damage{
                 this.damageCount = 3
                 this.speed = 2.5
                 this.stun = 5    
-                this.coolDown = 28
+                this.coolDown = 18
                 this.sp_value = 35
+
+                this.sprites.sprite = createImage('src/image/attack_power_sword.png')
+                this.sprites.width = 50
+                this.sprites.height = 50
+                this.sprites.currentCropWidth = 36
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 36
+                this.sprites.cropHeight = 36
+
+                this.max_frames = 7
+            break
+            
+            case 'ghost_blade':
+                this.width = 50
+                this.height = 50
+
+                this.power = 10
+                this.attack_percentage = 30
+                this.bonus_dexterity = 10
+                this.time = 10
+                this.count_time = 0  
+                this.damageCount = 50
+                this.speed = 0.2
+                this.stun = 5  
+                this.coolDown = 30
+                this.sp_value = 25
+
+                this.isKnockBack = true
 
                 this.sprites.sprite = createImage('src/image/attack_power_sword.png')
                 this.sprites.width = 50
@@ -99,7 +127,7 @@ class Damage{
                 this.damageCount = 30
                 this.speed = 0
                 this.stun = 8    
-                this.coolDown = 120
+                this.coolDown = 55
                 this.sp_value = 30
 
                 this.isKnockBack = false
@@ -107,34 +135,6 @@ class Damage{
                 this.sprites.sprite = createImage('src/image/attack_circular_fire.png')
                 this.sprites.width = 80
                 this.sprites.height = 80     
-                this.sprites.currentCropWidth = 36
-                this.sprites.currentCropHeight = 0
-                this.sprites.cropWidth = 36
-                this.sprites.cropHeight = 36
-
-                this.max_frames = 7
-            break
-
-            case 'ghost_blade':
-                this.width = 50
-                this.height = 50
-
-                this.power = 10
-                this.attack_percentage = 30
-                this.bonus_dexterity = 10
-                this.time = 10
-                this.count_time = 0  
-                this.damageCount = 50
-                this.speed = 0.2
-                this.stun = 5  
-                this.coolDown = 50
-                this.sp_value = 25
-
-                this.isKnockBack = true
-
-                this.sprites.sprite = createImage('src/image/attack_power_sword.png')
-                this.sprites.width = 50
-                this.sprites.height = 50
                 this.sprites.currentCropWidth = 36
                 this.sprites.currentCropHeight = 0
                 this.sprites.cropWidth = 36
@@ -153,8 +153,8 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 0
                 this.stun = 0    
-                this.coolDown = 300
-                this.sp_value = 50      
+                this.coolDown = 80
+                this.sp_value = 100      
                 
                 this.isKnockBack = false
 
@@ -177,7 +177,7 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 0
                 this.stun = 0    
-                this.coolDown = 200
+                this.coolDown = 50
                 this.sp_value = 50      
                 
                 this.isKnockBack = false
@@ -201,8 +201,8 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 0
                 this.stun = 0    
-                this.coolDown = 200
-                this.sp_value = 50      
+                this.coolDown = 100
+                this.sp_value = 90      
                 
                 this.isKnockBack = false
 
@@ -254,8 +254,8 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 1.5
                 this.stun = 0    
-                this.coolDown = 50
-                this.sp_value = 12    
+                this.coolDown = 30
+                this.sp_value = 25    
                 
                 this.bad_status = 'wet'
                 this.magic = true
@@ -283,8 +283,8 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 1.5
                 this.stun = 0    
-                this.coolDown = 50
-                this.sp_value = 12    
+                this.coolDown = 30
+                this.sp_value = 25    
                 
                 this.bad_status = 'cold'
                 this.magic = true
@@ -312,8 +312,8 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 1.5
                 this.stun = 0    
-                this.coolDown = 50
-                this.sp_value = 12   
+                this.coolDown = 30
+                this.sp_value = 25   
                 
                 this.bad_status = 'heat'
                 this.magic = true
@@ -341,8 +341,8 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 1.5
                 this.stun = 0    
-                this.coolDown = 50
-                this.sp_value = 12    
+                this.coolDown = 30
+                this.sp_value = 25    
                 
                 this.bad_status = 'burn'
                 this.magic = true
@@ -370,8 +370,8 @@ class Damage{
                 this.damageCount = 6
                 this.speed = 0.8
                 this.stun = 0    
-                this.coolDown = 60
-                this.sp_value = 15    
+                this.coolDown = 40
+                this.sp_value = 40    
                 
                 this.bad_status = 'breeze'
                 this.magic = true
@@ -399,8 +399,8 @@ class Damage{
                 this.damageCount = 6
                 this.speed = 0.8
                 this.stun = 0    
-                this.coolDown = 60
-                this.sp_value = 15    
+                this.coolDown = 40
+                this.sp_value = 40    
                 
                 this.bad_status = 'electrification'
                 this.magic = true
@@ -430,8 +430,8 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 1.5
                 this.stun = 0    
-                this.coolDown = 50
-                this.sp_value = 12   
+                this.coolDown = 30
+                this.sp_value = 25   
                 
                 this.bad_status = 'dirty'
                 this.magic = true
@@ -459,8 +459,8 @@ class Damage{
                 this.damageCount = 0
                 this.speed = 1.5
                 this.stun = 0    
-                this.coolDown = 50
-                this.sp_value = 12   
+                this.coolDown = 30
+                this.sp_value = 25   
                 
                 this.bad_status = 'petrification'
                 this.magic = true
@@ -1254,8 +1254,11 @@ function playerDamagePlayer(damage){
                 result = Math.round(result)
                 if(result > 0){  
                     var target = enemy
-                    if(enemy.good_status.damage_transfer > 0){
+                    if(enemy.good_status.damage_transfer > 0 && enemy.good_status.damage_transfer_id != player_id){
                         target = players.find(player => player.id == enemy.good_status.damage_transfer_id)
+                        if(target == undefined){
+                            target = enemy
+                        }
                     }                 
                     display = new Display({x : target.position.x + target.width/2, y : target.position.y + 
                     target.height/2, color : 'red', text : result, type : 'damage'})

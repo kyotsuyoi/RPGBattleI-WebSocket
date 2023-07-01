@@ -51,17 +51,17 @@ class Player{
         }
 
         this.attributes = {
-            // power : 12,
-            // agility : 10,
-            // dexterity : 12,
-            // vitality : 11,
-            // inteligence : 17
+            power : 10,
+            agility : 10,
+            dexterity : 10,
+            vitality : 10,
+            inteligence : 10
 
-            power : 100,
-            agility : 100,
-            dexterity : 100,
-            vitality : 100,
-            inteligence : 100
+            // power : 100,
+            // agility : 100,
+            // dexterity : 100,
+            // vitality : 100,
+            // inteligence : 100
         }
         
         this.attributes_values = {
@@ -136,7 +136,7 @@ class Player{
         }
 
         this.framespeed 
-        this.is_debug = true
+        this.is_debug = false
     }
 
     draw(){ 
@@ -332,7 +332,7 @@ class Player{
         var total_frames = 3            
 
         if(this.good_status.damage_transfer > 0){
-            context.globalAlpha = 0.4
+            context.globalAlpha = 0.6
             this.effectCropWidth = 42 
             var center_x = (this.position.x + this.width/2) - (42/2)
             var center_y = (this.position.y + this.height/2) - (42/2)
@@ -748,11 +748,11 @@ class Player{
             this.good_status.sword_reinforce -= 1
         }
 
-        // if(this.good_status.damage_transfer > 0){
-        //     this.good_status.damage_transfer -= 1
-        // }else{
-        //     this.good_status.damage_transfer_id = 0
-        // }
+        if(this.good_status.damage_transfer > 0){
+            this.good_status.damage_transfer -= 1
+        }else{
+            this.good_status.damage_transfer_id = 0
+        }
 
     }
 

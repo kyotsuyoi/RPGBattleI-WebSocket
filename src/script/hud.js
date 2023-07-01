@@ -195,7 +195,7 @@ class Hud {
             character_width : undefined, character_height: undefined, lastTimestamp : undefined
         })  
 
-        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var currentCoolDown = spellCooldown(damage.coolDown, inteligence, dexterity) 
         var calc = Math.round(22 * player.cooldown.spell_type_1 / currentCoolDown) 
 
         context.fillStyle = '#555555dd'        
@@ -208,7 +208,7 @@ class Hud {
             character_width : undefined, character_height: undefined, lastTimestamp : undefined
         })  
 
-        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var currentCoolDown = spellCooldown(damage.coolDown, inteligence, dexterity) 
         var calc = Math.round(22 * player.cooldown.spell_type_2 / currentCoolDown) 
 
         context.fillStyle = '#555555dd'        
@@ -221,7 +221,7 @@ class Hud {
             character_width : undefined, character_height: undefined, lastTimestamp : undefined
         })  
 
-        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var currentCoolDown = spellCooldown(damage.coolDown, inteligence, dexterity) 
         var calc = Math.round(22 * player.cooldown.spell_type_3 / currentCoolDown) 
 
         context.fillStyle = '#555555dd'        
@@ -234,7 +234,7 @@ class Hud {
             character_width : undefined, character_height: undefined, lastTimestamp : undefined
         })  
 
-        var currentCoolDown = spell_cooldown(damage.coolDown, inteligence, dexterity) 
+        var currentCoolDown = spellCooldown(damage.coolDown, inteligence, dexterity) 
         var calc = Math.round(22 * player.cooldown.spell_type_4 / currentCoolDown) 
 
         context.fillStyle = '#555555dd'        

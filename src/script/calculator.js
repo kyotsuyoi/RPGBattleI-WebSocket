@@ -130,10 +130,11 @@ function cure_spell(target_max_hp, inteligence){
     return (target_max_hp*20/100) * (inteligence/100)
 }
 
-function spell_cooldown(cooldown_value, inteligence, dexterity){
-    var val = Math.round(cooldown_value - (inteligence*40/100) - (dexterity*30/100))
-    if(val < 1){
-        val = 1
+function spellCooldown(cooldown_value, inteligence, dexterity){
+    var val = Math.round(cooldown_value * ((inteligence*0.4 + dexterity*0.3)/100))
+    val = cooldown_value - val
+    if(val < 3){
+        val = 3
     }
     return val
 }
