@@ -133,7 +133,8 @@ function keyCodeDown(keyCode){
                     'attack_type' : player.skill.primary_weapon_type,
                     'attributes_values' : player.attributes_values
                 }        
-                conn.send(JSON.stringify(json_obj)) 
+                //conn.send(JSON.stringify(json_obj)) 
+                connSend(json_obj)
             }
         break
         
@@ -208,8 +209,8 @@ function keyCodeDown(keyCode){
                     'attack_type' : player.skill.spell_type_1,
                     'attributes_values' : player.attributes_values
                 }        
-                conn.send(JSON.stringify(json_obj)) 
-
+                //conn.send(JSON.stringify(json_obj)) 
+                connSend(json_obj)
                 setRumble('attack')
             }
         break
@@ -253,8 +254,8 @@ function keyCodeDown(keyCode){
                     'attack_type' : player.skill.spell_type_2,
                     'attributes_values' : player.attributes_values
                 }        
-                conn.send(JSON.stringify(json_obj)) 
-
+                //conn.send(JSON.stringify(json_obj)) 
+                connSend(json_obj)
                 setRumble('attack')
             }
         break
@@ -302,8 +303,8 @@ function keyCodeDown(keyCode){
                     'attack_type' : player.skill.spell_type_3,
                     'attributes_values' : player.attributes_values
                 }        
-                conn.send(JSON.stringify(json_obj)) 
-
+                //conn.send(JSON.stringify(json_obj)) 
+                connSend(json_obj)
                 setRumble('attack')
             }
         break
@@ -347,8 +348,8 @@ function keyCodeDown(keyCode){
                     'attack_type' : player.skill.spell_type_4,
                     'attributes_values' : player.attributes_values
                 }        
-                conn.send(JSON.stringify(json_obj)) 
-
+                //conn.send(JSON.stringify(json_obj)) 
+                connSend(json_obj)
                 setRumble('attack')
             }
         break  

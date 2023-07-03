@@ -71,8 +71,9 @@ function send_message() {
         return
     }
     output.append('Eu (' + player_id + '): ' + text, document.createElement('br'))
-    //let json = JSON.parse('{ "type":"chat" , "text":"' + value + '" }')
-    conn.send('{ "type":"chat" , "text":"' + text + '" }')
+    var json = JSON.parse('{ "type":"chat" , "text":"' + text + '" }')
+    //conn.send(          '{ "type":"chat" , "text":"' + text + '" }')
+    connSend(json)
     input.value = ''
 
     player.setMessage(text)
@@ -317,7 +318,8 @@ function setConnection(user_name){
                 'character_class' : character_class
             }
 
-            conn.send(JSON.stringify(json_obj))
+            //conn.send(JSON.stringify(json_obj))
+            connSend(json_obj)
 
             login.style.visibility = 'hidden'
             chat.style.visibility = 'visible'
@@ -354,3 +356,15 @@ function setConnection(user_name){
     })
 }
 
+function connSend(json_obj){
+
+    if(conn.readyState == WebSocket.CLOSED){
+        console.log('Disconnected')
+        end_game = true
+        return
+    }
+
+    if(conn.readyState == WebSocket.OPEN){
+        conn.send(JSON.stringify(json_obj))
+    }
+}

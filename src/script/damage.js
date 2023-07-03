@@ -1359,7 +1359,8 @@ function sendDamage(id, result, knockback_side, knockback_val, stamina_result, s
         'stamina_result': stamina_result,
         'stun': stun
     }
-    conn.send(JSON.stringify(json_obj))
+    //conn.send(JSON.stringify(json_obj))
+    connSend(json_obj)
     //console.log('send dmg type:action_damage '+ ' from:'+player.id+' to:'+id)    
 }
 
@@ -1370,7 +1371,8 @@ function sendDamageFinish(id, damage_id){
         'id' : id,
         'damage_id' : damage_id,
     }
-    conn.send(JSON.stringify(json_obj))   
+    //conn.send(JSON.stringify(json_obj))  
+    connSend(json_obj)
 }
 
 function sendBadStatus(id, sender_id, damage_type){
@@ -1381,7 +1383,8 @@ function sendBadStatus(id, sender_id, damage_type){
         'sender_id' : sender_id,
         'damage_type' : damage_type,
     }
-    conn.send(JSON.stringify(json_obj))   
+    //conn.send(JSON.stringify(json_obj))  
+    connSend(json_obj)
 }
 
 function sendGoodStatus(id, sender_id, damage_type){
@@ -1392,7 +1395,8 @@ function sendGoodStatus(id, sender_id, damage_type){
         'sender_id' : sender_id,
         'damage_type' : damage_type,
     }
-    conn.send(JSON.stringify(json_obj))   
+    //conn.send(JSON.stringify(json_obj))  
+    connSend(json_obj)
 }
 
 function sendRestore(id, result, restore_type){
@@ -1403,7 +1407,8 @@ function sendRestore(id, result, restore_type){
         'result' : result,
         'restore_type' : restore_type
     }
-    conn.send(JSON.stringify(json_obj)) 
+    //conn.send(JSON.stringify(json_obj)) 
+    connSend(json_obj)
 }
 
 function activateGoodStatus(good_status, status_type, sender_id){

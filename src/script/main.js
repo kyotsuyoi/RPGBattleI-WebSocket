@@ -4,6 +4,8 @@ const context = background.getContext('2d')
 // background.width = 800
 // background.height = 800
 
+var end_game = false
+
 const perfectFrameTime = 1000 / 60
 let deltaTime = 0
 let lastTimestamp = 0
@@ -66,7 +68,17 @@ function start() {
     hud = new Hud({id : 'player'})
 }
 
+function end(){
+    context.fillStyle = '#ffffff88'
+    context.fillRect(0, 0, 800, 800) 
+
+    context.font = "32px Arial"
+    context.fillStyle = 'red'
+    context.fillText('Sem conexão',300,400)
+}
+
 function animate(timestamp){
+    if(end_game) return end()        
 
     requestAnimationFrame(animate)
     lastTimestamp = timestamp
@@ -187,7 +199,7 @@ function sendUpdates(){
             'bad_status' : player.bad_status
         }
 
-        conn.send(JSON.stringify(json_obj))
+        connSend(json_obj)
 
         player_last_x = player.position.x
         player_last_y = player.position.y
@@ -253,6 +265,7 @@ function debug(){
     context.fillText('Time:'+clock(),5,20)
     context.fillText('framerate:'+last_framerate,5,40)
     //context.fillText('s_count:'+sound_count,2,50)
+    context.fillText('ws_conn:'+conn.readyState,2,50)
     context.fillText('weapon_count:'+weapons.length,5,60)
     context.fillText('damage_count:'+damages.length,5,70)
     context.fillText('recep_tax:'+last_recep_tax,5,80)

@@ -38,11 +38,6 @@ class WSManager implements MessageComponentInterface {
                     'x' => 0, 'y' => 0, 
                     'gender' => '', 
                     'character_class' => '',
-                    // 'side' => 'down', 
-                    // 'walking' => false,
-                    // 'running' => false,
-                    // 'attacking' => false,
-                    // 'defending' => false,
                     'state' => '',
                     'attributes_values' => '',
                     'good_status' => '']
@@ -60,11 +55,6 @@ class WSManager implements MessageComponentInterface {
                                 $inner_y = $player['y'];
                                 $inner_gender = $player['gender'];
                                 $inner_character_class = $player['character_class'];
-                                // $inner_side = $player['side'];
-                                // $inner_walking = $player['walking'];
-                                // $inner_running = $player['running'];
-                                // $inner_attacking = $player['attacking'];
-                                // $inner_defending = $player['defending'];
                                 $inner_state = $player['state'];
                                 $inner_attributes_values = $player['attributes_values'];
                                 $inner_good_status = $player['good_status'];
@@ -81,11 +71,6 @@ class WSManager implements MessageComponentInterface {
                             'y' => $inner_y, 
                             'gender' => $inner_gender, 
                             'character_class' => $inner_character_class, 
-                            // 'side' => $inner_side, 
-                            // 'walking' => $inner_walking, 
-                            // 'running' => $inner_running, 
-                            // 'attacking' => $inner_attacking, 
-                            // 'defending' => $inner_defending,
                             'state' => $inner_state,
                             'attributes_values' => $inner_attributes_values,
                             'good_status' => $inner_good_status]
@@ -126,11 +111,6 @@ class WSManager implements MessageComponentInterface {
                         'id' => $from->resourceId, 
                         'x' => $json->x, 
                         'y' => $json->y, 
-                        // 'side' => $json->side, 
-                        // 'walking' => $json->walking, 
-                        // 'running' => $json->running, 
-                        // 'attacking' => $json->attacking, 
-                        // 'defending' => $json->defending, 
                         'state' => $json->state, 
                         'attributes_values' => $json->attributes_values, 
                         'good_status' => $json->good_status, 
@@ -250,11 +230,6 @@ class WSManager implements MessageComponentInterface {
                 if ($player['id'] == $from->resourceId) {
                     $this->players[$key]['x'] = $json->x;
                     $this->players[$key]['y'] = $json->y;
-                    // $this->players[$key]['side'] = $json->side;
-                    // $this->players[$key]['walking'] = $json->walking;
-                    // $this->players[$key]['running'] = $json->running;
-                    // $this->players[$key]['attacking'] = $json->attacking;
-                    // $this->players[$key]['defending'] = $json->defending;
                     $this->players[$key]['state'] = $json->state;
                     $this->players[$key]['attributes_values'] = $json->attributes_values;                    
                     $this->players[$key]['good_status'] = $json->good_status;
