@@ -159,6 +159,13 @@ function animate(timestamp){
 }
 
 function sendUpdates(){
+
+    if(conn.readyState != WebSocket.OPEN){
+        console.log('Disconnected')
+        end_game = true
+        return
+    }
+
     if(player_last_x != player.position.x || player_last_y != player.position.y || 
 
         player_last_walking !=  player.state.walking || player_last_running !=  player.state.running || 

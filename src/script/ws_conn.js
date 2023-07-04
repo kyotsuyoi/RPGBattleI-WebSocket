@@ -300,35 +300,53 @@ function setConnection(user_name){
     
         if(data.type === 'first_connection'){
             player_id = data.id
-            output.append('Seu ID: ' + player_id, document.createElement('br'))
-            player = new Player(player_id, user_name, lastTimestamp, 350, 700, data.color, char_gender, character_class)            
-            // var coord = random_area(player.height, player.width) //350, 700
-            // player.position.x = coord.x
-            // player.position.y = coord.y
-            player.start = true
-            start()
-
             var json_obj = {
                 'type' : 'login',
                 'id' : player_id,
-                'x' : player.position.x,
-                'y' : player.position.y,
+                'color' : data.color,
+                'x' : 350,
+                'y' : 700,
                 'user_name' : user_name,
                 'gender' : char_gender,
                 'character_class' : character_class
             }
-
-            //conn.send(JSON.stringify(json_obj))
             connSend(json_obj)
+        }
+
+        if(data.type === 'login_complete'){
+            player_id = data.id
+            output.append('Seu ID: ' + player_id, document.createElement('br'))
+            player = new Player(player_id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)   
+            
+            if(data.state != ''){
+                player.state = data.state
+            }
+            if(data.attributes_values != ''){
+                player.attributes_values = data.attributes_values
+            }
+            if(data.good_status != ''){
+                player.good_status = data.good_status
+            }
+            if(data.bad_status != ''){
+                player.bad_status = data.bad_status
+            }
+
+            var json_obj = {
+                'type' : 'login_complete'
+            }
+            connSend(json_obj)
+            
+            player.start = true
+            start()
 
             login.style.visibility = 'hidden'
             chat.style.visibility = 'visible'
         }
-    
-        if(data.type === 'first_connection_wellcome'){
+
+        if(data.type === 'login_wellcome'){
             var id = data.id
-            output.append(data.user_name + ' (' + data.id + ') entrou', document.createElement('br'))
-            var p = new Player(id, data.user_name, lastTimestamp, 350, 700, data.color, data.gender, data.character_class)
+            output.append(data.user_name + ' (' + id + ') entrou', document.createElement('br'))
+            var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)
             p.start = true
             players.push(p)
         }
@@ -338,17 +356,19 @@ function setConnection(user_name){
             output.append('Encontrou ' + data.user_name + ' (' + data.id + ')', document.createElement('br'))
             var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)
             p.start = true
-            // p.state.side = data.side
-            // p.state.defending = data.defending  
             p.state = data.state
             p.attributes_values = data.attributes_values
             p.good_status = data.good_status
             players.push(p)
         }
+
+        if(data.type === 'login_refused'){
+            alert(data.message)
+        }
     
         if(data.type === 'disconnection'){
             var id = data.id
-            output.append(id + ' saiu', document.createElement('br'))
+            output.append(data.user_name + ' (' + id + ')' + ' saiu', document.createElement('br'))
             var p = players.find(element => element.id == id)  
             p.start = false     
             players = players.filter(player => player.start == true)
@@ -367,4 +387,67 @@ function connSend(json_obj){
     if(conn.readyState == WebSocket.OPEN){
         conn.send(JSON.stringify(json_obj))
     }
+}
+
+function sendDamage(id, result, knockback_side, knockback_val, stamina_result, stun){
+    
+    var json_obj = {
+        'type' : 'action_damage',
+        'id' : id,
+        'result' : result,
+        'knockback_side' : knockback_side,
+        'knockback_val' : knockback_val,
+        'stamina_result': stamina_result,
+        'stun': stun
+    }
+    //conn.send(JSON.stringify(json_obj))
+    connSend(json_obj)
+    //console.log('send dmg type:action_damage '+ ' from:'+player.id+' to:'+id)    
+}
+
+function sendDamageFinish(id, damage_id){
+    
+    var json_obj = {
+        'type' : 'action_damage_finish',
+        'id' : id,
+        'damage_id' : damage_id,
+    }
+    //conn.send(JSON.stringify(json_obj))  
+    connSend(json_obj)
+}
+
+function sendBadStatus(id, sender_id, damage_type){
+    
+    var json_obj = {
+        'type' : 'set_bad_status',
+        'id' : id,
+        'sender_id' : sender_id,
+        'damage_type' : damage_type,
+    }
+    //conn.send(JSON.stringify(json_obj))  
+    connSend(json_obj)
+}
+
+function sendGoodStatus(id, sender_id, damage_type){
+    
+    var json_obj = {
+        'type' : 'set_good_status',
+        'id' : id,
+        'sender_id' : sender_id,
+        'damage_type' : damage_type,
+    }
+    //conn.send(JSON.stringify(json_obj))  
+    connSend(json_obj)
+}
+
+function sendRestore(id, result, restore_type){
+    
+    var json_obj = {
+        'type' : 'action_restore',
+        'id' : id,
+        'result' : result,
+        'restore_type' : restore_type
+    }
+    //conn.send(JSON.stringify(json_obj)) 
+    connSend(json_obj)
 }

@@ -1068,117 +1068,28 @@ function playerDamagePlayer(damage){
                 return
             }
             
-            var is_hit = is_hit = dexterity_vs_flee(
-                player.attributes.dexterity + damage.bonus_dexterity, 
+            var mult_dexterity = 1
+            //20% dex bonus with sword_reinforce
+            if(player.good_status.sword_reinforce > 0){
+                mult_dexterity = 0.2
+            }
+
+            var is_hit = dexterity_vs_flee(
+                (player.attributes.dexterity + damage.bonus_dexterity) * mult_dexterity, 
                 enemy.attributes.agility
             )    
             
-            if(damage.type == 'rod_fire' || damage.type == 'rod_lava' || damage.type == 'rod_water' || damage.type == 'rod_ice'
-            || damage.type == 'rod_earth' || damage.type == 'rod_stone' || damage.type == 'rod_wind' || damage.type == 'rod_eletric'){
-
-                if(damage.type != 'rod_wind' && damage.type != 'rod_eletric'){
-                    is_hit = true
-                    damage.finished = true                    
-                    sendDamageFinish(player.id, damage.id)
-                }                
-
-                switch(damage.bad_status){
-                    case 'burn':
-                        if(status_chance(60)){
-                            enemy.bad_status.burn = status_duration(damage.bad_status)
-                            sendBadStatus(enemy.id, player.id, damage.type)
-                        }
-                    break
-
-                    case 'heat':
-                        if(status_chance(100)){
-                            enemy.bad_status.heat = status_duration(damage.bad_status)                                                       
-                            sendBadStatus(enemy.id, player.id, damage.type)
-                        }
-                    break
-    
-                    case 'wet':
-                        if(status_chance(100)){
-                            enemy.bad_status.wet = status_duration(damage.bad_status)
-                            sendBadStatus(enemy.id, player.id, damage.type)
-                        }
-                    break
-
-                    case 'cold':
-                        if(status_chance(50)){
-                            enemy.bad_status.cold = status_duration(damage.bad_status)
-                            sendBadStatus(enemy.id, player.id, damage.type)
-                        }
-                    break
-
-                    case 'dirty':
-                        if(status_chance(100)){
-                            enemy.bad_status.dirty = status_duration(damage.bad_status)
-                            sendBadStatus(enemy.id, player.id, damage.type)
-                        }
-                    break
-
-                    case 'petrification':
-                        if(status_chance(50)){
-                            enemy.bad_status.petrification = status_duration(damage.bad_status)
-                            sendBadStatus(enemy.id, player.id, damage.type)
-                        }
-                    break
-
-                    case 'breeze':
-                        if(status_chance(100)){
-                            enemy.bad_status.breeze = status_duration(damage.bad_status)
-                            sendBadStatus(enemy.id, player.id, damage.type)
-                        }
-                    break
-
-                    case 'electrification':
-                        if(status_chance(60)){
-                            enemy.bad_status.electrification = status_duration(damage.bad_status)
-                            sendBadStatus(enemy.id, player.id, damage.type)
-                        }
-                    break
-                }
-            }
-
-            if(enemy.bad_status.wet > 0 && ((damage.type == 'rod_wind' && status_chance(70)) || damage.type == 'rod_ice')){
-                enemy.bad_status.cold = status_duration('cold')                
-                sendBadStatus(enemy.id, player.id, 'rod_ice')
-            }
-
-            if(enemy.bad_status.heat > 0 && ((damage.type == 'rod_water' && status_chance(80)) || damage.type == 'rod_lava')){
-                enemy.bad_status.cold = status_duration('burn')                
-                sendBadStatus(enemy.id, player.id, 'rod_lava')
-            }
-
-            if(enemy.bad_status.dirty > 0 && ((damage.type == 'rod_fire' && status_chance(70)) || damage.type == 'rod_stone')){
-                enemy.bad_status.cold = status_duration('petrification')                
-                sendBadStatus(enemy.id, player.id, 'rod_stone')
-            }
-
-            if(enemy.bad_status.breeze > 0 && ((damage.type == 'rod_earth' && status_chance(80)) || damage.type == 'rod_eletric')){
-                enemy.bad_status.cold = status_duration('electrification')                
-                sendBadStatus(enemy.id, player.id, 'rod_eletric')
+            if(damage.magic){
+                //magic always hit
+                is_hit = true
+                magicDamageControl(damage, enemy)
+                magicBadStatusConversion(damage, enemy)
             }
             
-            if(is_hit){  
-                
-                //Shield Reflect
+            if(is_hit){
+                //Reflect 100% damage with shield_reflect (not included bad status damage)
                 if(enemy.good_status.shield_reflect > 0 && enemy.state.defending){   
-
-                    if(damage.magic){
-                        var result = m_attack_vs_m_defense(
-                            player.attributes_values.m_attack * damage.attack_percentage / 100, 
-                            player.attributes.dexterity + damage.bonus_dexterity, 
-                            enemy.attributes_values.m_defense
-                        )
-                    }else{
-                        var result = attack_vs_defense(
-                            player.attributes_values.attack * damage.attack_percentage / 100, 
-                            player.attributes.dexterity + damage.bonus_dexterity, 
-                            enemy.attributes_values.defense
-                        )
-                    }
+                    result = resultDamageControl(damage, enemy)
 
                     display = new Display({x : player.position.x + enemy.width/2, y : player.position.y + 
                     player.height/2, color : 'red', text : result, type : 'damage'})
@@ -1197,31 +1108,24 @@ function playerDamagePlayer(damage){
                 
                 var stamina_result = 0
                 if(damage.magic){
-                    var result = m_attack_vs_m_defense(
-                        player.attributes_values.m_attack * damage.attack_percentage / 100, 
-                        player.attributes.dexterity + damage.bonus_dexterity, 
-                        enemy.attributes_values.m_defense
-                    ) * elementalCalc(enemy.bad_status, damage.type)
                     stamina_result = stamina_vs_attack(enemy.attributes.power, player.attributes.inteligence)
                 }else{
-                    var result = attack_vs_defense(
-                        player.attributes_values.attack * damage.attack_percentage / 100, 
-                        player.attributes.dexterity + damage.bonus_dexterity, 
-                        enemy.attributes_values.defense
-                    )
                     stamina_result = stamina_vs_attack(enemy.attributes.power, player.attributes.power)
                 }
+
+                result = resultDamageControl(damage, enemy)
 
                 if(enemy.state.defending && enemy.attributes_values.stamina >= stamina_result){                    
     
                     shieldSound()
+                    //Save 40% Stamina with shield_reinforce
                     if(enemy.good_status.shield_reinforce > 0){
                         stamina_result -= (stamina_result * 0.6)
                     }
                     enemy.attributes_values.stamina -= (enemy.attributes_values.stamina - stamina_result)
-                    if(damage.type==''){  
-                        damage.finished = true
-                    }                    
+                    // if(damage.type==''){  
+                    //     damage.finished = true
+                    // }                   
                     result = 0                    
     
                 }else{
@@ -1234,10 +1138,12 @@ function playerDamagePlayer(damage){
                     stamina_result = 0
                 }                   
 
+                //2x damage for sword_reinforce
                 if(player.good_status.sword_reinforce > 0){
                     result *= 2
                 }
 
+                //Save 40% HP with shield_reinforce
                 if(enemy.good_status.shield_reinforce > 0){
                     result *= 0.6
                 }
@@ -1348,69 +1254,6 @@ function playerCure(cure, player, inteligence){
     }
 }
 
-function sendDamage(id, result, knockback_side, knockback_val, stamina_result, stun){
-    
-    var json_obj = {
-        'type' : 'action_damage',
-        'id' : id,
-        'result' : result,
-        'knockback_side' : knockback_side,
-        'knockback_val' : knockback_val,
-        'stamina_result': stamina_result,
-        'stun': stun
-    }
-    //conn.send(JSON.stringify(json_obj))
-    connSend(json_obj)
-    //console.log('send dmg type:action_damage '+ ' from:'+player.id+' to:'+id)    
-}
-
-function sendDamageFinish(id, damage_id){
-    
-    var json_obj = {
-        'type' : 'action_damage_finish',
-        'id' : id,
-        'damage_id' : damage_id,
-    }
-    //conn.send(JSON.stringify(json_obj))  
-    connSend(json_obj)
-}
-
-function sendBadStatus(id, sender_id, damage_type){
-    
-    var json_obj = {
-        'type' : 'set_bad_status',
-        'id' : id,
-        'sender_id' : sender_id,
-        'damage_type' : damage_type,
-    }
-    //conn.send(JSON.stringify(json_obj))  
-    connSend(json_obj)
-}
-
-function sendGoodStatus(id, sender_id, damage_type){
-    
-    var json_obj = {
-        'type' : 'set_good_status',
-        'id' : id,
-        'sender_id' : sender_id,
-        'damage_type' : damage_type,
-    }
-    //conn.send(JSON.stringify(json_obj))  
-    connSend(json_obj)
-}
-
-function sendRestore(id, result, restore_type){
-    
-    var json_obj = {
-        'type' : 'action_restore',
-        'id' : id,
-        'result' : result,
-        'restore_type' : restore_type
-    }
-    //conn.send(JSON.stringify(json_obj)) 
-    connSend(json_obj)
-}
-
 function activateGoodStatus(good_status, status_type, sender_id){
     switch(status_type){    
                 
@@ -1506,4 +1349,113 @@ function activateBadStatus(bad_status, status_type, sender_id){
     }
 
     return bad_status
+}
+
+function magicBadStatusConversion(damage, enemy){
+    if(enemy.bad_status.wet > 0 && ((damage.type == 'rod_wind' && status_chance(70)) || damage.type == 'rod_ice')){
+        enemy.bad_status.cold = status_duration('cold')                
+        sendBadStatus(enemy.id, player.id, 'rod_ice')
+    }
+
+    if(enemy.bad_status.heat > 0 && ((damage.type == 'rod_water' && status_chance(80)) || damage.type == 'rod_lava')){
+        enemy.bad_status.cold = status_duration('burn')                
+        sendBadStatus(enemy.id, player.id, 'rod_lava')
+    }
+
+    if(enemy.bad_status.dirty > 0 && ((damage.type == 'rod_fire' && status_chance(70)) || damage.type == 'rod_stone')){
+        enemy.bad_status.cold = status_duration('petrification')                
+        sendBadStatus(enemy.id, player.id, 'rod_stone')
+    }
+
+    if(enemy.bad_status.breeze > 0 && ((damage.type == 'rod_earth' && status_chance(80)) || damage.type == 'rod_eletric')){
+        enemy.bad_status.cold = status_duration('electrification')                
+        sendBadStatus(enemy.id, player.id, 'rod_eletric')
+    }
+}
+
+function magicDamageControl(damage, enemy){
+    if(damage.type == 'rod_fire' || damage.type == 'rod_lava' || damage.type == 'rod_water' || damage.type == 'rod_ice'
+    || damage.type == 'rod_earth' || damage.type == 'rod_stone' || damage.type == 'rod_wind' || damage.type == 'rod_eletric'){
+
+        if(damage.type != 'rod_wind' && damage.type != 'rod_eletric'){
+            damage.finished = true                    
+            sendDamageFinish(player.id, damage.id)
+        }                
+
+        switch(damage.bad_status){
+            case 'burn':
+                if(status_chance(60)){
+                    enemy.bad_status.burn = status_duration(damage.bad_status)
+                    sendBadStatus(enemy.id, player.id, damage.type)
+                }
+            break
+
+            case 'heat':
+                if(status_chance(100)){
+                    enemy.bad_status.heat = status_duration(damage.bad_status)                                                       
+                    sendBadStatus(enemy.id, player.id, damage.type)
+                }
+            break
+
+            case 'wet':
+                if(status_chance(100)){
+                    enemy.bad_status.wet = status_duration(damage.bad_status)
+                    sendBadStatus(enemy.id, player.id, damage.type)
+                }
+            break
+
+            case 'cold':
+                if(status_chance(50)){
+                    enemy.bad_status.cold = status_duration(damage.bad_status)
+                    sendBadStatus(enemy.id, player.id, damage.type)
+                }
+            break
+
+            case 'dirty':
+                if(status_chance(100)){
+                    enemy.bad_status.dirty = status_duration(damage.bad_status)
+                    sendBadStatus(enemy.id, player.id, damage.type)
+                }
+            break
+
+            case 'petrification':
+                if(status_chance(50)){
+                    enemy.bad_status.petrification = status_duration(damage.bad_status)
+                    sendBadStatus(enemy.id, player.id, damage.type)
+                }
+            break
+
+            case 'breeze':
+                if(status_chance(100)){
+                    enemy.bad_status.breeze = status_duration(damage.bad_status)
+                    sendBadStatus(enemy.id, player.id, damage.type)
+                }
+            break
+
+            case 'electrification':
+                if(status_chance(60)){
+                    enemy.bad_status.electrification = status_duration(damage.bad_status)
+                    sendBadStatus(enemy.id, player.id, damage.type)
+                }
+            break
+        }
+    }
+}
+
+function resultDamageControl(damage, enemy){
+    var result = 0
+    if(damage.magic){
+        result = m_attack_vs_m_defense(
+            player.attributes_values.m_attack * damage.attack_percentage / 100, 
+            player.attributes.dexterity + damage.bonus_dexterity, 
+            enemy.attributes_values.m_defense
+        )
+    }else{
+        result = attack_vs_defense(
+            player.attributes_values.attack * damage.attack_percentage / 100, 
+            player.attributes.dexterity + damage.bonus_dexterity, 
+            enemy.attributes_values.defense
+        )
+    }
+    return result
 }

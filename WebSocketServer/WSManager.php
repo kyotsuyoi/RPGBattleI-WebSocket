@@ -30,53 +30,6 @@ class WSManager implements MessageComponentInterface {
                     'id' => $resourceId, 
                     'color' => $color]
                 ));
-
-                array_push($this->players, 
-                    ['id' => $resourceId, 
-                    'user_name' => null, 
-                    'color' => $color, 
-                    'x' => 0, 'y' => 0, 
-                    'gender' => '', 
-                    'character_class' => '',
-                    'state' => '',
-                    'attributes_values' => '',
-                    'good_status' => '']
-                );
-                //var_dump($this->players);
-
-                foreach ($this->clients as $inner_client) {
-                    if ($inner_client->resourceId !== $client->resourceId) {
-
-                        foreach ($this->players as $player) {
-                            if ($player['id'] == $inner_client->resourceId) {
-                                $inner_user_name = $player['user_name'];
-                                $inner_color = $player['color'];
-                                $inner_x = $player['x'];
-                                $inner_y = $player['y'];
-                                $inner_gender = $player['gender'];
-                                $inner_character_class = $player['character_class'];
-                                $inner_state = $player['state'];
-                                $inner_attributes_values = $player['attributes_values'];
-                                $inner_good_status = $player['good_status'];
-                                //var_dump($player);
-                            }
-                        }
-                        //get all players info and send to the new connection
-                        $client->send(json_encode(
-                            ['type' => 'get_player', 
-                            'id' => $inner_client->resourceId, 
-                            'user_name' => $inner_user_name, 
-                            'color' => $inner_color, 
-                            'x' => $inner_x, 
-                            'y' => $inner_y, 
-                            'gender' => $inner_gender, 
-                            'character_class' => $inner_character_class, 
-                            'state' => $inner_state,
-                            'attributes_values' => $inner_attributes_values,
-                            'good_status' => $inner_good_status]
-                        )); 
-                    }
-                }
             }
         }    
         
@@ -186,19 +139,25 @@ class WSManager implements MessageComponentInterface {
                     ));             
                 } 
 
-                if($json->type === 'login'){
+                if($json->type === 'login_complete'){
 
-                     //send new info for all other connections
+                    //send new info for all other connections
                     foreach ($this->players as $key => $player) {
                         if ($player['id'] == $from->resourceId) {                    
                     
                             $client->send(json_encode([
-                                'type' => 'first_connection_wellcome', 
+                                'type' => 'login_wellcome', 
                                 'id' => $player['id'], 
                                 'color' => $player['color'], 
-                                'user_name' => $json->user_name, 
-                                'gender' => $json->gender, 
-                                'character_class' => $json->character_class
+                                'x' => $player['x'],
+                                'y' => $player['y'],
+                                'user_name' => $player['user_name'], 
+                                'gender' => $player['gender'], 
+                                'character_class' => $player['character_class'],
+                                'state' => $player['state'],
+                                'attributes_values' => $player['attributes_values'],
+                                'good_status' => $player['good_status'],
+                                'bad_status' => $player['bad_status']
                             ]));                            
                         }
                     }                
@@ -209,17 +168,102 @@ class WSManager implements MessageComponentInterface {
             if ($from === $client) {
                 if($json->type === 'login'){
 
-                    foreach ($this->players as $key => $player) {
-                        if ($player['id'] == $from->resourceId) {
-                            $this->players[$key]['user_name'] = $json->user_name;
-                            $this->players[$key]['x'] = $json->x;
-                            $this->players[$key]['y'] = $json->y;
-                            $this->players[$key]['gender'] = $json->gender;
-                            $this->players[$key]['character_class'] = $json->character_class;
+                    //$color = bin2hex(openssl_random_pseudo_bytes(3));
+                    $key = getKeyByUserName($json->user_name,$this->players);
+                    if($key == -1){
+                        array_push($this->players, 
+                            ['id' => $from->resourceId, 
+                            'user_name' => $json->user_name, 
+                            'color' => $json->color, 
+                            'x' => $json->x, 
+                            'y' => $json->y, 
+                            'gender' => $json->gender, 
+                            'character_class' => $json->character_class,
+                            'state' => '',
+                            'attributes_values' => '',
+                            'good_status' => '',
+                            'bad_status' => '']
+                        );
+                        
+                        $client->send(json_encode([
+                            'type' => 'login_complete', 
+                            'id' => $from->resourceId, 
+                            'color' => $json->color,
+                            'x' => $json->x, 
+                            'y' => $json->y, 
+                            'user_name' => $json->user_name, 
+                            'gender' => $json->gender, 
+                            'character_class' => $json->character_class,
+                            'state' => '',
+                            'attributes_values' => '',
+                            'good_status' => '',
+                            'bad_status' => ''
+                        ])); 
+                        
+                        echo ('ID:'.$from->resourceId.' login:'. $json->user_name . " - <login> \n");  
 
-                            echo ('ID:'.$from->resourceId.' login:'. $this->players[$key]['user_name'] . "\n");      
+                    } else {
+                        
+                        if($this->players[$key]['id'] != 0){
+                            $client->send(json_encode([
+                                'type' => 'login_refused',
+                                'message' => 'This login ID is in use'
+                            ])); 
+                            return;
                         }
-                    }                
+                        $this->players[$key]['id'] = $from->resourceId;                        
+
+                        $client->send(json_encode([
+                            'type' => 'login_complete', 
+                            'id' => $this->players[$key]['id'], 
+                            'color' => $this->players[$key]['color'], 
+                            'x' => $this->players[$key]['x'], 
+                            'y' => $this->players[$key]['y'], 
+                            'user_name' => $this->players[$key]['user_name'], 
+                            'gender' => $this->players[$key]['gender'], 
+                            'character_class' => $this->players[$key]['character_class'],
+                            'state' => $this->players[$key]['state'],
+                            'attributes_values' => $this->players[$key]['attributes_values'],
+                            'good_status' => $this->players[$key]['good_status'],
+                            'bad_status' => $this->players[$key]['bad_status']
+                        ])); 
+
+                        echo ('ID:'.$from->resourceId.' login:'. $json->user_name . " - <relogin> \n");  
+                    } 
+                    
+                    //get all players info and send to the new logged user
+                    foreach ($this->clients as $inner_client) {
+                        if ($inner_client->resourceId !== $client->resourceId) {
+
+                            foreach ($this->players as $player) {
+                                if ($player['id'] == $inner_client->resourceId) {
+                                    $inner_user_name = $player['user_name'];
+                                    $inner_color = $player['color'];
+                                    $inner_x = $player['x'];
+                                    $inner_y = $player['y'];
+                                    $inner_gender = $player['gender'];
+                                    $inner_character_class = $player['character_class'];
+                                    $inner_state = $player['state'];
+                                    $inner_attributes_values = $player['attributes_values'];
+                                    $inner_good_status = $player['good_status'];
+                                    //var_dump($player);
+                                }
+                            }
+                            $client->send(json_encode(
+                                ['type' => 'get_player', 
+                                'id' => $inner_client->resourceId, 
+                                'user_name' => $inner_user_name, 
+                                'color' => $inner_color, 
+                                'x' => $inner_x, 
+                                'y' => $inner_y, 
+                                'gender' => $inner_gender, 
+                                'character_class' => $inner_character_class, 
+                                'state' => $inner_state,
+                                'attributes_values' => $inner_attributes_values,
+                                'good_status' => $inner_good_status]
+                            )); 
+                        }
+                    }               
                 } 
             }
         }
@@ -239,24 +283,28 @@ class WSManager implements MessageComponentInterface {
     }
 
     public function onClose(ConnectionInterface $conn) {
-        // The connection is closed, remove it, as we can no longer send it messages
-        $this->clients->detach($conn);
         
-        foreach ($this->clients as $client) {
-            
+        foreach ($this->clients as $client) {            
             foreach ($this->players as $key => $player) {
-                if ($player['id'] === $conn->resourceId) {
-                    $this->players[$key]['id'] == null;
-                    //unset($this->players[$key]);
+                if ($player['id'] == $conn->resourceId) {
+                    $this->players[$key]['id'] = 0; 
+                    $vKey = $key;
                 }
             }
             
             //send the disconnection to all other connections
-            $client->send(json_encode(['type' => 'disconnection', 'id' => $conn->resourceId]));
-            
+            $client->send(json_encode(
+                ['type' => 'disconnection', 
+                'id' => $conn->resourceId, 
+                'user_name' => $this->players[$vKey]['user_name']]
+            ));
         }
+        
+        // The connection is closed, remove it, as we can no longer send it messages
+        $this->clients->detach($conn);
 
-        echo "Connection {$conn->resourceId} has disconnected\n";
+        //var_dump($this->players);
+        echo "Connection {$conn->resourceId} has disconnected\n";      
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {
