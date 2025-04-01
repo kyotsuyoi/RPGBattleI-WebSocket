@@ -10,6 +10,28 @@ Para executar servidor WebSocket é necessário o PHP instalado.
 Também é necessário Composer do PHP instalado para poder baixar o Ratchet (usado para o WebSocket).  
 
 *******
+
+Instalação PHP:
+Instale o Visual C: https://aka.ms/vs/17/release/vc_redist.x64.exe
+Acesse a pagina pra baixar o PHP: https://windows.php.net/download#php-8.4
+Baixar o arquivo .zip, extrair na Unidade C e renomear a pasta para o nome e versão do PHP selecionado.
+Ex.: php84
+Vá em Variaveis de Ambiente e dentro da variavel PATH aponte o novo caminho que acabou de criar.
+Ex.: C:\php84
+
+Testar no Powershell com o comando: php -v
+Se não funcionar talvez seja necessária a reinicialização do sistema.
+
+Instalação do Composer:
+Baixe o instalador .exe pelo link: https://getcomposer.org/
+Siga os passos do instalador apenas Next-Next como qualquer outro.
+Após instalar, abra o Powershell no caminho raiz do projeto e execute o comando:
+composer require cboden/ratchet
+Assim deverá baixar as dependencias do Ratchet para o projeto.
+Se já houver composer.json, composer.lock e a pasta vendor no seu projeto, remova antes de executar o comando
+
+*******
+
 Para executar servidor PHP no terminal (maquina local):  
     php -S localhost:8000  
 
