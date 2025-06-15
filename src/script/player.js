@@ -44,6 +44,7 @@ class Player{
         this.cooldown = {
             stamina : 0,
             attack : 0,
+            attack2 : 0,
             spell_type_1 : 0,
             spell_type_2 : 0,
             spell_type_3 : 0,
@@ -51,11 +52,11 @@ class Player{
         }
 
         this.attributes = {
-            power : 10,
-            agility : 10,
-            dexterity : 10,
+            power : 2,
+            agility : 1,
+            dexterity : 1,
             vitality : 10,
-            inteligence : 10
+            inteligence : 1
 
             // power : 100,
             // agility : 100,
@@ -146,12 +147,12 @@ class Player{
         //draw shield first (up only)
         if(this.state.side == 'up' && this.state.defending){
 
-            var posx = 0
-            if(this.user_name == 'Kyo'){
-                posx = -12
-            }else{
-                posx = -11
-            }
+            var posx = -11
+            // if(this.user_name == 'Kyo'){
+            //     posx = -12
+            // }else{
+            //     posx = -11
+            // }
 
             context.drawImage(          
                 this.currentShieldSprite, 
@@ -677,6 +678,9 @@ class Player{
         if(this.cooldown.attack > 0){
             this.cooldown.attack -= 1
         }
+        if(this.cooldown.attack2 > 0){
+            this.cooldown.attack2 -= 1
+        }
 
         if(this.cooldown.spell_type_1 > 0){
             this.cooldown.spell_type_1 -= 1
@@ -836,40 +840,58 @@ class Player{
         var class_bonus_inteligence = 1
         var class_bonus_hp = 1
         var class_bonus_sp = 1
+        var class_bonus_hp_sum = 0
+        var class_bonus_sp_sum = 0
+
         switch(this.character_class){
             case 'knight':
                 class_bonus_power = 1.15
                 class_bonus_vitality = 1.2
                 class_bonus_hp = 1.25
+
+                class_bonus_hp_sum = 40
+                class_bonus_sp_sum = 4
             break
 
             case 'wizzard':
                 class_bonus_inteligence = 1.2
                 class_bonus_dexterity = 1.1
                 class_bonus_sp = 1.25
+
+                class_bonus_hp_sum = 22
+                class_bonus_sp_sum = 18
             break
 
             case 'mage':
                 class_bonus_inteligence = 1.1
                 class_bonus_dexterity = 1.2
                 class_bonus_sp = 1.25
+
+                class_bonus_hp_sum = 20
+                class_bonus_sp_sum = 20
             break
 
             case 'archer':
                 class_bonus_power = 1.1
                 class_bonus_dexterity = 1.15
                 class_bonus_agility = 1.1
+
+                class_bonus_hp_sum = 25
+                class_bonus_sp_sum = 15
             break
 
             case 'squire':
                 class_bonus_power = 1.1
                 class_bonus_vitality = 1.3
                 class_bonus_hp = 1.2
+
+                class_bonus_hp_sum = 30
+                class_bonus_sp_sum = 20
             break
         }
 
-        this.attributes_values.max_hp = Math.round(hp_value(attributes.vitality, attributes.power) * class_bonus_hp)
-        this.attributes_values.max_sp = Math.round(sp_value(attributes.inteligence, attributes.dexterity) * class_bonus_sp)
+        this.attributes_values.max_hp = class_bonus_hp_sum +Math.round(hp_value(attributes.vitality, attributes.power) * class_bonus_hp)
+        this.attributes_values.max_sp = class_bonus_sp_sum + Math.round(sp_value(attributes.inteligence, attributes.dexterity) * class_bonus_sp)
 
         this.attributes_values.hp = this.attributes_values.max_hp
         this.attributes_values.sp = this.attributes_values.max_sp
@@ -962,7 +984,7 @@ class Player{
 
         switch(this.character_class){
             case 'knight':
-                this.skill.primary_weapon_type = 'sword_2'                    
+                this.skill.primary_weapon_type = 'dagger'                    
                 this.skill.secondary_weapon_type = 'sword_2'
                 this.skill.spell_type_1 = 'power_blade'
                 this.skill.spell_type_2 = 'ghost_blade'
@@ -991,14 +1013,14 @@ class Player{
             case 'archer':
                 this.skill.primary_weapon_type = 'dagger'
                 this.skill.secondary_weapon_type = 'arrow'
-                this.skill.spell_type_1 = ''
-                this.skill.spell_type_2 = ''
-                this.skill.spell_type_3 = ''
+                this.skill.spell_type_1 = 'arrow_fire'
+                this.skill.spell_type_2 = 'arrow_pierce'
+                this.skill.spell_type_3 = 'arrow_triple'
                 this.skill.spell_type_4 = ''
             break
 
             case 'squire':
-                this.skill.primary_weapon_type = 'sword_1'
+                this.skill.primary_weapon_type = 'dagger'
                 this.skill.secondary_weapon_type = 'sword_1'
                 this.skill.spell_type_1 = 'rapid_blade'
                 this.skill.spell_type_2 = 'shield_reinforce'

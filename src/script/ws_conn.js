@@ -1,6 +1,7 @@
 
-const input = document.querySelector('input')
-const output = document.querySelector('output')
+const chat_input = document.querySelector('#chat-input')
+//const output = document.querySelector('output')
+const chat_output = document.getElementById('chat-output')
 
 const chat = document.getElementById('chat')
 const button_send = document.getElementById('button_send')
@@ -10,19 +11,22 @@ const button_user_name = document.getElementById('button_user_name')
 const checkbox_char_gender = document.getElementById('checkbox_char_gender')
 const checkbox_char_class = document.getElementById('checkbox_char_class')
 var char_gender, character_class
+var input_ip = document.getElementById('input_ip')
+const attributes = document.getElementById('attributes')
 
 var button_user_name_click_count = 0
+input_ip.value = "192.168.15.50"
 
 var player_id
 
-chat.style.visibility = 'hidden'
+chat.style.display = 'none'
 
 // conn.addEventListener('open', console.log)
 // conn.addEventListener('message', console.log)
 
 var conn = null
 
-input.addEventListener('keypress', e =>{
+chat_input.addEventListener('keypress', e =>{
     if (e.code === 'Enter'){
         send_message()
     }            
@@ -31,10 +35,19 @@ input.addEventListener('keypress', e =>{
 button_send.addEventListener("click", send_message)
 
 function send_message() {
-    const text = input.value
+    const text = chat_input.value
     if (text === ''){
         return
     }
+
+    //const input_msg = document.getElementById('input');
+    // const message = chat_input.value.trim();
+    // if (message) {
+    //     const msgDiv = document.createElement('div');
+    //     msgDiv.textContent = message;
+    //     chat_output.appendChild(msgDiv);
+    // }
+
     if(text.substring(0,6)=='code:>'){
         var code = text.substring(6,10)
         switch (code){
@@ -70,13 +83,16 @@ function send_message() {
         player.setMessage('CODE RUNNER')
         return
     }
-    output.append('Eu (' + player_id + '): ' + text, document.createElement('br'))
+    chat_output.append('Eu (' + player_id + '): ' + text, document.createElement('br'))
     var json = JSON.parse('{ "type":"chat" , "text":"' + text + '" }')
     //conn.send(          '{ "type":"chat" , "text":"' + text + '" }')
     connSend(json)
-    input.value = ''
+    chat_input.value = ''
 
     player.setMessage(text)
+
+    //document.getElementById('chat-output').scrollTop = document.getElementById('chat-output').scrollHeight;
+    chat_output.scrollTop = chat_output.scrollHeight;
 }
 
 button_user_name.addEventListener("click", send_user_name)
@@ -90,6 +106,9 @@ function send_user_name() {
     if (value === ''){
         return
     }  
+
+    document.getElementById('background').style.display = 'block';
+
     char_gender = checkbox_char_gender.options[checkbox_char_gender.selectedIndex].value
     character_class = checkbox_char_class.options[checkbox_char_class.selectedIndex].value
     button_user_name_click_count++  
@@ -98,16 +117,18 @@ function send_user_name() {
 
 function setConnection(user_name){
     //conn = new WebSocket('wss://websocket-test-rpg-game.glitch.me/')
-    conn = new WebSocket('ws://10.0.0.103:8085')
+    conn = new WebSocket('ws://' + input_ip.value + ':8085')
     conn.addEventListener('message', message => {
         const data = JSON.parse(message.data)
 
         recep_tax ++
 
         if(data.type === 'chat'){
-            output.append(data.user_name +' (' + data.id + '): ' + data.text, document.createElement('br'))
+            chat_output.append(data.user_name +' (' + data.id + '): ' + data.text, document.createElement('br'))
             var p = players.find(element => element.id == data.id)
             p.setMessage(data.text)
+            //document.getElementById('chat-output').scrollTop = document.getElementById('chat-output').scrollHeight;
+            chat_output.scrollTop = chat_output.scrollHeight;
         }
     
         if(data.type === 'action'){
@@ -231,7 +252,14 @@ function setConnection(user_name){
 
         if(data.type === 'action_damage_finish'){
             var damage = damages.find(element => element.id == data.damage_id && element.owner_id == data.id)
-            damage.finished = true
+            if (damage != undefined) damage.finished = true
+        }
+
+        if(data.type === 'action_damage_update'){
+            var damage = damages.find(element => element.id == data.damage_id && element.owner_id == data.id)
+            damage.side = data.side
+            damage.velocity_side()
+            console.log('action:'+data.type + ' from id:'+data.id + ' damage_id:'+data.damage_id + ' side:'+data.side)
         }
 
         if(data.type === 'action_restore'){
@@ -315,7 +343,7 @@ function setConnection(user_name){
 
         if(data.type === 'login_complete'){
             player_id = data.id
-            output.append('Seu ID: ' + player_id, document.createElement('br'))
+            chat_output.append('Seu ID: ' + player_id, document.createElement('br'))
             player = new Player(player_id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)   
             
             if(data.state != ''){
@@ -339,13 +367,17 @@ function setConnection(user_name){
             player.start = true
             start()
 
-            login.style.visibility = 'hidden'
-            chat.style.visibility = 'visible'
+            login.style.display = 'none'
+            chat.style.display = 'block'
+            attributes.style.display = 'block'
+            document.body.style.backgroundImage = 'none'
+
+            updateAttributesUI()
         }
 
         if(data.type === 'login_wellcome'){
             var id = data.id
-            output.append(data.user_name + ' (' + id + ') entrou', document.createElement('br'))
+            chat_output.append(data.user_name + ' (' + id + ') entrou', document.createElement('br'))
             var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)
             p.start = true
             players.push(p)
@@ -353,7 +385,7 @@ function setConnection(user_name){
     
         if(data.type === 'get_player'){
             var id = data.id
-            output.append('Encontrou ' + data.user_name + ' (' + data.id + ')', document.createElement('br'))
+            chat_output.append('Encontrou ' + data.user_name + ' (' + data.id + ')', document.createElement('br'))
             var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)
             p.start = true
             p.state = data.state
@@ -368,7 +400,7 @@ function setConnection(user_name){
     
         if(data.type === 'disconnection'){
             var id = data.id
-            output.append(data.user_name + ' (' + id + ')' + ' saiu', document.createElement('br'))
+            chat_output.append(data.user_name + ' (' + id + ')' + ' saiu', document.createElement('br'))
             var p = players.find(element => element.id == id)  
             p.start = false     
             players = players.filter(player => player.start == true)
@@ -411,6 +443,18 @@ function sendDamageFinish(id, damage_id){
         'type' : 'action_damage_finish',
         'id' : id,
         'damage_id' : damage_id,
+    }
+    //conn.send(JSON.stringify(json_obj))  
+    connSend(json_obj)
+}
+
+function sendDamageUpdate(id, damage_id, side){
+    
+    var json_obj = {
+        'type' : 'action_damage_update',
+        'id' : id,
+        'damage_id' : damage_id,
+        'side' : side,
     }
     //conn.send(JSON.stringify(json_obj))  
     connSend(json_obj)

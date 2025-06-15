@@ -110,6 +110,16 @@ class WSManager implements MessageComponentInterface {
                     ));               
                 } 
 
+                if($json->type === 'action_damage_update'){
+                    $client->send(json_encode(
+                        ['type' => 'action_damage_update', 
+                        'id' => $json->id, 
+                        'damage_id' => $json->damage_id, 
+                        'side' => $json->side]
+                    ));    
+                    echo "Type: {$json->type} ({$json->side}) from ID:{$from->resourceId} to ID: {$json->id}\n";            
+                }
+
                 if($json->type === 'set_bad_status'){
                     $client->send(json_encode(
                         ['type' => 'set_bad_status', 

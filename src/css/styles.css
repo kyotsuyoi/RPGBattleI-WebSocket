@@ -35,7 +35,6 @@ div.chat {
     text-align: center;
     /* padding: 3vw 0vw 0vw 0vw; */
     min-width:0vw;
-    overflow-y: scroll;
     /* width: 200px;  */
     height: 200px;
 }
@@ -62,7 +61,7 @@ div.chat {
     margin: 0;
     margin: 0;
     background-color: black; 
-    display: flex;
+    /*display: none;*/
     align-items: center;
     justify-content: center;
     /*height: 100vh;*/

@@ -21,6 +21,9 @@ const keys = {
     attack : {
         pressed : false
     },
+    attack2 : {
+        pressed : false
+    },
     defense : {
         pressed : false
     },
@@ -158,8 +161,40 @@ function keyCodeDown(keyCode){
             }
         break
 
-        //run
+        //attack2
         case 98:
+            if(!keys.attack2.pressed && player.cooldown.attack2 <= 0){
+
+                damage = new Damage({ id : lastTimestamp,
+                    x : player.position.x, y : player.position.y, 
+                    owner_id : player.id, owner : 'player', type : player.skill.secondary_weapon_type, side : player.state.side, 
+                    character_width : player.width, character_height: player.height, lastTimestamp : lastTimestamp
+                })
+
+                keys.attack2.pressed = true      
+                //lastKey = 'attack'
+                player.state.attacking = true
+
+                player.cooldown.attack2 = Math.round(player.attributes_values.attack_speed)
+                swordSound()
+
+                damages.push(damage)   
+                weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
+                weapons.push(weapon)
+
+                var json_obj = {
+                    'type' : 'action_attack',
+                    'damage_id' : damage.id,
+                    'attack_type' : player.skill.secondary_weapon_type,
+                    'attributes_values' : player.attributes_values
+                }        
+                //conn.send(JSON.stringify(json_obj)) 
+                connSend(json_obj)
+            }
+        break
+
+        //run
+        case 99:
             if(!keys.run.pressed && player.attributes_values.stamina>=5){
                 keys.run.pressed = true  
                 if (player.velocity.x != 0 || player.velocity.y != 0){
@@ -406,12 +441,16 @@ function keyCodeUp(keyCode){
             keys.attack.pressed = false  
         break
 
+       case 98:
+            keys.attack2.pressed = false  
+        break
+
         case 103:
             keys.defense.pressed = false  
             player.state.defending = false
         break
 
-        case 98:
+        case 99:
             if(keys.run.pressed){                
                 keys.run.pressed = false   
                 player.state.running = false
@@ -502,10 +541,10 @@ function gamepadHandler(event, connecting) {
 
     if (connecting) {
         gamepads[gamepad.index] = gamepad
-        //console.log('Gamepad Index ID:' + gamepad.index + ' is connected')
+        console.log('Gamepad Index ID:' + gamepad.index + ' is connected')
     } else {
         delete gamepads[gamepad.index]        
-        //console.log('Gamepad Index ID:' + gamepad.index + ' is disconnected')
+        console.log('Gamepad Index ID:' + gamepad.index + ' is disconnected')
     }
 }
 
@@ -513,7 +552,7 @@ window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true
 window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); })
 
 function buttonPressed(b) {
-    //console.log(b)
+    console.log(b)
     if (typeof(b) == "object") {
         return b.pressed
     }
@@ -523,9 +562,9 @@ function buttonPressed(b) {
 function padLoop() {
     if (!connectedGamepad()) return
     var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [])
-    var gp = gamepads[0]
+    var gp = gamepads[2]
 
-    //console.log(gp) 
+    console.log(gp) 
     
     if (gp.axes[0] < -0.1 || gp.axes[0] > 0.1){
         axes_x = Math.abs(gp.axes[0])   
@@ -629,7 +668,7 @@ function padLoop() {
     if (buttonPressed(gp.buttons[10])) {
         //console.log('b10')
     } else if (buttonPressed(gp.buttons[11])) {
-        //console.log('b11')
+       //console.log('b11')
     }  
 
     return false
@@ -639,8 +678,8 @@ function connectedGamepad(){
     var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [])
     if (!gamepads) return false
 
-    if(gamepads[0]==null) return false
-    if(!gamepads[0].connected) return false
+    if(gamepads[2]==null) return false
+    if(!gamepads[2].connected) return false
     return true
 }
 

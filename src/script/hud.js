@@ -338,6 +338,18 @@ class Hud {
                 sprite_icon = createImage('src/image/icon_rod_stone.png')
             break
 
+            case 'arrow_fire':
+                sprite_icon = createImage('src/image/icon_arrow_fire.png')
+            break
+
+            case 'arrow_pierce':
+                sprite_icon = createImage('src/image/icon_arrow_pierce.png')
+            break
+
+            case 'arrow_triple':
+                sprite_icon = createImage('src/image/icon_arrow_triple.png')
+            break
+
             default:                
                 sprite_icon = createImage('src/image/icon_blocked.png')
         }

@@ -4,40 +4,124 @@
         <meta charset="Content-Type: application/javascript">
         <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="src/css/styles.css">
-        <title>WebSocket Chat</title>
+        <link rel="stylesheet" href="src/css/styles_chat.css">
+        <title>RPG Battle L</title>
     </head>
-    <body>  
+    <body style="background: url('src/image/background.png') no-repeat center center fixed; background-color: #23272f;">  
+        <div class="container">
+            <canvas id="background" width="800" height="600" style="background-image: url('src/image/ground.jpg'); display:none;"></canvas>
+            
+            <!-- Mantenha a estrutura original dos campos abaixo do header -->
+            <div id="login" class="minimized">
+              <div class="login-header">
+                <span>LOGIN</span>
+                <button id="toggle_login" class="toggle-button">+</button>
+              </div>
+              <div id="login-body">
+                <label for="user_name">Seu nome:</label>
+                <input id="user_name" type="text" />
 
-        <div class="ctnFlex">
-            <div class="canvas">
-                <canvas id="background" class="canvas_st" style="background-image: url('src/image/ground.jpg');"></canvas>
+                <label for="input_ip">IP WS Server:</label>
+                <input id="input_ip" type="text" value="192.168.15.50" />
+
+                <div class="login-selects">
+                    <select id="checkbox_char_gender">
+                        <option value="female">Feminino</option>
+                        <option value="male">Masculino</option>
+                    </select>
+                    <select id="checkbox_char_class">
+                        <option value="knight">Knight</option>
+                        <option value="wizzard">Wizzard</option>
+                        <option value="mage">Mage</option>
+                        <option value="archer">Archer</option>
+                        <option value="squire">Squire</option>
+                    </select>
+                </div>                
+
+                <button id="button_user_name">ENTRAR</button>
+
+                <output></output>
+              </div>
+            </div> 
+
+            <!-- Exemplo de estrutura do chat -->
+            <div id="chat">
+              <div class="chat-header">
+                Chat
+                <button id="toggle_chat" class="toggle-button">–</button>
+              </div>
+              <div id="chat-output">
+                <!-- Mensagens do chat -->
+              </div>
+              <div id="chat-controls">
+                <input id="chat-input" type="text" placeholder="Digite sua mensagem">
+                <button id="button_send">ENVIAR</button>
+              </div>
             </div>
 
-            <div class="chat" id="chat">                
-                <input id= "input" type="text"></input>        
-                <button id="button_send" class="send_button">ENVIAR</button>
-                </br>
-                <output></output>
-            </div>  
-            
-            <div class="chat" id="login">
-                <label>Seu nome:</label>                
-                <input id="user_name" type="text"></input>        
-                <button id="button_user_name" class="send_button">ENTRAR</button>
-                <select id=checkbox_char_gender>
-                    <option value="female" >Feminino</option>
-                    <option value="male" >Masculino</option>
-                </select>
-                <select id=checkbox_char_class>
-                    <option value="knight" >Knight</option>
-                    <option value="wizzard" >Wizzard</option>
-                    <option value="mage" >Mage</option>
-                    <option value="archer" >Archer</option>
-                    <option value="squire" >Squire</option>
-                </select>
-                </br>
-                <output></output>
-            </div> 
+
+            <div id="attributes" class="minimized" style="display: none;">
+              <div class="chat-header">
+                Atributos
+                <button id="toggle_attributes" class="toggle-button">+</button>
+              </div>
+              <!-- Exemplo de conteúdo atualizado para a div #attributes-body -->
+              <div id="attributes-body">
+                <div class="attributes-controls">
+                  <label for="for-value">FOR</label>
+                  <span id="for-value">1</span>
+                  <button id="inc-for" class="attr-button">+</button>
+                  <button id="dec-for" class="attr-button">−</button>
+                </div>
+                <div class="attributes-controls">
+                  <label for="agi-value">AGI</label>
+                  <span id="agi-value">1</span>
+                  <button id="inc-agi" class="attr-button">+</button>
+                  <button id="dec-agi" class="attr-button">−</button>
+                </div>
+                <div class="attributes-controls">
+                  <label for="des-value">DES</label>
+                  <span id="des-value">1</span>
+                  <button id="inc-des" class="attr-button">+</button>
+                  <button id="dec-des" class="attr-button">−</button>
+                </div>
+                <div class="attributes-controls">
+                  <label for="vit-value">VIT</label>
+                  <span id="vit-value">1</span>
+                  <button id="inc-vit" class="attr-button">+</button>
+                  <button id="dec-vit" class="attr-button">−</button>
+                </div>
+                <div class="attributes-controls">
+                  <label for="int-value">INT</label>
+                  <span id="int-value">1</span>
+                  <button id="inc-int" class="attr-button">+</button>
+                  <button id="dec-int" class="attr-button">−</button>
+                </div>
+              </div>
+              <div id="attributes-values">
+                <div>
+                  <label>HP:</label>
+                  <span class="attribute-value"><span id="av-hp">459</span>/<span id="av-max_hp">459</span></span>
+                </div>
+                <div>
+                  <label>SP:</label>
+                  <span class="attribute-value"><span id="av-sp">15</span>/<span id="av-max_sp">15</span></span>
+                </div>
+                <div>
+                  <label>Stamina:</label>
+                  <span class="attribute-value"><span id="av-stamina">100</span>/<span id="av-max_stamina">100</span></span>
+                </div>
+                <div>Attack: <span id="av-attack">0</span></div>
+                <div>Defense: <span id="av-defense">0</span></div>
+                <div>Flee: <span id="av-flee">0</span></div>
+                <div>Magic Attack: <span id="av-m_attack">0</span></div>
+                <div>Magic Defense: <span id="av-m_defense">0</span></div>
+                <div>Speed: <span id="av-speed">0</span></div>
+                <div>Attack Speed: <span id="av-attack_speed">0</span></div>
+                <div>HP Recovery: <span id="av-hp_recovery">0</span></div>
+                <div>SP Recovery: <span id="av-sp_recovery">0</span></div>
+              </div>
+            </div>
          </div>
 
     </body>
@@ -51,4 +135,255 @@
     <script src="src/script/main.js"></script>
     <script src="src/script/ws_conn.js"></script>
     <script src="src/script/audio.js"></script>
+    <script>
+      document.getElementById('toggle_chat').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const chatBox = document.getElementById('chat');
+        chatBox.classList.toggle('minimized');
+        if(chatBox.classList.contains('minimized')) {
+          this.textContent = '+';
+        } else {
+          this.textContent = '–';
+        }
+      });
+
+      // Certifique-se de que o código seja executado após o carregamento do DOM
+      const chat_m = document.getElementById('chat');
+
+      let isDraggingChat = false;
+      let offsetXChat = 0;
+      let offsetYChat = 0;
+
+      chat_m.addEventListener('mousedown', (e) => {
+        isDraggingChat = true;
+        // Calcula a distância entre o mouse e o canto do elemento
+        const rect = chat.getBoundingClientRect();
+        offsetXChat = e.clientX - rect.left;
+        offsetYChat = e.clientY - rect.top;
+        // Remove transform para permitir posicionamento via left/top
+        chat_m.style.transform = 'none';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (isDraggingChat) {
+          chat_m.style.left = (e.clientX - offsetXChat) + 'px';
+          chat_m.style.top = (e.clientY - offsetYChat) + 'px';
+          // Para que o posicionamento funcione, garanta que o chat esteja com position: fixed
+          chat_m.style.position = 'fixed';
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDraggingChat = false;
+      });
+
+
+
+      // Toggle para minimizar ou expandir a caixa de attributes
+      document.getElementById('toggle_attributes').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const attrBox = document.getElementById('attributes');
+        attrBox.classList.toggle('minimized');
+        // Atualiza o símbolo de toggle: "+" se minimizado, "–" se expandido
+        if(attrBox.classList.contains('minimized')) {
+          this.textContent = '+';
+        } else {
+          this.textContent = '–';
+        }
+      });
+
+      // Incrementa o valor FOR
+      document.getElementById('inc-for').addEventListener('click', function() {
+        const forValueEl = document.getElementById('for-value');
+        let currentValue = parseInt(forValueEl.textContent, 10);
+        currentValue ++;
+        forValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.power = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+
+      // Decrementa o valor FOR
+      document.getElementById('dec-for').addEventListener('click', function() {
+        const forValueEl = document.getElementById('for-value');
+        let currentValue = parseInt(forValueEl.textContent, 10);
+        currentValue--;
+        forValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.power = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+
+      // AGI
+      document.getElementById('inc-agi').addEventListener('click', function() {
+        const agiValueEl = document.getElementById('agi-value');
+        let currentValue = parseInt(agiValueEl.textContent, 10);
+        currentValue++;
+        agiValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.agility = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+      document.getElementById('dec-agi').addEventListener('click', function() {
+        const agiValueEl = document.getElementById('agi-value');
+        let currentValue = parseInt(agiValueEl.textContent, 10);
+        currentValue--;
+        agiValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.agility = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+
+      // DES (representa dexterity)
+      document.getElementById('inc-des').addEventListener('click', function() {
+        const desValueEl = document.getElementById('des-value');
+        let currentValue = parseInt(desValueEl.textContent, 10);
+        currentValue++;
+        desValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.dexterity = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+      document.getElementById('dec-des').addEventListener('click', function() {
+        const desValueEl = document.getElementById('des-value');
+        let currentValue = parseInt(desValueEl.textContent, 10);
+        currentValue--;
+        desValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.dexterity = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+
+      // VIT
+      document.getElementById('inc-vit').addEventListener('click', function() {
+        const vitValueEl = document.getElementById('vit-value');
+        let currentValue = parseInt(vitValueEl.textContent, 10);
+        currentValue++;
+        vitValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.vitality = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+      document.getElementById('dec-vit').addEventListener('click', function() {
+        const vitValueEl = document.getElementById('vit-value');
+        let currentValue = parseInt(vitValueEl.textContent, 10);
+        currentValue--;
+        vitValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.vitality = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+
+      // INT
+      document.getElementById('inc-int').addEventListener('click', function() {
+        const intValueEl = document.getElementById('int-value');
+        let currentValue = parseInt(intValueEl.textContent, 10);
+        currentValue++;
+        intValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.inteligence = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+      document.getElementById('dec-int').addEventListener('click', function() {
+        const intValueEl = document.getElementById('int-value');
+        let currentValue = parseInt(intValueEl.textContent, 10);
+        currentValue--;
+        intValueEl.textContent = currentValue;
+        if (player) {
+          player.attributes.inteligence = currentValue;
+          player.setAttributesValues()
+          updateAttributesUI()
+        }
+      });
+
+      // Certifique-se de que o código seja executado após o DOM estar completamente carregado
+      const attrWindow = document.getElementById('attributes');
+      const attrHeader = attrWindow.querySelector('.chat-header');
+
+      let isDraggingAttrib = false;
+      let offsetXAttrib = 0;
+      let offsetYAttrib = 0;
+
+      attrHeader.addEventListener('mousedown', (e) => {
+        isDraggingAttrib = true;
+        const rect = attrWindow.getBoundingClientRect();
+        offsetXAttrib = e.clientX - rect.left;
+        offsetYAttrib = e.clientY - rect.top;
+        // Remova qualquer transform que possa interferir no posicionamento absoluto
+        attrWindow.style.transform = 'none';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (isDraggingAttrib) {
+          attrWindow.style.left = (e.clientX - offsetXAttrib) + 'px';
+          attrWindow.style.top = (e.clientY - offsetYAttrib) + 'px';
+          attrWindow.style.position = 'fixed';
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDraggingAttrib = false;
+      });
+
+      // Função de toggle para minimizar/expandir a janela de login
+      const toggleLoginBtn = document.getElementById('toggle_login');
+      const loginWindow = document.getElementById('login');
+
+      toggleLoginBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (loginWindow.classList.contains('minimized')) {
+          loginWindow.classList.remove('minimized');
+          toggleLoginBtn.textContent = '−';
+        } else {
+          loginWindow.classList.add('minimized');
+          toggleLoginBtn.textContent = '+';
+        }
+      });
+
+      // Permite arrastar a div #login pela área do header
+      let isDraggingLogin = false;
+      let offsetXLogin = 0;
+      let offsetYLogin = 0;
+
+      const loginHeader = loginWindow.querySelector('.login-header');
+
+      loginHeader.addEventListener('mousedown', (e) => {
+        isDraggingLogin = true;
+        const rect = loginWindow.getBoundingClientRect();
+        offsetXLogin = e.clientX - rect.left;
+        offsetYLogin = e.clientY - rect.top;
+        // Remove transform para posicionamento absoluto via left/top
+        loginWindow.style.transform = 'none';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (isDraggingLogin) {
+          loginWindow.style.left = (e.clientX - offsetXLogin) + 'px';
+          loginWindow.style.top = (e.clientY - offsetYLogin) + 'px';
+          loginWindow.style.position = 'fixed';
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDraggingLogin = false;
+      });
+    </script>
 </html>

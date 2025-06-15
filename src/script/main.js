@@ -139,7 +139,7 @@ function animate(timestamp){
 
     if(lastTimestamp - 1000 > lastTimestamp2){       
         lastTimestamp2 = lastTimestamp    
-        last_framerate = framerate - 1
+        last_framerate = framerate
         framerate = 0
 
         last_recep_tax = recep_tax
@@ -150,7 +150,7 @@ function animate(timestamp){
     }
     framerate++
     
-    if(lastTimestamp - 33 > lastTimestamp_tax){ 
+    if(lastTimestamp - 10 > lastTimestamp_tax){ 
         lastTimestamp_tax = lastTimestamp         
         sendUpdates()
     }    
@@ -272,7 +272,7 @@ function debug(){
     context.fillText('Time:'+clock(),5,20)
     context.fillText('framerate:'+last_framerate,5,40)
     //context.fillText('s_count:'+sound_count,2,50)
-    context.fillText('ws_conn:'+conn.readyState,2,50)
+    //context.fillText('ws_conn:'+conn.readyState,2,50)
     context.fillText('weapon_count:'+weapons.length,5,60)
     context.fillText('damage_count:'+damages.length,5,70)
     context.fillText('recep_tax:'+last_recep_tax,5,80)
@@ -311,4 +311,31 @@ function clock(){
     }
 
     return total_hour+':'+min+':'+sec
+}
+
+function updateAttributesUI() {
+  if (player) {
+    document.getElementById('for-value').textContent = player.attributes.power;
+    document.getElementById('agi-value').textContent = player.attributes.agility;
+    document.getElementById('des-value').textContent = player.attributes.dexterity;
+    document.getElementById('vit-value').textContent = player.attributes.vitality;
+    document.getElementById('int-value').textContent = player.attributes.inteligence;
+
+    document.getElementById('av-max_hp').textContent = parseFloat(player.attributes_values.max_hp).toFixed(0);
+    document.getElementById('av-max_sp').textContent = parseFloat(player.attributes_values.max_sp).toFixed(0);
+    document.getElementById('av-max_stamina').textContent = parseFloat(player.attributes_values.max_stamina).toFixed(0);
+    document.getElementById('av-hp').textContent = parseFloat(player.attributes_values.hp).toFixed(0);
+    document.getElementById('av-sp').textContent = parseFloat(player.attributes_values.sp).toFixed(0);
+    document.getElementById('av-stamina').textContent = parseFloat(player.attributes_values.stamina).toFixed(0);
+
+    document.getElementById('av-attack').textContent = parseFloat(player.attributes_values.attack).toFixed(2);
+    document.getElementById('av-defense').textContent = parseFloat(player.attributes_values.defense).toFixed(2);
+    document.getElementById('av-flee').textContent = parseFloat(player.attributes_values.flee).toFixed(2);
+    document.getElementById('av-m_attack').textContent = parseFloat(player.attributes_values.m_attack).toFixed(2);
+    document.getElementById('av-m_defense').textContent = parseFloat(player.attributes_values.m_defense).toFixed(2);
+    document.getElementById('av-speed').textContent = parseFloat(player.attributes_values.speed).toFixed(2);
+    document.getElementById('av-attack_speed').textContent = parseFloat(player.attributes_values.attack_speed).toFixed(2);
+    document.getElementById('av-hp_recovery').textContent = parseFloat(player.attributes_values.hp_recovery).toFixed(2);
+    document.getElementById('av-sp_recovery').textContent = parseFloat(player.attributes_values.sp_recovery).toFixed(2);
+  }
 }

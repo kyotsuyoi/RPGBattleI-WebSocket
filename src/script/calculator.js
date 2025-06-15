@@ -23,14 +23,14 @@ function hp_value(vitality, power){
     var B = (((power-1)/100) * 500)
 
     if(B<0) B=0
-    return Math.round(A + B)
+    return 20+Math.round(A + B)
 }
 
 function sp_value(inteligence, dexterity){
     var A = (((inteligence-1)/100) * 1100)
     var B = (((dexterity-1)/100) * 400)
 
-    return Math.round(A + B)
+    return 10+Math.round(A + B)
 }
 
 //reverse
@@ -159,7 +159,7 @@ function status_duration(type){
         
         //bad
         case 'heat' : return 120
-        case 'burn' : return 40
+        case 'burn' : return 80
 
         case 'wet' : return 120
         case 'cold' : return 40
@@ -168,7 +168,7 @@ function status_duration(type){
         case 'petrification' : return 40
         
         case 'breeze' : return 120
-        case 'electrification' : return 40
+        case 'electrification' : return 80
     }
 }
 
@@ -178,6 +178,19 @@ function status_chance(percentage){
         return true
     }
     return false
+}
+
+function reflect_arrow(direction) {
+    const vertical = ['up', 'down'];
+    const horizontal = ['left', 'right'];
+
+    if (vertical.includes(direction)) {
+        return horizontal[Math.floor(Math.random() * 2)];
+    } else if (horizontal.includes(direction)) {
+        return vertical[Math.floor(Math.random() * 2)];
+    } else {
+        throw new Error("Direção inválida. Use 'up', 'down', 'left' ou 'right'.");
+    }
 }
 
 function elementalCalc(bad_status, type){

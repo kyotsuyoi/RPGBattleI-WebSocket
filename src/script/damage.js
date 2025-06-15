@@ -10,6 +10,12 @@ class Damage{
             x : 0,
             y : 0
         }
+
+        this.character_size={
+            width : character_width,
+            height : character_height
+        }
+
         this.width = 42
         this.height = 42
         this.targetRange = 150 
@@ -570,6 +576,103 @@ class Damage{
                 this.sprites.cropHeight = 42
             break
 
+            case 'arrow':
+                this.width = this.width
+                this.height = this.height  
+
+                this.power = 2
+                this.time = 60
+                this.count_time = 1
+                this.attack_percentage = 100
+                this.bonus_dexterity = 0      
+                this.speed = 5
+                this.stun = 0
+
+                this.sprites.sprite = createImage('src/image/attack_arrow.png')  
+                this.sprites.width = 42
+                this.sprites.height = 42
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+
+                this.max_frames = 0
+            break
+
+            case 'arrow_fire':
+                this.width = 50
+                this.height = 50
+
+                this.power = 4
+                this.attack_percentage = 140
+                this.bonus_dexterity = 3
+                this.time = 40   
+                this.count_time = 1           
+                this.damageCount = 0
+                this.speed = 7
+                this.stun = 0    
+                this.coolDown = 40
+                this.sp_value = 20   
+                
+                this.bad_status = 'burn'             
+
+                this.sprites.sprite = createImage('src/image/attack_arrow_fire.png')        
+                this.sprites.width = 50
+                this.sprites.height = 50     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
+            case 'arrow_pierce':
+                this.width = 50
+                this.height = 50
+
+                this.power = 4
+                this.attack_percentage = 130
+                this.bonus_dexterity = 5
+                this.time = 25   
+                this.count_time = 2          
+                this.damageCount = 2
+                this.speed = 8
+                this.stun = 0    
+                this.coolDown = 60
+                this.sp_value = 40                             
+
+                this.sprites.sprite = createImage('src/image/attack_arrow_pierce.png')        
+                this.sprites.width = 50
+                this.sprites.height = 50     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
+            case 'arrow_triple':
+                this.width = 50
+                this.height = 50
+
+                this.power = 2
+                this.attack_percentage = 120
+                this.bonus_dexterity = 3
+                this.time = 30
+                this.count_time = 0
+                this.damageCount = 3
+                this.speed = 5
+                this.stun = 1   
+                this.coolDown = 60
+                this.sp_value = 40                             
+
+                this.sprites.sprite = createImage('src/image/attack_arrow_pierce.png')        
+                this.sprites.width = 50
+                this.sprites.height = 50     
+                this.sprites.currentCropWidth = 42
+                this.sprites.currentCropHeight = 0
+                this.sprites.cropWidth = 42
+                this.sprites.cropHeight = 42
+            break
+
             default:       
                 this.width = this.width
                 this.height = this.height  
@@ -597,40 +700,12 @@ class Damage{
 
         this.side = side
         if(type == 'phanton_blade' || type == 'cure' || type == 'shield_reinforce' || type == 'shield_reflect' || type == 'sword_reinforce'){
-            this.position.x = x - this.width/2 + character_width /2
+            this.position.x = x - this.width/2 + this.character_size.width /2
             this.position.y = (y + character_height /2) - (this.height/2) 
             this.sprites.currentCropHeight = 0
 
         }else{
-            switch (side){
-                case 'up':
-                    this.position.x = (x + character_width /2) - (this.height/2)
-                    this.position.y = y - this.height/2 + character_height /2//- this.width //- this.height
-                    this.sprites.currentCropHeight = this.sprites.cropHeight*2
-                    this.velocity.y = -this.speed
-                break
-    
-                case 'down':
-                    this.position.x = (x + character_width /2) - (this.height/2)
-                    this.position.y = y - this.height/2 + character_height /2 //+ character_height 
-                    this.sprites.currentCropHeight = this.sprites.cropHeight*3
-                    this.velocity.y = this.speed
-                break
-    
-                case 'left':
-                    this.position.x = x - this.width/2 + character_width /2//- this.width
-                    this.position.y = (y + character_height /2) - (this.height/2) 
-                    this.sprites.currentCropHeight = 0
-                    this.velocity.x = -this.speed
-                break
-    
-                case 'right':
-                    this.position.x = x - this.width/2 + character_width /2//+ character_width 
-                    this.position.y = (y + character_height /2) - (this.height/2)
-                    this.sprites.currentCropHeight = this.sprites.cropHeight
-                    this.velocity.x = this.speed
-                break
-            }
+            this.velocity_side()
         }       
     }
 
@@ -737,7 +812,43 @@ class Damage{
         context.fillStyle = 'red'
         context.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
-}
+
+    velocity_side(){
+        switch (this.side){
+            case 'up':
+                this.position.x = (this.position.x + this.character_size.width /2) - (this.height/2)
+                this.position.y = this.position.y - this.height/2 + this.character_size.height /2//- this.width //- this.height
+                this.sprites.currentCropHeight = this.sprites.cropHeight*2
+                this.velocity.y = -this.speed                
+                this.velocity.x = 0
+            break
+
+            case 'down':
+                this.position.x = (this.position.x + this.character_size.width /2) - (this.height/2)
+                this.position.y = this.position.y - this.height/2 + this.character_size.height /2 //+ character_height 
+                this.sprites.currentCropHeight = this.sprites.cropHeight*3
+                this.velocity.y = this.speed             
+                this.velocity.x = 0
+            break
+
+            case 'left':
+                this.position.x = this.position.x - this.width/2 + this.character_size.width /2//- this.width
+                this.position.y = (this.position.y + this.character_size.height /2) - (this.height/2) 
+                this.sprites.currentCropHeight = 0
+                this.velocity.x = -this.speed             
+                this.velocity.y = 0
+            break
+
+            case 'right':
+                this.position.x = this.position.x - this.width/2 + this.character_size.width /2//+ character_width 
+                this.position.y = (this.position.y + this.character_size.height /2) - (this.height/2)
+                this.sprites.currentCropHeight = this.sprites.cropHeight
+                this.velocity.x = this.speed             
+                this.velocity.y = 0
+            break
+        }
+    }
+} 
 
 function damage_action(damage){
     if(damage.count_time <= 0){
@@ -781,6 +892,26 @@ function damage_action(damage){
                     damage.damageCount -= 1
                     damage.count_time = damage.time
                 }else{ 
+                    damage.finished = true
+                } 
+            break
+
+            case 'arrow':
+                if(damage.damageCount > 1){ 
+                    damage.lastDamage = new Array()
+                    damage.damageCount -= 1
+                    damage.count_time = damage.time
+                }else{ 
+                    damage.finished = true
+                } 
+            break
+
+            case 'arrow_triple':
+                if(damage.damageCount > 1){
+                    damage.lastDamage = new Array()
+                    damage.damageCount -= 1
+                    damage.count_time = damage.time
+                }else{
                     damage.finished = true
                 } 
             break
@@ -1071,7 +1202,7 @@ function playerDamagePlayer(damage){
             var mult_dexterity = 1
             //20% dex bonus with sword_reinforce
             if(player.good_status.sword_reinforce > 0){
-                mult_dexterity = 0.2
+                mult_dexterity = 1.2
             }
 
             var is_hit = dexterity_vs_flee(
@@ -1087,8 +1218,31 @@ function playerDamagePlayer(damage){
             }
             
             if(is_hit){
+                if (damage.type == 'arrow_fire') {
+                    damage.finished = true                    
+                    sendDamageFinish(player.id, damage.id)
+
+                    if(status_chance(30)){
+                        enemy.bad_status.burn = status_duration(damage.bad_status)
+                        sendBadStatus(enemy.id, player.id, damage.type)
+                    }  
+                } 
+
+                if (damage.type == 'arrow') {
+                    damage.finished = true                    
+                    sendDamageFinish(player.id, damage.id)
+                } 
+
+                defending_side_ok = false
+                if (damage.side == 'up' && enemy.state.side == 'down' ||
+                    damage.side == 'down' && enemy.state.side == 'up' ||
+                    damage.side == 'left' && enemy.state.side == 'right' ||
+                    damage.side == 'right' && enemy.state.side == 'left'){
+                    defending_side_ok = true
+                }
+
                 //Reflect 100% damage with shield_reflect (not included bad status damage)
-                if(enemy.good_status.shield_reflect > 0 && enemy.state.defending){   
+                if(enemy.good_status.shield_reflect > 0 && enemy.state.defending && defending_side_ok){   
                     result = resultDamageControl(damage, enemy)
 
                     display = new Display({x : player.position.x + enemy.width/2, y : player.position.y + 
@@ -1115,7 +1269,7 @@ function playerDamagePlayer(damage){
 
                 result = resultDamageControl(damage, enemy)
 
-                if(enemy.state.defending && enemy.attributes_values.stamina >= stamina_result){                    
+                if(enemy.state.defending && enemy.attributes_values.stamina >= stamina_result && defending_side_ok){                    
     
                     shieldSound()
                     //Save 40% Stamina with shield_reinforce
@@ -1125,8 +1279,17 @@ function playerDamagePlayer(damage){
                     enemy.attributes_values.stamina -= (enemy.attributes_values.stamina - stamina_result)
                     // if(damage.type==''){  
                     //     damage.finished = true
-                    // }                   
-                    result = 0                    
+                    // }                 
+                    result = 0  
+                    
+                    if (damage.type == 'arrow_pierce') {
+
+                        if(status_chance(50)){
+                            damage.side = reflect_arrow(enemy.state.side)                    
+                            sendDamageUpdate(player.id, damage.id, damage.side)
+                            damage.velocity_side()
+                        }  
+                    }
     
                 }else{
                     enemy.attributes_values.hp -= result  
@@ -1452,7 +1615,7 @@ function resultDamageControl(damage, enemy){
         )
     }else{
         result = attack_vs_defense(
-            player.attributes_values.attack * damage.attack_percentage / 100, 
+            player.attributes_values.attack * (1+damage.attack_percentage) / 100, 
             player.attributes.dexterity + damage.bonus_dexterity, 
             enemy.attributes_values.defense
         )
