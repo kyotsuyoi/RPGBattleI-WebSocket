@@ -1,0 +1,430 @@
+html,
+body {
+    overflow: hidden;
+}
+
+body {
+  background: #23272f;
+}
+
+#button_send {
+    background: linear-gradient(90deg, #23272f 0%, #353b48 100%);
+    color: #e0e0e0;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    transition: background 0.2s, transform 0.2s;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#button_send:hover, #button_send:focus {
+    background: linear-gradient(90deg, #353b48 0%, #23272f 100%);
+    transform: translateY(-2px) scale(1.03);
+    outline: none;
+}
+
+#chat-input {
+    background: #23272f;
+    color: #e0e0e0;
+    border: 1px solid #353b48;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 1rem;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#chat-input:focus {
+    border: 1.5px solid #7289da;
+    box-shadow: 0 0 0 2px #23272f;
+}
+
+#chat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  height: 300px;
+  background: #23272f;
+  color: #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  overflow: hidden;
+  transition: height 0.3s ease;
+  z-index: 100;
+}
+
+#chat-output {
+  flex: 1 1 auto;
+  padding: 18px 16px 8px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  max-height: 200px; /* ou o valor que preferir */
+}
+
+#chat-controls {
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px 16px 16px;
+    background: #23272f;
+    border-top: 1px solid #2c313c;
+}
+
+/* Para navegadores baseados no WebKit */
+#chat::-webkit-scrollbar {
+    width: 8px;
+    background-color: #23272f;
+}
+
+#chat::-webkit-scrollbar-thumb {
+    background-color: #353b48;
+    border-radius: 8px;
+    border: 2px solid #23272f; /* opcional para melhor integração */
+}
+
+/* Para Firefox */
+#chat {
+    scrollbar-color: #353b48 #23272f;
+    scrollbar-width: thin;
+}
+
+#login {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 300px; /* Altura normal (expandida) */
+  background: #23272f;
+  color: #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  border: 1px solid #2c313c;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  z-index: 101;
+}
+
+.login-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(30, 34, 40, 0.85);
+  z-index: 100;
+}
+
+#login input[type="text"] {
+  background: #23272f;
+  color: #e0e0e0;
+  border: 1px solid #353b48;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#login input[type="text"]:focus {
+  border: 1.5px solid #7289da;
+  box-shadow: 0 0 0 2px #23272f;
+}
+
+#login .send_button, #button_user_name {
+  background: linear-gradient(90deg, #23272f 0%, #353b48 100%);
+  color: #e0e0e0;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  transition: background 0.2s, transform 0.2s;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+#login .send_button:hover, #button_user_name:hover,
+#login .send_button:focus, #button_user_name:focus {
+  background: linear-gradient(90deg, #353b48 0%, #23272f 100%);
+  transform: translateY(-2px) scale(1.03);
+  outline: none;
+}
+
+#login .login-selects {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+#login select {
+  flex: 1 1 0;
+  background: #23272f;
+  color: #e0e0e0;
+  border: 1px solid #353b48;
+  border-radius: 8px;
+  padding: 10px 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+#login select:focus {
+  border: 1.5px solid #7289da;
+  box-shadow: 0 0 0 2px #23272f;
+}
+
+/* Faz com que o container ocupe toda a tela */
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Centraliza o canvas na tela */
+#background {
+  display: none;  /* fica oculto até o botão ser acionado */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  z-index: 100;
+}
+
+/* Estilo normal para o chat */
+#chat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  height: 300px;
+  background: #23272f;
+  color: #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  overflow: hidden;
+  transition: height 0.3s ease;
+  z-index: 100;
+}
+
+/* Cabeçalho do chat para clique */
+.chat-header {
+  background: #353b48;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  cursor: default;
+}
+
+/* Botão de toggle */
+.toggle-button {
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Estado minimizado: reduz a altura para mostrar somente o cabeçalho */
+#chat.minimized {
+  height: 40px;
+}
+
+/* Caso queira que o chat não esteja limitado na altura e tenha scroll apenas internamente no conteúdo */
+#chat #chat-output {
+  overflow-y: auto;
+  height: 146px; /* ajuste conforme necessário */
+}
+
+/* Centraliza o container principal na tela */
+.main-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;   /* Garante que o flex ocupe toda a largura da tela */
+  height: 100vh;  /* Ocupa toda a altura da tela */
+  gap: 48px;      /* Espaço entre o canvas e o login */
+}
+
+/* Remova margens automáticas do chat e login */
+#chat, #login {
+  margin: 0;
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
+/* Centraliza o canvas verticalmente */
+#background {
+  display: block;
+  margin: 0;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+}
+
+/* Adicione essas regras ao final de styles_chat.css, para prevalecer sobre outras */
+#login {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  height: auto;
+}
+
+/* Estilo para a caixa #attributes, similar ao #chat */
+#attributes {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px; /* ajuste a posição se necessário para não sobrepor o chat */
+  width: 400px;
+  height: 530px;
+  background: #23272f;
+  color: #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: height 0.3s ease;
+}
+
+/* Header da caixa, igual ao do chat */
+#attributes .chat-header {
+  background: #353b48;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  cursor: default;
+}
+
+/* Área central da caixa (corpo) */
+#attributes #attributes-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 16px;
+  gap: 8px;
+}
+
+/* Controles de atributos */
+.attributes-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Botões + e - */
+.attr-button {
+  background: linear-gradient(90deg, #23272f 0%, #353b48 100%);
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #e0e0e0;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+.attr-button:hover {
+  transform: scale(1.1);
+}
+
+/* Estado minimizado: mostra apenas o header */
+#attributes.minimized {
+  height: 40px;
+}
+
+/* Estilo da janela de login – similar aos demais, mas com header exclusivo */
+#login {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 300px; /* Altura normal (expandida) */
+  background: #23272f;
+  color: #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  border: 1px solid #2c313c;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  z-index: 101;
+}
+
+/* Estado minimizado: mostra somente o header */
+#login.minimized {
+  height: 40px;
+}
+
+/* Header da janela login */
+.login-header {
+  background: #353b48;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: default;
+  user-select: none;
+}
+
+/* Botão toggle para minimizar/expandir */
+#toggle_login.toggle-button {
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Corpo do login, com preenchimento */
+#login-body {
+  padding: 16px;
+}
+
+/* Adicione ao final do seu styles_chat.css (ou em um arquivo específico para atributos) */
+#attributes-values {
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+  background: #1b1e24; /* Um tom ainda mais escuro, se desejar */
+}
+#attributes-values > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Empurra os botões para a direita */
+.attributes-controls button:first-of-type {
+  margin-left: auto;
+}
