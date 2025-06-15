@@ -138,6 +138,7 @@ function setConnection(user_name){
                 p.position.x = data.x
                 p.position.y = data.y
                 p.state = data.state
+                p.attributes = data.attributes
                 p.attributes_values = data.attributes_values
                 p.good_status = data.good_status
                 p.bad_status = data.bad_status
@@ -149,10 +150,28 @@ function setConnection(user_name){
             var id = data.id
             var attack_type = data.attack_type
             var p = players.find(element => element.id == id)
+            //p.attributes = data.attributes
             p.attributes_values = data.attributes_values
-            
-            weapon = new Weapon({x : p.position.x, y : p.position.y, owner_id : id, 
-                type : p.skill.primary_weapon_type, side : p.state.side})
+
+            weapon = new Weapon({
+                x : p.position.x, y : p.position.y, owner_id : id, 
+                type : p.skill.primary_weapon_type, side : p.state.side
+            })
+
+            if(attack_type===p.skill.secondary_weapon_type){
+                weapon = new Weapon({
+                    x : p.position.x, y : p.position.y, owner_id : id, 
+                    type : p.skill.secondary_weapon_type, side : p.state.side
+                })
+            }
+
+            if(attack_type==="arrow_fire" || attack_type==="arrow_pierce" || attack_type==="arrow_triple"){
+                weapon = new Weapon({
+                    x : p.position.x, y : p.position.y, owner_id : id, 
+                    type : p.skill.secondary_weapon_type, side : p.state.side
+                })
+            }
+
             weapons.push(weapon)  
 
             damage = new Damage({ id : data.damage_id,
@@ -349,6 +368,9 @@ function setConnection(user_name){
             if(data.state != ''){
                 player.state = data.state
             }
+            if(data.attributes != ''){
+                player.attributes = data.attributes
+            }
             if(data.attributes_values != ''){
                 player.attributes_values = data.attributes_values
             }
@@ -389,6 +411,7 @@ function setConnection(user_name){
             var p = new Player(id, data.user_name, lastTimestamp, data.x, data.y, data.color, data.gender, data.character_class)
             p.start = true
             p.state = data.state
+            p.attributes = data.attributes
             p.attributes_values = data.attributes_values
             p.good_status = data.good_status
             players.push(p)
@@ -492,6 +515,33 @@ function sendRestore(id, result, restore_type){
         'result' : result,
         'restore_type' : restore_type
     }
+    //conn.send(JSON.stringify(json_obj)) 
+    connSend(json_obj)
+}
+
+function sendAction(x, y, state, attributes, attributes_values, good_status, bad_status){
+
+    var json_obj = {
+        'type' : 'action',
+        'x' : x,
+        'y' : y,
+        'state' : state,
+        'attributes' : attributes,
+        'attributes_values' : attributes_values,
+        'good_status' : good_status,
+        'bad_status' : bad_status
+    }
+    //conn.send(JSON.stringify(json_obj)) 
+    connSend(json_obj)
+}
+
+function sendActionAttack(damage_id, attack_type, attributes_values){
+    var json_obj = {
+        'type' : 'action_attack',
+        'damage_id' : damage_id,
+        'attack_type' : attack_type,
+        'attributes_values' : attributes_values
+    } 
     //conn.send(JSON.stringify(json_obj)) 
     connSend(json_obj)
 }

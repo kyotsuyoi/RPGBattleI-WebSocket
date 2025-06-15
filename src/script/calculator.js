@@ -6,8 +6,8 @@ function m_attack_value(inteligence, dexterity){
     return inteligence + (inteligence/2) + (dexterity/5)
 }
 
-function defense_value(vitality, dexterity){
-    return  vitality + (dexterity/3)
+function defense_value(vitality, power){
+    return  vitality + (power * 0.2)
 }
 
 function m_defense_value(inteligence, dexterity){
@@ -40,7 +40,7 @@ function sp_value(inteligence, dexterity){
 //reverse
 function attack_speed_value(agility){
     var ext_val = (20*agility/100)
-    var val = 20 - ext_val
+    var val = 8 - ext_val
     if(val < 2){
         val = 2
     }
@@ -48,10 +48,7 @@ function attack_speed_value(agility){
 }
 
 function speed_value(agility){
-    var val = 0.5 + agility / 10
-    if(val < 0.8){
-        val = 0.8
-    }
+    var val = 0.8 + agility * 0.01
     if(val > 2){
         val = 2
     }
@@ -113,7 +110,7 @@ function dexterity_vs_flee(dexterity, agility){
 
 //power_a is attack and power_b is defense
 function knock_back(damage_power, power_a, power_b){
-    var result = (power_a - power_b) + damage_power
+    var result = (power_a * 0.4 - power_b * 0.3) + damage_power
     if(result <= 0){
         return 0
     }

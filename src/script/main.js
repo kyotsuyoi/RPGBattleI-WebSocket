@@ -194,19 +194,9 @@ function sendUpdates(){
         player_last_bad_status.breeze != player.bad_status.breeze || 
         player_last_bad_status.electrification_id != player.bad_status.electrification_id ||
         player_last_bad_status.electrification != player.bad_status.electrification
-        ){           
+        ){       
 
-        var json_obj = {
-            'type' : 'action',
-            'x' : player.position.x,
-            'y' : player.position.y,
-            'state' : player.state,
-            'attributes_values' : player.attributes_values,
-            'good_status' : player.good_status,
-            'bad_status' : player.bad_status
-        }
-
-        connSend(json_obj)
+        sendAction(player.position.x, player.position.y, player.state, player.attributes, player.attributes_values, player.good_status, player.bad_status)
 
         player_last_x = player.position.x
         player_last_y = player.position.y
@@ -314,29 +304,33 @@ function clock(){
 }
 
 function updateAttributesUI() {
-  if (player) {
-    document.getElementById('for-value').textContent = player.attributes.power;
-    document.getElementById('agi-value').textContent = player.attributes.agility;
-    document.getElementById('des-value').textContent = player.attributes.dexterity;
-    document.getElementById('vit-value').textContent = player.attributes.vitality;
-    document.getElementById('int-value').textContent = player.attributes.inteligence;
+    if (player) {
+        document.getElementById('for-value').textContent = player.attributes.power;
+        document.getElementById('agi-value').textContent = player.attributes.agility;
+        document.getElementById('des-value').textContent = player.attributes.dexterity;
+        document.getElementById('vit-value').textContent = player.attributes.vitality;
+        document.getElementById('int-value').textContent = player.attributes.inteligence;
 
-    document.getElementById('av-max_hp').textContent = parseFloat(player.attributes_values.max_hp).toFixed(0);
-    document.getElementById('av-max_sp').textContent = parseFloat(player.attributes_values.max_sp).toFixed(0);
-    document.getElementById('av-max_stamina').textContent = parseFloat(player.attributes_values.max_stamina).toFixed(0);
-    document.getElementById('av-hp').textContent = parseFloat(player.attributes_values.hp).toFixed(0);
-    document.getElementById('av-sp').textContent = parseFloat(player.attributes_values.sp).toFixed(0);
-    document.getElementById('av-stamina').textContent = parseFloat(player.attributes_values.stamina).toFixed(0);
+        document.getElementById('av-max_hp').textContent = parseFloat(player.attributes_values.max_hp).toFixed(0);
+        document.getElementById('av-max_sp').textContent = parseFloat(player.attributes_values.max_sp).toFixed(0);
+        document.getElementById('av-max_stamina').textContent = parseFloat(player.attributes_values.max_stamina).toFixed(0);
+        document.getElementById('av-hp').textContent = parseFloat(player.attributes_values.hp).toFixed(0);
+        document.getElementById('av-sp').textContent = parseFloat(player.attributes_values.sp).toFixed(0);
+        document.getElementById('av-stamina').textContent = parseFloat(player.attributes_values.stamina).toFixed(0);
 
-    document.getElementById('av-attack').textContent = parseFloat(player.attributes_values.attack).toFixed(2);
-    document.getElementById('av-defense').textContent = parseFloat(player.attributes_values.defense).toFixed(2);
-    document.getElementById('av-flee').textContent = parseFloat(player.attributes_values.flee).toFixed(2);
-    document.getElementById('av-accuracy').textContent = parseFloat(player.attributes_values.accuracy).toFixed(2);
-    document.getElementById('av-m_attack').textContent = parseFloat(player.attributes_values.m_attack).toFixed(2);
-    document.getElementById('av-m_defense').textContent = parseFloat(player.attributes_values.m_defense).toFixed(2);
-    document.getElementById('av-speed').textContent = parseFloat(player.attributes_values.speed).toFixed(2);
-    document.getElementById('av-attack_speed').textContent = parseFloat(player.attributes_values.attack_speed).toFixed(2);
-    document.getElementById('av-hp_recovery').textContent = parseFloat(player.attributes_values.hp_recovery).toFixed(2);
-    document.getElementById('av-sp_recovery').textContent = parseFloat(player.attributes_values.sp_recovery).toFixed(2);
-  }
+        document.getElementById('av-attack').textContent = parseFloat(player.attributes_values.attack).toFixed(2);
+        document.getElementById('av-defense').textContent = parseFloat(player.attributes_values.defense).toFixed(2);
+        document.getElementById('av-flee').textContent = parseFloat(player.attributes_values.flee).toFixed(2);
+        document.getElementById('av-accuracy').textContent = parseFloat(player.attributes_values.accuracy).toFixed(2);
+        document.getElementById('av-knock-back').textContent = parseFloat(player.attributes_values.knock_back).toFixed(2);
+        document.getElementById('av-m_attack').textContent = parseFloat(player.attributes_values.m_attack).toFixed(2);
+        document.getElementById('av-m_defense').textContent = parseFloat(player.attributes_values.m_defense).toFixed(2);
+        document.getElementById('av-speed').textContent = parseFloat(player.attributes_values.speed).toFixed(2);
+        document.getElementById('av-attack_speed').textContent = parseFloat(player.attributes_values.attack_speed).toFixed(2);
+        document.getElementById('av-hp_recovery').textContent = parseFloat(player.attributes_values.hp_recovery).toFixed(2);
+        document.getElementById('av-sp_recovery').textContent = parseFloat(player.attributes_values.sp_recovery).toFixed(2);
+
+        //To save the action to the server
+        sendAction(player.position.x, player.position.y, player.state, player.attributes, player.attributes_values, player.good_status, player.bad_status);
+    }
 }

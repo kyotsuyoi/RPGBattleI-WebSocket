@@ -130,14 +130,7 @@ function keyCodeDown(keyCode){
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.primary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
-                var json_obj = {
-                    'type' : 'action_attack',
-                    'damage_id' : damage.id,
-                    'attack_type' : player.skill.primary_weapon_type,
-                    'attributes_values' : player.attributes_values
-                }        
-                //conn.send(JSON.stringify(json_obj)) 
-                connSend(json_obj)
+                sendActionAttack(damage.id, player.skill.primary_weapon_type, player.attributes_values)
             }
         break
         
@@ -182,14 +175,7 @@ function keyCodeDown(keyCode){
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
-                var json_obj = {
-                    'type' : 'action_attack',
-                    'damage_id' : damage.id,
-                    'attack_type' : player.skill.secondary_weapon_type,
-                    'attributes_values' : player.attributes_values
-                }        
-                //conn.send(JSON.stringify(json_obj)) 
-                connSend(json_obj)
+                sendActionAttack(damage.id, player.skill.secondary_weapon_type, player.attributes_values)
             }
         break
 
@@ -238,14 +224,7 @@ function keyCodeDown(keyCode){
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
-                var json_obj = {
-                    'type' : 'action_attack',
-                    'damage_id' : damage.id,
-                    'attack_type' : player.skill.spell_type_1,
-                    'attributes_values' : player.attributes_values
-                }        
-                //conn.send(JSON.stringify(json_obj)) 
-                connSend(json_obj)
+                sendActionAttack(damage.id, player.skill.spell_type_1, player.attributes_values)
                 setRumble('attack')
             }
         break
@@ -283,14 +262,7 @@ function keyCodeDown(keyCode){
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
-                var json_obj = {
-                    'type' : 'action_attack',
-                    'damage_id' : damage.id,
-                    'attack_type' : player.skill.spell_type_2,
-                    'attributes_values' : player.attributes_values
-                }        
-                //conn.send(JSON.stringify(json_obj)) 
-                connSend(json_obj)
+                sendActionAttack(damage.id, player.skill.spell_type_2, player.attributes_values)
                 setRumble('attack')
             }
         break
@@ -332,14 +304,7 @@ function keyCodeDown(keyCode){
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
-                var json_obj = {
-                    'type' : 'action_attack',
-                    'damage_id' : damage.id,
-                    'attack_type' : player.skill.spell_type_3,
-                    'attributes_values' : player.attributes_values
-                }        
-                //conn.send(JSON.stringify(json_obj)) 
-                connSend(json_obj)
+                sendActionAttack(damage.id, player.skill.spell_type_3, player.attributes_values)
                 setRumble('attack')
             }
         break
@@ -377,14 +342,7 @@ function keyCodeDown(keyCode){
                 weapon = new Weapon({x : player.position.x, y : player.position.y, owner_id : player.id, type : player.skill.secondary_weapon_type, side : player.state.side})
                 weapons.push(weapon)
 
-                var json_obj = {
-                    'type' : 'action_attack',
-                    'damage_id' : damage.id,
-                    'attack_type' : player.skill.spell_type_4,
-                    'attributes_values' : player.attributes_values
-                }        
-                //conn.send(JSON.stringify(json_obj)) 
-                connSend(json_obj)
+                sendActionAttack(damage.id, player.skill.spell_type_4, player.attributes_values)
                 setRumble('attack')
             }
         break  

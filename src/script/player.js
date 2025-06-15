@@ -78,6 +78,7 @@ class Player{
             defense : 0,
             flee : 0,
             accuracy: 0,
+            knock_back : 0,
 
             m_attack : 0,
             m_defense : 0,
@@ -518,24 +519,36 @@ class Player{
     }
 
     update(){
-        //sprite switching
+        //sprite switching        
+
         if(!this.state.attacking && this.state.walking){
             if(keys.right.pressed && lastKey === 'right'){
                 this.state.side = 'right'
-                this.currentCropHeight = this.sprites.character.cropHeight * 1
         
             } else if (keys.left.pressed && lastKey === 'left'){       
                 this.state.side = 'left'
-                this.currentCropHeight = this.sprites.character.cropHeight * 2
             
             } else if (keys.down.pressed && lastKey === 'down'){        
                 this.state.side = 'down'
-                this.currentCropHeight = this.sprites.character.cropHeight * 0
             
             } else if (keys.up.pressed && lastKey === 'up'){        
                 this.state.side = 'up'
-                this.currentCropHeight = this.sprites.character.cropHeight * 3
             }
+        }
+
+        switch (this.state.side){
+            case 'right':
+                this.currentCropHeight = this.sprites.character.cropHeight * 1  
+            break
+            case 'left':
+                this.currentCropHeight = this.sprites.character.cropHeight * 2
+            break
+            case 'down':
+                this.currentCropHeight = this.sprites.character.cropHeight * 0
+            break
+            case 'up':
+                this.currentCropHeight = this.sprites.character.cropHeight * 3
+            break
         }
 
         this.updateSpritesOnTime()
@@ -891,7 +904,7 @@ class Player{
             break
         }
 
-        this.attributes_values.max_hp = class_bonus_hp_sum +Math.round(hp_value(attributes.vitality, attributes.power) * class_bonus_hp)
+        this.attributes_values.max_hp = class_bonus_hp_sum +Math.round(hp_value(attributes.vitality, 1) * class_bonus_hp)
         this.attributes_values.max_sp = class_bonus_sp_sum + Math.round(sp_value(attributes.inteligence, attributes.dexterity) * class_bonus_sp)
 
         this.attributes_values.hp = this.attributes_values.max_hp
@@ -899,15 +912,16 @@ class Player{
         this.attributes_values.stamina = this.attributes_values.max_stamina
         
         this.attributes_values.attack = attack_value(attributes.power * class_bonus_power, attributes.dexterity)
-        this.attributes_values.defense = defense_value(attributes.vitality * class_bonus_vitality, attributes.dexterity)
+        this.attributes_values.defense = defense_value(attributes.vitality * class_bonus_vitality, attributes.power)
         this.attributes_values.flee = flee_value(attributes.agility * class_bonus_agility, 1)
-        this.attributes_values.accuracy = accuracy_value(attributes.agility * class_bonus_agility, attributes.dexterity * class_bonus_dexterity)
+        this.attributes_values.accuracy = accuracy_value(1, attributes.dexterity * class_bonus_dexterity)
+        this.attributes_values.knock_back = knock_back(0, attributes.power, 1)
 
         this.attributes_values.m_attack = m_attack_value(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity)
         this.attributes_values.m_defense = m_defense_value(attributes.inteligence * class_bonus_inteligence, attributes.dexterity)
         
         this.attributes_values.speed = speed_value(attributes.agility * class_bonus_agility) 
-        this.attributes_values.attack_speed = attack_speed_value(attributes.agility * class_bonus_agility) -12
+        this.attributes_values.attack_speed = attack_speed_value(attributes.agility * class_bonus_agility)
         this.attributes_values.hp_recovery = hp_recovery(attributes.vitality * class_bonus_vitality)   
         this.attributes_values.sp_recovery = sp_recovery(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * 0.1) 
     }

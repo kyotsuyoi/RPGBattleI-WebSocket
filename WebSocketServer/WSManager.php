@@ -65,6 +65,7 @@ class WSManager implements MessageComponentInterface {
                         'x' => $json->x, 
                         'y' => $json->y, 
                         'state' => $json->state, 
+                        'attributes' => $json->attributes, 
                         'attributes_values' => $json->attributes_values, 
                         'good_status' => $json->good_status, 
                         'bad_status' => $json->bad_status]
@@ -165,6 +166,7 @@ class WSManager implements MessageComponentInterface {
                                 'gender' => $player['gender'], 
                                 'character_class' => $player['character_class'],
                                 'state' => $player['state'],
+                                'attributes' => $player['attributes'],
                                 'attributes_values' => $player['attributes_values'],
                                 'good_status' => $player['good_status'],
                                 'bad_status' => $player['bad_status']
@@ -190,6 +192,7 @@ class WSManager implements MessageComponentInterface {
                             'gender' => $json->gender, 
                             'character_class' => $json->character_class,
                             'state' => '',
+                            'attributes' => '',
                             'attributes_values' => '',
                             'good_status' => '',
                             'bad_status' => '']
@@ -205,6 +208,7 @@ class WSManager implements MessageComponentInterface {
                             'gender' => $json->gender, 
                             'character_class' => $json->character_class,
                             'state' => '',
+                            'attributes' => '',
                             'attributes_values' => '',
                             'good_status' => '',
                             'bad_status' => ''
@@ -233,6 +237,7 @@ class WSManager implements MessageComponentInterface {
                             'gender' => $this->players[$key]['gender'], 
                             'character_class' => $this->players[$key]['character_class'],
                             'state' => $this->players[$key]['state'],
+                            'attributes' => $this->players[$key]['attributes'],
                             'attributes_values' => $this->players[$key]['attributes_values'],
                             'good_status' => $this->players[$key]['good_status'],
                             'bad_status' => $this->players[$key]['bad_status']
@@ -254,6 +259,7 @@ class WSManager implements MessageComponentInterface {
                                     $inner_gender = $player['gender'];
                                     $inner_character_class = $player['character_class'];
                                     $inner_state = $player['state'];
+                                    $inner_attributes = $player['attributes'];
                                     $inner_attributes_values = $player['attributes_values'];
                                     $inner_good_status = $player['good_status'];
                                     //var_dump($player);
@@ -269,6 +275,7 @@ class WSManager implements MessageComponentInterface {
                                 'gender' => $inner_gender, 
                                 'character_class' => $inner_character_class, 
                                 'state' => $inner_state,
+                                'attributes' => $inner_attributes,
                                 'attributes_values' => $inner_attributes_values,
                                 'good_status' => $inner_good_status]
                             )); 
@@ -285,8 +292,9 @@ class WSManager implements MessageComponentInterface {
                     $this->players[$key]['x'] = $json->x;
                     $this->players[$key]['y'] = $json->y;
                     $this->players[$key]['state'] = $json->state;
+                    $this->players[$key]['attributes'] = $json->attributes;  
                     $this->players[$key]['attributes_values'] = $json->attributes_values;                    
-                    $this->players[$key]['good_status'] = $json->good_status;
+                    $this->players[$key]['good_status'] = $json->good_status; 
                 }
             } 
         }
