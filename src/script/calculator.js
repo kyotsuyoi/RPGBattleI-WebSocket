@@ -18,6 +18,10 @@ function flee_value(agility, dexterity){
     return  (agility/2) + (dexterity/5)
 }
 
+function accuracy_value(agility, dexterity){
+    return  (agility/6) + (dexterity/2)
+}
+
 function hp_value(vitality, power){
     var A = (((vitality-1)/100) * 3000)
     var B = (((power-1)/100) * 500)

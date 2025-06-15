@@ -331,6 +331,7 @@ function updateAttributesUI() {
     document.getElementById('av-attack').textContent = parseFloat(player.attributes_values.attack).toFixed(2);
     document.getElementById('av-defense').textContent = parseFloat(player.attributes_values.defense).toFixed(2);
     document.getElementById('av-flee').textContent = parseFloat(player.attributes_values.flee).toFixed(2);
+    document.getElementById('av-accuracy').textContent = parseFloat(player.attributes_values.accuracy).toFixed(2);
     document.getElementById('av-m_attack').textContent = parseFloat(player.attributes_values.m_attack).toFixed(2);
     document.getElementById('av-m_defense').textContent = parseFloat(player.attributes_values.m_defense).toFixed(2);
     document.getElementById('av-speed').textContent = parseFloat(player.attributes_values.speed).toFixed(2);

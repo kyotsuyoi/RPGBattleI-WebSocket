@@ -77,6 +77,7 @@ class Player{
             attack : 0,
             defense : 0,
             flee : 0,
+            accuracy: 0,
 
             m_attack : 0,
             m_defense : 0,
@@ -897,17 +898,18 @@ class Player{
         this.attributes_values.sp = this.attributes_values.max_sp
         this.attributes_values.stamina = this.attributes_values.max_stamina
         
-        this.attributes_values.attack = attack_value(attributes.power * class_bonus_power, attributes.dexterity * class_bonus_dexterity)
-        this.attributes_values.defense = defense_value(attributes.vitality * class_bonus_vitality, attributes.dexterity * class_bonus_dexterity)
-        this.attributes_values.flee = flee_value(attributes.agility * class_bonus_agility, attributes.dexterity * class_bonus_dexterity)
+        this.attributes_values.attack = attack_value(attributes.power * class_bonus_power, attributes.dexterity)
+        this.attributes_values.defense = defense_value(attributes.vitality * class_bonus_vitality, attributes.dexterity)
+        this.attributes_values.flee = flee_value(attributes.agility * class_bonus_agility, 1)
+        this.attributes_values.accuracy = accuracy_value(attributes.agility * class_bonus_agility, attributes.dexterity * class_bonus_dexterity)
 
         this.attributes_values.m_attack = m_attack_value(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity)
-        this.attributes_values.m_defense = m_defense_value(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity)
+        this.attributes_values.m_defense = m_defense_value(attributes.inteligence * class_bonus_inteligence, attributes.dexterity)
         
         this.attributes_values.speed = speed_value(attributes.agility * class_bonus_agility) 
         this.attributes_values.attack_speed = attack_speed_value(attributes.agility * class_bonus_agility) -12
         this.attributes_values.hp_recovery = hp_recovery(attributes.vitality * class_bonus_vitality)   
-        this.attributes_values.sp_recovery = sp_recovery(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity) 
+        this.attributes_values.sp_recovery = sp_recovery(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * 0.1) 
     }
 
     setGender(){
