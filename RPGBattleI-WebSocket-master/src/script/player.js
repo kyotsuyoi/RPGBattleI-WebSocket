@@ -905,7 +905,7 @@ class Player{
         this.attributes_values.m_defense = m_defense_value(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity)
         
         this.attributes_values.speed = speed_value(attributes.agility * class_bonus_agility) 
-        this.attributes_values.attack_speed = attack_speed_value(attributes.agility * class_bonus_agility) -12
+        this.attributes_values.attack_speed = attack_speed_value(attributes.agility * class_bonus_agility) 
         this.attributes_values.hp_recovery = hp_recovery(attributes.vitality * class_bonus_vitality)   
         this.attributes_values.sp_recovery = sp_recovery(attributes.inteligence * class_bonus_inteligence, attributes.dexterity * class_bonus_dexterity) 
     }

@@ -1218,19 +1218,14 @@ function playerDamagePlayer(damage){
             }
             
             if(is_hit){
-                if (damage.type == 'arrow_fire') {
+                if (damage.type == 'arrow' || damage.type == 'arrow_fire') {
                     damage.finished = true                    
                     sendDamageFinish(player.id, damage.id)
 
-                    if(status_chance(30)){
+                    if(damage.type == 'arrow_fire' && status_chance(45)){
                         enemy.bad_status.burn = status_duration(damage.bad_status)
                         sendBadStatus(enemy.id, player.id, damage.type)
                     }  
-                } 
-
-                if (damage.type == 'arrow') {
-                    damage.finished = true                    
-                    sendDamageFinish(player.id, damage.id)
                 } 
 
                 defending_side_ok = false
@@ -1282,7 +1277,7 @@ function playerDamagePlayer(damage){
                     // }                 
                     result = 0  
                     
-                    if (damage.type == 'arrow_pierce') {
+                    if (damage.type == 'arrow_pierce' || damage.type == 'arrow_triple') {
 
                         if(status_chance(50)){
                             damage.side = reflect_arrow(enemy.state.side)                    
